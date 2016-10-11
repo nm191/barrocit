@@ -1,4 +1,8 @@
 </div>
+</div>
+
+</div>
+</div>
 
 <div class="footer flex">
     <span>Copyright &copy; 2016 Barroc IT</span>
