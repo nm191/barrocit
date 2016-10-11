@@ -107,7 +107,17 @@ Finance <span class="caret pull-right"></span>
                                 </ul>
                             </div>
                         </li>
-
+                        <li>
+                            <a href="#" data-toggle="collapse" data-target="#toggleAdmin" data-parent="#sidenav01" class="collapsed">
+                                </span> Admin <span class="caret pull-right"></span>
+                            </a>
+                            <div class="collapse" id="toggleAdmin" style="height: 0px;">
+                                <ul class="nav nav-list">
+                                    <li><a href="#">Users</a></li>
+                                    <li><a href="admin.php?page=add_user">Add User</a></li>
+                                </ul>
+                            </div>
+                        </li>
                     </ul>
                 </div><!--/.nav-collapse -->
             </div>
