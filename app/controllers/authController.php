@@ -12,8 +12,9 @@ if(!empty($_POST['username'])
    if($_POST['password'] == $_POST['password_check']){
 
        if($user->exists($username)){
-
-           $user->redirect('admin.php?page=add_user');
+           $message = 'User already exists!';
+           $user->redirect('admin.php?page=add_user&error='.$message);
+           die();
        }
        /*
          * hash all the passwords!
@@ -24,15 +25,17 @@ if(!empty($_POST['username'])
        $password = password_hash($password, PASSWORD_DEFAULT);
        
        $user->register($username, $password);
-
-       $user->redirect('../public/admin.php?page=add_user');
+       $message = 'User is added!';
+       $user->redirect('../public/admin.php?page=add_user&success='.$message);
        
+   }else{
+       $message = 'Passwords do not match!';
+       $user->redirect('admin.php?page=add_user&error='.$message);
    }
 
-
-
 } else {
-echo 'Gegevens onvolledig ingevuld';
+    $message = 'Fill in the required fields!';
+    $user->redirect('admin.php?page=add_user&error='.$message);
 }
 
 

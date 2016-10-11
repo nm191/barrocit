@@ -4,5 +4,5 @@
  *
  * */
 define ('BASE_URL', 'http://localhost/barrocit');
-define ('APP_PATH',realpath(__DIR__));
+define ('APP_PATH', realpath(__DIR__).'../app');
 define ('PUBLIC_PATH',realpath(__DIR__.'../public'));
