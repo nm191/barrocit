@@ -146,6 +146,10 @@ li a.logout:hover {
     justify-content: center;
 }
 
+.alert{
+    margin: 10px 0px;
+}
+
 /* make sidebar nav vertical */
 @media (min-width: 768px) {
     .sidebar-nav .navbar .navbar-collapse {

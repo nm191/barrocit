@@ -22,10 +22,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
         case 'Register':
             if(!empty($_POST['username'])
                 && !empty($_POST['password'])
-                && !empty($_POST['password_check'])){
+                && !empty($_POST['password_check'])
+                && !empty($_POST['userLevel'])){
 
                 $username = $_POST['username'];
-
+                $user_level = $_POST['userLevel'];
                 if($_POST['password'] == $_POST['password_check']){
 
                     if($user->exists($username)){
@@ -41,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
                     $password = $_POST['password'];
                     $password = password_hash($password, PASSWORD_DEFAULT);
 
-                    $user->register($username, $password);
+                    $user->register($username, $password, $user_level);
                     $message = 'User is added!';
                     $user->redirect('../public/admin.php?page=add_user&success='.$message);
 

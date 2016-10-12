@@ -12,10 +12,12 @@ require_once ('includes/menus.php');
 
 $current_page = $error = $success = '';
 
+$admin = new Admin();
+
 if(isset($_GET['page'])){
     $current_page = $_GET['page'];
 } else {
-    $current_page = 'admin';
+    $current_page = 'users';
 }
 
 //Message handling
@@ -31,6 +33,10 @@ if(isset($_GET['success'])){
 
 <h1 class="text-center">Admin Panel</h1>
 
+    <ul class="nav nav-tabs flex tab-menu">
+        <li role="presentation" <?php echo ($current_page == 'users' || $current_page == 'add_user' ? 'class="active"' : ''); ?>><a href="admin.php">Users</a></li>
+        <li role="presentation" <?php echo ($current_page == 'user_rights' ? 'class="active"' : ''); ?>><a href="admin.php?page=user_rights">User Rights</a></li>
+    </ul>
 
 <?php
 
@@ -65,6 +71,16 @@ switch ($current_page){
                 <label class="col-sm-offset-2 col-sm-2 control-label" for="password_check">Password check:</label>
                 <div class="col-sm-4"><input class="form-control" id="password_check" name="password_check" type="password" required></div>
             </div>
+               <div class="form-group">
+                   <label class="col-sm-offset-2 col-sm-2 control-label" for="userLevel">User Level:</label>
+                   <div class="col-sm-4">
+                       <select class="form-control" name="userLevel" id="userLevel">
+                           <?php
+                           echo $admin->getUserLevelOptions();
+                           ?>
+                       </select>
+                   </div>
+               </div>
                 <div class="col-sm-offset-4 col-sm-4"><input type="submit" name='type' value='Register' class="btn btn-block btn-success"> </div>
             </fieldset>
             </form>
@@ -73,12 +89,18 @@ switch ($current_page){
 
         break;
     case 'users':
-
+        ?>
+        <div class="col-sm-10 col-sm-offset-1">
+        <a href="admin.php?page=add_user" class="btn btn-primary btn-block">Add user</a>
+        <?php
+        echo $admin->getUsersTable();
+        ?>
+        </div>
+        <?php
         break;
     case 'admin':
         var_dump($user);
         break;
-
     default:
         echo 'This page does not exists!';
 

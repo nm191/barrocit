@@ -54,16 +54,17 @@ class User
         return;
     }
 
-    public function register($username, $password){
+    public function register($username, $password, $user_level){
 
         $sql = "INSERT INTO `tbl_users`
-                (username, password) 
-                VALUES(:username, :password)";
+                (username, password, user_level_id) 
+                VALUES(:username, :password, :user_level)";
 
         /* Paramatised queries*/
         $stmt = $this->db->pdo->prepare($sql);
         $stmt->bindParam(':username', $username);
         $stmt->bindParam(':password', $password);
+        $stmt->bindParam(':user_level', $user_level);
         $stmt->execute();
 
     }
