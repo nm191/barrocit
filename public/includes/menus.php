@@ -28,7 +28,7 @@
 
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
-                    <li><a href="#">Add customer <span class="sr-only">(current)</span></a></li>
+                    <li><a href="customers.php?page=customer_general_data">Add Customer <span class="sr-only">(current)</span></a></li>
                     <li><a href="#">Add Project</a></li>
                     <li><a href="#">Add Invoice</a></li>
                     <li><a href="#">Helpdesk</a></li>
@@ -93,8 +93,8 @@
                             </a>
                             <div class="collapse" id="toggleCustomers" style="height: 0px;">
                                 <ul class="nav nav-list">
-                                    <li><a href="#">Customers list</a></li>
-                                    <li><a href="#">Add customer</a></li>
+                                    <li><a href="customers.php">Customers list</a></li>
+                                    <li><a href="customers.php?page=customer_general_data">Add customer</a></li>
                                 </ul>
                             </div>
                         </li>
