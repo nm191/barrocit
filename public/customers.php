@@ -12,6 +12,8 @@ require_once ('includes/menus.php');
 
 $current_page = $error = $success = '';
 
+$customer = new Customer();
+
 if(isset($_GET['page'])){
     $current_page = $_GET['page'];
 } else {
@@ -298,7 +300,48 @@ switch ($current_page){
         <?php
         break;
     case 'customers':
-        echo $customers;
+?>
+<table class="table table-striped table-hover table-responsive">
+        <thead>
+        <tr>
+                <th>Companyname</th>
+                <th>Address</th>
+                <th>Contact Person</th>
+                <th>Contact email</th>
+                <th>Maintenance contract</th>
+                <th>Sales agent</th>
+                <th>Open projects</th>
+                <th>Prospectstatus</th>
+                <th>Option buttons</th>
+
+        </tr>
+        </thead>
+
+
+        <?php
+        $custData = $customer->getAlldata();
+        foreach($custData as $cust){
+            echo '<tr>';
+            echo '<td>' . $cust['customer_company_name'] . '</td>';
+            echo '<td>' . $cust['customer_address'] . '</td>';
+            echo '<td>' . $cust['customer_contact_firstname'] . ' ' . $cust['customer_contact_surname'] . '</td>';
+            echo '<td>' . $cust['customer_contact_email'] . '</td>';
+            echo '<td>' . $cust['customer_maintenance_contract'] . '</td>';
+            echo '<td>' . $cust['customer_sales_agent'] . '</td>';
+            echo '<td>' . $cust['customer_open_projects'] . '</td>';
+            echo '<td>' . $cust['customer_is_prospect'] . '</td>';
+            echo '<td> <a href="customers.php?page=customer_general_data?id='.$cust['customer_id'].'">
+                  <span style="color: blue;" class="glyphicon glyphicon-edit"></span></a>
+                  <a href="../app/controllers/deleteController.php" style="color: red;"><span class="glyphicon glyphicon-remove"></span></a>
+                  </td>';
+            echo '</tr>';
+        }
+        ?>
+
+</table>
+
+
+<?php
         break;
 
     default:
