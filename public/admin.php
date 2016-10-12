@@ -65,7 +65,7 @@ switch ($current_page){
                 <label class="col-sm-offset-2 col-sm-2 control-label" for="password_check">Password check:</label>
                 <div class="col-sm-4"><input class="form-control" id="password_check" name="password_check" type="password" required></div>
             </div>
-                <div class="col-sm-offset-4 col-sm-4"><input type="submit" class="btn btn-block btn-success"> </div>
+                <div class="col-sm-offset-4 col-sm-4"><input type="submit" name='type' value='Register' class="btn btn-block btn-success"> </div>
             </fieldset>
             </form>
 
@@ -76,7 +76,7 @@ switch ($current_page){
 
         break;
     case 'admin':
-        echo 'Admin home';
+        var_dump($user);
         break;
 
     default:

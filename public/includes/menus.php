@@ -5,7 +5,9 @@
  * Date: 10-10-2016
  * Time: 12:19
  */
-
+    if(!$user->isLoggedIn){
+        $user->redirect('index.php');
+    }
 ?>
 
 <div class="container-fluid">
@@ -48,8 +50,8 @@
                             <li><a href="#">One more separated link</a></li>
                         </ul>
                     </li>
-                    <li><span class="logged-in-as">Logged in as admin</span></li>
-                    <li><a class="btn btn-danger logout" href="#">Log Out!</a></li>
+                    <li><span class="logged-in-as">Logged in as <?php echo $user->username; ?></span></li>
+                    <li><a class="btn btn-danger logout" href="logout.php">Log Out</a></li>
                 </ul>
             </div>
         </div>

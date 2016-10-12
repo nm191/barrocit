@@ -9,25 +9,49 @@
 class User
 {
     private $db;
-    private $username;
+    public $username;
     private $password;
-    private $isLoggedIn; //camel-case: eerste woord kleine letter, de volgende woorden hoofdletter
+    public $isLoggedIn = false; //camel-case: eerste woord kleine letter, de volgende woorden hoofdletter
 
-    public function __construct()
+    public function __construct($uid = 0)
     {
         $this->db = Database::getInstance();
+        if($uid){
+            $sql = 'SELECT * FROM tbl_users WHERE `user_id` = :uid';
+            $stmt = $this->db->pdo->prepare($sql);
+            $stmt->bindParam(':uid', $uid);
+            $stmt->execute();
+            $result = $stmt->fetchObject();
+            if($result){
+                $this->isLoggedIn = true;
+                $this->username = $result->username;
+            }
+
+        }
     }
 
-    public function login($info){
+    public function login($username, $password){
+        $sql = 'SELECT * FROM tbl_users WHERE `username` = :username';
+        $stmt = $this->db->pdo->prepare($sql);
+        $stmt->bindParam(':username', $username);
+        $stmt->execute();
+        $result = $stmt->fetchObject();
 
-//        $stmt = $this->db->pdo->query("SELECT * FROM `users` WHERE id = $id")
-//        $user = $stmt->fetch();
+        if(!password_verify($password, $result->password)){
+            $message = 'Username or password is incorrect!';
+            $this->redirect('index.php?error='.$message);
+            exit();
+        }
 
-        $_SESSION['uid'] = $info['uid'];
-        $_SESSION['username'] = $info['username'];
-        $_SESSION['role'] = $info['role'];
+        $_SESSION['uid'] = $result->user_id;
+        $_SESSION['username'] = $result->username;
+        $_SESSION['user_level_id'] = $result->user_level_id;
 
-        header('location: ' . BASE_URL . '/app/router.php');
+        $this->isLoggedIn = true;
+        $this->username = $result->username;
+
+        $this->redirect('home.php');    
+        return;
     }
 
     public function register($username, $password){
@@ -37,7 +61,6 @@ class User
                 VALUES(:username, :password)";
 
         /* Paramatised queries*/
-
         $stmt = $this->db->pdo->prepare($sql);
         $stmt->bindParam(':username', $username);
         $stmt->bindParam(':password', $password);
@@ -56,8 +79,8 @@ class User
     }
 
     public function logout(){
-        echo 'Dit is de logout method';
         session_destroy();
+        $this->redirect('index.php');
     }
 
     public function redirect($path){

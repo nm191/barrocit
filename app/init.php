@@ -14,5 +14,12 @@ spl_autoload_register( function($class){
  }
 });
 
-$user = new User();
+if(isset($_SESSION['uid'])){
+    $user = new User($_SESSION['uid']);
+}else{
+    $user = new User();
+}
+
+
+
 
