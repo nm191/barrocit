@@ -85,7 +85,7 @@ switch($current_page){
                 <div class="form-group <?php if(isset($posted_values) && empty($posted_values['description'])){ echo 'has-error';} ?>">
                     <label class="col-sm-offset-2 col-sm-2 control-label" for="description">Description:</label>
                     <div class="col-sm-4">
-                        <textarea name="description" id="description" cols="69" rows="10"><?php if(isset($posted_values) && !empty($posted_values['description'])){ echo 'value="'.$posted_values['description'].'"';} ?></textarea>
+                        <textarea name="description" id="description" cols="69" rows="10"><?php if(isset($posted_values) && !empty($posted_values['description'])){ echo $posted_values['description'];} ?></textarea>
                     </div>
                 </div>
 
