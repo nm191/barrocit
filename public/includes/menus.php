@@ -29,7 +29,7 @@
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
                     <li><a href="customers.php?page=customer_general_data">Add Customer <span class="sr-only">(current)</span></a></li>
-                    <li><a href="#">Add Project</a></li>
+                    <li><a href="projects.php?page=add_project">Add Project</a></li>
                     <li><a href="#">Add Invoice</a></li>
                     <li><a href="#">Helpdesk</a></li>
 
@@ -82,8 +82,8 @@
                             </a>
                             <div class="collapse" id="toggleProjects" style="height: 0px;">
                                 <ul class="nav nav-list">
-                                    <li><a href="#">Project list</a></li>
-                                    <li><a href="#">Add project</a></li>
+                                    <li><a href="projects.php">Project list</a></li>
+                                    <li><a href="projects.php?page=add_project">Add project</a></li>
                                 </ul>
                             </div>
                         </li>

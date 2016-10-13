@@ -19,8 +19,8 @@ class Admin
         $sql = 'SELECT * 
                 FROM `tbl_users` users
                 LEFT JOIN `tbl_user_levels` ul
-                ON users.user_level_id = ul.user_level_id';
-
+                ON users.user_level_id = ul.user_level_id
+                ORDER BY users.user_id';
         $stmt = $this->db->pdo->prepare($sql);
         $stmt->execute();
         $result = $stmt->fetchAll(PDO::FETCH_OBJ);
