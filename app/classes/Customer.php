@@ -23,4 +23,10 @@ class Customer
         $result = $this->db->pdo->query($sql);
         return $result;
     }
+
+    public function delete()
+    {
+        
+
+    }
 }
