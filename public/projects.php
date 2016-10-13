@@ -58,34 +58,34 @@ switch($current_page){
         <form action="<?php echo BASE_URL; ?>/app/controllers/projectController.php" method="POST" class="form-horizontal">
             <fieldset>
                 <legend class="text-center">Add Project</legend>
-                <div class="form-group <?php if(isset($posted_values) && empty($posted_values['projectname'])){ echo 'has-error';} ?>">
-                    <label class="col-sm-offset-2 col-sm-2 control-label" for="projectname">Project Name:</label>
-                    <div class="col-sm-4"><input class="form-control" id="projectname" name="projectname" type="text" <?php if(isset($posted_values) && !empty($posted_values['projectname'])){ echo 'value="'.$posted_values['projectname'].'"';} ?> ></div>
+                <div class="form-group <?php if(isset($posted_values) && empty($posted_values['project_name'])){ echo 'has-error';} ?>">
+                    <label class="col-sm-offset-2 col-sm-2 control-label" for="project_name">Project Name:</label>
+                    <div class="col-sm-4"><input class="form-control" id="project_name" name="project_name" type="text" <?php if(isset($posted_values) && !empty($posted_values['project_name'])){ echo 'value="'.$posted_values['project_name'].'"';} ?> ></div>
                 </div>
-                <div class="form-group  <?php if(isset($posted_values) && empty($posted_values['customer'])){ echo 'has-error';} ?>">
-                    <label class="col-sm-offset-2 col-sm-2 control-label" for="customer">Customer:</label>
-                    <div class="col-sm-4"><input class="form-control" id="customer" name="customer" type="text" <?php if(isset($posted_values) && !empty($posted_values['customer'])){ echo 'value="'.$posted_values['customer'].'"';} ?>></div>
+                <div class="form-group  <?php if(isset($posted_values) && empty($posted_values['customer_id'])){ echo 'has-error';} ?>">
+                    <label class="col-sm-offset-2 col-sm-2 control-label" for="customer_id">Customer:</label>
+                    <div class="col-sm-4"><input class="form-control" id="customer_id" name="customer_id" type="number" <?php if(isset($posted_values) && !empty($posted_values['customer_id'])){ echo 'value="'.$posted_values['customer_id'].'"';} ?>></div>
                 </div>
-                <div class="form-group <?php if(isset($posted_values) && empty($posted_values['priority'])){ echo 'has-error';} ?>">
-                    <label class="col-sm-offset-2 col-sm-2 control-label" for="priority">Priority:</label>
-                    <div class="col-sm-4"><input class="form-control" id="priority" name="priority" type="number" min="1" max="999" <?php if(isset($posted_values) && !empty($posted_values['priority'])){ echo 'value="'.$posted_values['priority'].'"';} ?>></div>
+                <div class="form-group <?php if(isset($posted_values) && empty($posted_values['project_priority'])){ echo 'has-error';} ?>">
+                    <label class="col-sm-offset-2 col-sm-2 control-label" for="project_priority">Priority:</label>
+                    <div class="col-sm-4"><input class="form-control" id="project_priority" name="project_priority" type="number" min="1" max="999" <?php if(isset($posted_values) && !empty($posted_values['project_priority'])){ echo 'value="'.$posted_values['project_priority'].'"';} ?>></div>
                 </div>
-                <div class="form-group <?php if(isset($posted_values) && empty($posted_values['start_date'])){ echo 'has-error';} ?>">
-                    <label class="col-sm-offset-2 col-sm-2 control-label" for="start_date">Start date:</label>
-                    <div class="col-sm-4"><input class="form-control" id="start_date" name="start_date" type="date" <?php if(isset($posted_values) && !empty($posted_values['start_date'])){ echo 'value="'.$posted_values['start_date'].'"';} ?>></div>
+                <div class="form-group <?php if(isset($posted_values) && empty($posted_values['project_start_date'])){ echo 'has-error';} ?>">
+                    <label class="col-sm-offset-2 col-sm-2 control-label" for="project_start_date">Start date:</label>
+                    <div class="col-sm-4"><input class="form-control" id="project_start_date" name="project_start_date" type="date" <?php if(isset($posted_values) && !empty($posted_values['project_start_date'])){ echo 'value="'.$posted_values['project_start_date'].'"';} ?>></div>
                 </div>
                 <div class="form-group">
-                    <label class="col-sm-offset-2 col-sm-2 control-label" for="deadline">Deadline:</label>
-                    <div class="col-sm-4"><input class="form-control" id="deadline" name="deadline" type="date"></div>
+                    <label class="col-sm-offset-2 col-sm-2 control-label" for="project_deadline">Deadline:</label>
+                    <div class="col-sm-4"><input class="form-control" id="project_deadline" name="project_deadline" type="date"></div>
                 </div>
-                <div class="form-group  <?php if(isset($posted_values) && empty($posted_values['version'])){ echo 'has-error';} ?>">
-                    <label class="col-sm-offset-2 col-sm-2 control-label" for="version">Version:</label>
-                    <div class="col-sm-4"><input class="form-control" id="version" name="version" type="text" maxlength="15" <?php if(isset($posted_values) && !empty($posted_values['version'])){ echo 'value="'.$posted_values['version'].'"';} ?>></div>
+                <div class="form-group  <?php if(isset($posted_values) && empty($posted_values['project_version'])){ echo 'has-error';} ?>">
+                    <label class="col-sm-offset-2 col-sm-2 control-label" for="project_version">Version:</label>
+                    <div class="col-sm-4"><input class="form-control" id="project_version" name="project_version" type="text" maxlength="15" <?php if(isset($posted_values) && !empty($posted_values['project_version'])){ echo 'value="'.$posted_values['project_version'].'"';} ?>></div>
                 </div>
-                <div class="form-group <?php if(isset($posted_values) && empty($posted_values['description'])){ echo 'has-error';} ?>">
-                    <label class="col-sm-offset-2 col-sm-2 control-label" for="description">Description:</label>
+                <div class="form-group <?php if(isset($posted_values) && empty($posted_values['project_description'])){ echo 'has-error';} ?>">
+                    <label class="col-sm-offset-2 col-sm-2 control-label" for="project_description">Description:</label>
                     <div class="col-sm-4">
-                        <textarea name="description" id="description" cols="69" rows="10"><?php if(isset($posted_values) && !empty($posted_values['description'])){ echo $posted_values['description'];} ?></textarea>
+                        <textarea name="project_description" id="project_description" cols="69" rows="10"><?php if(isset($posted_values) && !empty($posted_values['project_description'])){ echo $posted_values['project_description'];} ?></textarea>
                     </div>
                 </div>
 
