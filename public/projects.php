@@ -78,8 +78,8 @@ switch($current_page){
                     <label class="col-sm-offset-2 col-sm-2 control-label" for="deadline">Deadline:</label>
                     <div class="col-sm-4"><input class="form-control" id="deadline" name="deadline" type="date"></div>
                 </div>
-                <div class="form-group">
-                    <label class="col-sm-offset-2 col-sm-2 control-label" for="version" <?php if(isset($posted_values) && empty($posted_values['version'])){ echo 'has-error';} ?>>Version:</label>
+                <div class="form-group  <?php if(isset($posted_values) && empty($posted_values['version'])){ echo 'has-error';} ?>">
+                    <label class="col-sm-offset-2 col-sm-2 control-label" for="version">Version:</label>
                     <div class="col-sm-4"><input class="form-control" id="version" name="version" type="text" maxlength="15" <?php if(isset($posted_values) && !empty($posted_values['version'])){ echo 'value="'.$posted_values['version'].'"';} ?>></div>
                 </div>
                 <div class="form-group <?php if(isset($posted_values) && empty($posted_values['description'])){ echo 'has-error';} ?>">
