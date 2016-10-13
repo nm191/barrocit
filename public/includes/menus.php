@@ -30,7 +30,7 @@
                 <ul class="nav navbar-nav">
                     <li><a href="customers.php?page=customer_general_data">Add Customer <span class="sr-only">(current)</span></a></li>
                     <li><a href="projects.php?page=add_project">Add Project</a></li>
-                    <li><a href="#">Add Invoice</a></li>
+                    <li><a href="invoices.php">Add Invoice</a></li>
                     <li><a href="#">Helpdesk</a></li>
 
 
