@@ -104,8 +104,8 @@ Finance <span class="caret pull-right"></span>
                             </a>
                             <div class="collapse" id="toggleFinance" style="height: 0px;">
                                 <ul class="nav nav-list">
-                                    <li><a href="#">Invoice list</a></li>
-                                    <li><a href="#">Add invoice</a></li>
+                                    <li><a href="invoices.php">Invoice list</a></li>
+                                    <li><a href="invoices.php">Add invoice</a></li>
                                 </ul>
                             </div>
                         </li>
