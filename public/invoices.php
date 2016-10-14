@@ -44,6 +44,8 @@ if(!empty($success)){
     <div class="alert alert-success" role="alert">Success: <?php echo $success; ?></div>
     <?php
 }
+switch ($current_page){
+    case 'add_invoice':
         ?>
         <form action="<?php echo BASE_URL; ?>/app/controllers/authController.php" method="POST" class="form-horizontal">
             <fieldset>
@@ -116,8 +118,33 @@ if(!empty($success)){
                 <div class="col-sm-offset-4 col-sm-4"><input type="submit" name='saveGeneralData' value='Save' class="btn btn-block btn-success"> </div>
             </fieldset>
         </form>
+        <?php
+        break;
+    case 'list_invoices':
+        ?>
+            <table class="table table-striped table-hover table-responsive">
+                <thead>
+                <tr>
+                    <th>Companyname</th>
+                    <th>Address</th>
+                    <th>Contact Person</th>
+                    <th>Contact email</th>
+                    <th>Maintenance contract</th>
+                    <th>Sales agent</th>
+                    <th>Open projects</th>
+                    <th>Prospectstatus</th>
+                    <th>Option buttons</th>
 
-<?php
+                </tr>
+                </thead>
+             </table>
+        <?php
+        break;
+
+    default:
+        echo 'This page does not exists!';
+
+}
 require_once ('includes/footer.php');
 
 ?>

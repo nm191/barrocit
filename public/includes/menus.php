@@ -30,7 +30,7 @@
                 <ul class="nav navbar-nav">
                     <li><a href="customers.php?page=customer_general_data">Add Customer <span class="sr-only">(current)</span></a></li>
                     <li><a href="projects.php?page=add_project">Add Project</a></li>
-                    <li><a href="invoices.php">Add Invoice</a></li>
+                    <li><a href="invoices.php?page=add_invoice">Add Invoice</a></li>
                     <li><a href="#">Helpdesk</a></li>
 
 
@@ -104,8 +104,8 @@ Finance <span class="caret pull-right"></span>
                             </a>
                             <div class="collapse" id="toggleFinance" style="height: 0px;">
                                 <ul class="nav nav-list">
-                                    <li><a href="invoices.php">Invoice list</a></li>
-                                    <li><a href="invoices.php">Add invoice</a></li>
+                                    <li><a href="invoices.php?page=list_invoices">Invoice list</a></li>
+                                    <li><a href="invoices.php?page=add_invoice">Add invoice</a></li>
                                 </ul>
                             </div>
                         </li>
