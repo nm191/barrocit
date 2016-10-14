@@ -47,12 +47,12 @@ if(!empty($success)){
 switch ($current_page){
     case 'add_invoice':
         ?>
-        <form action="<?php echo BASE_URL; ?>/app/controllers/authController.php" method="POST" class="form-horizontal">
+        <form action="<?php echo BASE_URL; ?>/app/controllers/invoiceController.php" method="POST" class="form-horizontal">
             <fieldset>
                 <legend class="text-center">Invoice Data</legend>
                 <div class="form-group">
                     <label class="col-sm-offset-2 col-sm-2 control-label" for="customerName">Invoice number:</label>
-                    <div class="col-sm-4"><input class="form-control" id="customerName" name="customerName" type="text" required></div>
+                    <div class="col-sm-4"><input class="form-control" id="invoiceNumber" name="invoiceNumber" type="text" required></div>
                 </div>
                 <div class="form-group">
                     <label class="col-sm-offset-2 col-sm-2 control-label" for="project">Project:</label>
@@ -88,17 +88,15 @@ switch ($current_page){
                     </div>
                 </div>
                 <div class="form-group">
+                    <label class="col-sm-offset-2 col-sm-2 control-label" for="customerName">Invoice Total:</label>
+                    <div class="col-sm-4"><input class="form-control" id="invoiceTotal" name="invoiceTotal" type="text" required></div>
+                </div>
+                <div class="form-group">
                     <label class="col-sm-offset-2 col-sm-2 control-label" for="project">Date:</label>
-                        <div class="col-sm-4" id='datetimepicker1'>
-                            <input type='date' class="form-control" />
+                        <div class="col-sm-4">
+                            <input type='date' name="invoiceDate" id="invoiceDate" class="form-control" />
                         </div>
                     </div>
-
-                <script type="text/javascript">
-                    $(function () {
-                        $('#datetimepicker1').datetimepicker();
-                    });
-                </script>
                 <div class="form-group">
                     <div class="checkbox col-sm-offset-4 col-sm-4">
                         <label>
@@ -115,7 +113,7 @@ switch ($current_page){
                         </label>
                     </div>
                 </div>
-                <div class="col-sm-offset-4 col-sm-4"><input type="submit" name='saveGeneralData' value='Save' class="btn btn-block btn-success"> </div>
+                <div class="col-sm-offset-4 col-sm-4"><input type="submit" name='type' value='addInvoice' class="btn btn-block btn-success"> </div>
             </fieldset>
         </form>
         <?php
@@ -125,16 +123,14 @@ switch ($current_page){
             <table class="table table-striped table-hover table-responsive">
                 <thead>
                 <tr>
-                    <th>Companyname</th>
-                    <th>Address</th>
-                    <th>Contact Person</th>
-                    <th>Contact email</th>
-                    <th>Maintenance contract</th>
-                    <th>Sales agent</th>
-                    <th>Open projects</th>
-                    <th>Prospectstatus</th>
-                    <th>Option buttons</th>
-
+                    <th>Invoice Number</th>
+                    <th>Customer</th>
+                    <th>Invoice Date</th>
+                    <th>Invoice Total</th>
+                    <th>Invoice Term</th>
+                    <th>Sent?</th>
+                    <th>Confirmed?</th>
+                    <th>Options</th>
                 </tr>
                 </thead>
              </table>
