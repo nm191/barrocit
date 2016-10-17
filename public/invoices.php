@@ -12,6 +12,8 @@ require_once ('includes/menus.php');
 
 $current_page = $error = $success = '';
 
+$invoices = new Invoice();
+
 if(isset($_GET['page'])){
     $current_page = $_GET['page'];
 } else {
@@ -133,6 +135,26 @@ switch ($current_page){
                     <th>Options</th>
                 </tr>
                 </thead>
+
+                <?php
+                $invoiceData = $invoices->getAllData();
+                foreach ($invoiceData as $invoice) {
+                    echo '<tr>';
+                    echo '<td>' . $invoice['invoice_number'] . '</td>';
+                    echo '<td>' . $invoice['project_id'] . '</td>';
+                    echo '<td>' . $invoice['invoice_date'] . '</td>';
+                    echo '<td> € ' . $invoice['invoice_total'] . '</td>';
+                    echo '<td>' . $invoice['invoice_date'] . '</td>';
+                    echo '<td>' . ( $invoice['invoice_is_sent'] == 1 ? 'Yes' : 'No' ). '</td>';
+                    echo '<td>' . ( $invoice['invoice_is_confirmed'] == 1 ? 'Yes' : 'No' ). '</td>';
+                    echo '<td> <a href="invoices.php?page=add_invoice?id='.$invoice['invoice_id'].'">
+                  <span style="color: blue;" class="glyphicon glyphicon-edit"></span></a>
+                  <a href="../app/controllers/deleteController.php?invoice_id='.$invoice['invoice_id'].'" style="color: red;"><span class="glyphicon glyphicon-remove"></span></a></td>';
+                    echo '</tr>';
+                }
+
+
+                ?>
              </table>
         <?php
         break;

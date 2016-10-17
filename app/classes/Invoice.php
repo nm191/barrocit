@@ -6,7 +6,7 @@
  * Date: 14-10-2016
  * Time: 09:53
  */
-class Invoices
+class Invoice
 {
     private $db;
 
@@ -25,6 +25,16 @@ class Invoices
         $stmt->bindParam(':invoiceTotal', $invoiceTotal);
         $stmt->bindParam(':invoiceDate', $invoiceDate);
         $stmt->execute();
+    }
+
+    public function getAllData() {
+        $sql = "SELECT * FROM tbl_invoices";
+        $result = $this->db->pdo->query($sql);
+        return $result;
+    }
+
+    public function deleteInvoice() {
+        $sql = "DELETE FROM tbl_invoice WHERE invoice_id = todo";
     }
 
     public function redirect($path){

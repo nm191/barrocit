@@ -8,7 +8,7 @@
 
 require_once ('../init.php');
 
-$invoice = new Invoices();
+$invoice = new Invoice();
 
 var_dump($_POST);
 
