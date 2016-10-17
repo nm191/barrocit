@@ -59,7 +59,7 @@ if(!empty($success)){
 switch ($current_page){
     case 'customer_general_data':
         ?>
-        <form action="<?php echo BASE_URL; ?>/app/controllers/authController.php" method="POST" class="form-horizontal">
+        <form action="<?php echo BASE_URL; ?>/app/controllers/customerController.php" method="POST" class="form-horizontal">
             <fieldset>
                 <legend class="text-center">Customer General Data</legend>
                 <div class="form-group">
@@ -79,7 +79,7 @@ switch ($current_page){
                 <div class="form-group">
                     <div class="checkbox col-sm-offset-4 col-sm-4">
                         <label>
-                            <input type="checkbox" value="prospect" name="prospect" >
+                            <input type="checkbox" value="1" name="prospect">
                             Prospect?
                         </label>
                     </div>
@@ -87,10 +87,13 @@ switch ($current_page){
                 <div class="form-group">
                     <div class="checkbox col-sm-offset-4 col-sm-4">
                         <label>
-                            <input type="checkbox" value="maintenanceContract" name="maintenanceContract" >
+                            <input type="checkbox" value="1" name="maintenanceContract">
                             Maintenance contract?
                         </label>
                     </div>
+                </div>
+                <div class="formname">
+                    <input type="hidden" name="formname" value="generalData">
                 </div>
                 <div class="col-sm-offset-4 col-sm-4"><input type="submit" name='saveGeneralData' value='Save' class="btn btn-block btn-success"> </div>
             </fieldset>
@@ -101,39 +104,34 @@ switch ($current_page){
         break;
     case 'customer_addresses':
         ?>
-        <form action="<?php echo BASE_URL; ?>/app/controllers/authController.php" method="POST" class="form-horizontal">
+        <form action="<?php echo BASE_URL; ?>/app/controllers/customerController.php" method="POST" class="form-horizontal">
             <fieldset>
                 <legend class="text-center">Customer Addresses</legend>
                 <div class="form-group">
-                    <label class="col-sm-offset-2 col-sm-2 control-label" for="customerName">Customer name:</label>
-                    <div class="col-sm-4"><input class="form-control" id="customerName" name="customerName" type="text" required></div>
+                    <label class="col-sm-offset-2 col-sm-2 control-label" for="primaryAddress">Primary Address:</label>
+                    <div class="col-sm-4"><input class="form-control" id="primaryAddress" name="primaryAddress" type="text" required></div>
                 </div>
                 <div class="form-group">
-                    <label class="col-sm-offset-2 col-sm-2 control-label" for="salesAgent">Sales agent:</label>
-                    <div class="col-sm-4">
-                        <select class="form-control" name="salesAgent" id="salesAgent">
-                            <option>Nick</option>
-                            <option>Ronald</option>
-                            <option>Tim</option>
-                        </select>
-                    </div>
+                    <label class="col-sm-offset-2 col-sm-2 control-label" for="primaryZipcode">Primary Zipcode:</label>
+                    <div class="col-sm-4"><input class="form-control" id="primaryZipcode" name="primaryZipcode" type="text" required></div>
+                </div>
+                <div class="form-group" style="margin-bottom: 40px;">
+                    <label class="col-sm-offset-2 col-sm-2 control-label" for="primaryCity">Primary City:</label>
+                    <div class="col-sm-4"><input class="form-control" id="primaryCity" name="primaryCity" type="text" required></div>
                 </div>
                 <div class="form-group">
-                    <div class="checkbox col-sm-offset-4 col-sm-4">
-                        <label>
-                            <input type="checkbox" value="prospect" name="prospect" >
-                            Prospect?
-                        </label>
-                    </div>
+                    <label class="col-sm-offset-2 col-sm-2 control-label" for="secundaryAddress">Secundary Address:</label>
+                    <div class="col-sm-4"><input class="form-control" id="secundaryAddress" name="secundaryAddress" type="text"></div>
                 </div>
                 <div class="form-group">
-                    <div class="checkbox col-sm-offset-4 col-sm-4">
-                        <label>
-                            <input type="checkbox" value="maintenanceContract" name="maintenanceContract" >
-                            Maintenance contract?
-                        </label>
-                    </div>
+                    <label class="col-sm-offset-2 col-sm-2 control-label" for="secundaryZipcode">Secundary Zipcode:</label>
+                    <div class="col-sm-4"><input class="form-control" id="secundaryZipcode" name="secundaryHousenumber" type="text"></div>
                 </div>
+                <div class="form-group">
+                    <label class="col-sm-offset-2 col-sm-2 control-label" for="secundaryCity">Secundary City:</label>
+                    <div class="col-sm-4"><input class="form-control" id="secundaryCity" name="secundaryCity" type="text"></div>
+                </div>
+
                 <div class="col-sm-offset-4 col-sm-4"><input type="submit" name='saveGeneralData' value='Save' class="btn btn-block btn-success"> </div>
             </fieldset>
         </form>
@@ -145,34 +143,36 @@ switch ($current_page){
             <fieldset>
                 <legend class="text-center">Customer Contact Person</legend>
                 <div class="form-group">
-                    <label class="col-sm-offset-2 col-sm-2 control-label" for="customerName">Customer name:</label>
+                    <label class="col-sm-offset-2 col-sm-2 control-label" for="customerName">Primary Address:</label>
                     <div class="col-sm-4"><input class="form-control" id="customerName" name="customerName" type="text" required></div>
                 </div>
                 <div class="form-group">
-                    <label class="col-sm-offset-2 col-sm-2 control-label" for="salesAgent">Sales agent:</label>
-                    <div class="col-sm-4">
-                        <select class="form-control" name="salesAgent" id="salesAgent">
-                            <option>Nick</option>
-                            <option>Ronald</option>
-                            <option>Tim</option>
-                        </select>
-                    </div>
+                    <label class="col-sm-offset-2 col-sm-2 control-label" for="customerName">Primary Housenumber</label>
+                    <div class="col-sm-4"><input class="form-control" id="customerName" name="customerName" type="text" required></div>
                 </div>
                 <div class="form-group">
-                    <div class="checkbox col-sm-offset-4 col-sm-4">
-                        <label>
-                            <input type="checkbox" value="prospect" name="prospect" >
-                            Prospect?
-                        </label>
-                    </div>
+                    <label class="col-sm-offset-2 col-sm-2 control-label" for="customerName">Primary Zipcode:</label>
+                    <div class="col-sm-4"><input class="form-control" id="customerName" name="customerName" type="text" required></div>
                 </div>
                 <div class="form-group">
-                    <div class="checkbox col-sm-offset-4 col-sm-4">
-                        <label>
-                            <input type="checkbox" value="maintenanceContract" name="maintenanceContract" >
-                            Maintenance contract?
-                        </label>
-                    </div>
+                    <label class="col-sm-offset-2 col-sm-2 control-label" for="customerName">Primary City:</label>
+                    <div class="col-sm-4"><input class="form-control" id="customerName" name="customerName" type="text" required></div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-offset-2 col-sm-2 control-label" for="customerName">Secundary Address:</label>
+                    <div class="col-sm-4"><input class="form-control" id="customerName" name="customerName" type="text"></div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-offset-2 col-sm-2 control-label" for="customerName">Secundary Housenumber</label>
+                    <div class="col-sm-4"><input class="form-control" id="customerName" name="customerName" type="text"></div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-offset-2 col-sm-2 control-label" for="customerName">Secundary Zipcode:</label>
+                    <div class="col-sm-4"><input class="form-control" id="customerName" name="customerName" type="text"></div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-offset-2 col-sm-2 control-label" for="customerName">Secundary City:</label>
+                    <div class="col-sm-4"><input class="form-control" id="customerName" name="customerName" type="text"></div>
                 </div>
                 <div class="col-sm-offset-4 col-sm-4"><input type="submit" name='saveGeneralData' value='Save' class="btn btn-block btn-success"> </div>
             </fieldset>
@@ -332,7 +332,7 @@ switch ($current_page){
             echo '<td>' . $cust['customer_is_prospect'] . '</td>';
             echo '<td> <a href="customers.php?page=customer_general_data?id='.$cust['customer_id'].'">
                   <span style="color: blue;" class="glyphicon glyphicon-edit"></span></a>
-                  <a href="../app/controllers/deleteController.php" style="color: red;"><span class="glyphicon glyphicon-remove"></span></a>
+                  <a href="../app/controllers/deleteController.php?customer_id='.$cust['customer_id'].'" style="color: red;"><span class="glyphicon glyphicon-remove"></span></a>
                   </td>';
             echo '</tr>';
         }

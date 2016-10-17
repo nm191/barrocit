@@ -6,9 +6,16 @@
  * Time: 12:32
  */
 
+require_once ('../init.php');
+
+$customer = new Customer();
+
 if ($_SERVER['REQUEST_METHOD'] == 'GET'){
     
-    if (delete()){
-        
+    $customer_id = $_GET['customer_id'];
+    if ($customer->delete($customer_id)){
+        echo 'Customer deleted';
+
+        header('location: ../public/customers.php');
     }
 }
