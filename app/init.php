@@ -5,6 +5,7 @@
  * Date: 7-10-2016
  * Time: 10:17
  */
+ob_start();
 session_start();
 require_once (realpath(__DIR__.'/config.php'));
 

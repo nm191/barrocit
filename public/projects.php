@@ -10,14 +10,25 @@ require_once ('includes/header.php');
 
 require_once ('includes/menus.php');
 
-    $current_page = $error = $success = '';
+    $project_id = $current_page = $error = $success = '';
 
-    $project = new Project();
+    if(isset($_GET['pid'])){
+        $project = new Project($_GET['pid']);
+    }else{
+        $project = new Project();
+    }
+
 
     if(isset($_GET['page'])){
-    $current_page = $_GET['page'];
+        $current_page = $_GET['page'];
     } else {
-    $current_page = 'projects';
+        $current_page = 'projects';
+    }
+
+    if(!isset($_GET['pid']) && $current_page == 'view_project'){
+        $current_page = 'invalid_project';
+    }else if($current_page == 'view_project'){
+        $project_id = $_GET['pid'];
     }
 
     //Message handling
@@ -96,7 +107,29 @@ switch($current_page){
         <?php
         break;
     case 'projects':
-        echo 'Project list';
+        ?>
+        <div class="col-sm-10 col-sm-offset-1">
+            <?php
+            echo $project->getProjectsTable();
+            ?>
+        </div>
+        <?php
+        break;
+    case 'view_project':
+        if(!$project->projectExists($project_id)){
+            $user->redirect('projects.php?page=invalid_project');
+        }
+
+        ?>
+        <div class="well">
+            <?php
+             var_dump($project);
+            ?>
+        </div>
+        <?php
+        break;
+    case 'invalid_project':
+        echo '<h2>This is not a valid project!</h2>';
         break;
     default:
         echo '<h2>This page doesn\'t exists!';
