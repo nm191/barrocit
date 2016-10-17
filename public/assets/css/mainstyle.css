@@ -152,6 +152,9 @@ li a.logout:hover {
 .control-label{
     padding-top: 9px !important;
 }
+.btn-options{
+    padding: 2px 18px;
+}
 /* make sidebar nav vertical */
 @media (min-width: 768px) {
     .sidebar-nav .navbar .navbar-collapse {

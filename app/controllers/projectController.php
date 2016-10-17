@@ -21,8 +21,7 @@ if($_SERVER['REQUEST_METHOD'] = 'POST'){
                     $user->redirect('projects.php?page=add_project&error='.$message);
                 }
             }
-
-           $project->addProject($posted_values);
+           $project->addProject($user, $posted_values);
 
             break;
     }
