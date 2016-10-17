@@ -17,7 +17,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
         $formname = $_POST['formname'];
     }
 
-    
 
     switch ($formname){
         case 'generalData':
@@ -36,27 +35,47 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
             $user->redirect('customers.php?page=customer_addresses');
         }
 
-        case 'Adresses':
-            if (!isset($_POST['primaryAdress']) || !isset($_POST['primaryHousenumnber']) || !isset($_POST['primaryZipcode']) || !isset($_POST['primaryCity'])){
+        break;
+
+        case 'Addresses':
+            if (!isset($_POST['primaryAddress']) || !isset($_POST['primaryZipcode']) || !isset($_POST['primaryCity'])){
                 header('location: '. BASE_URL . '/public/customers.php?page=customer_addresses');
             }
 
-            var_dump($_POST);
-            die;
+            $custData = $customer->getLatest();
 
-            $pAdress = $_POST['primaryAdress'];
+            $id = $custData['customer_id'];
+            $pAddress = $_POST['primaryAddress'];
             $pZipcode = $_POST['primaryZipcode'];
             $pCity = $_POST['primaryCity'];
-            if(isset($_POST['secundaryAdress'])) {$sAdress = $_POST['secundaryAdress'];}
+            if(isset($_POST['secundaryAddress'])) {$sAddress = $_POST['secundaryAddress'];}
             if(isset($_POST['secundaryZipcode'])){$sZipcode = $_POST['secundaryZipcode'];}
             if(isset($_POST['secundaryCity'])){$sCity = $_POST['secundaryCity'];}
 
-        if ($customer->addAddress($pAdress, $pZipcode, $pCity, $sAdress, $sZipcode, $sCity)){
+        if ($customer->addAddress($pAddress, $pZipcode, $pCity, $sAddress, $sZipcode, $sCity, $id)){
 
             $user->redirect('customers.php?page=customer_contact_person');
         }
+
+        break;
+        
+        case 'contact_person':
+
+            $custData = $customer->getLatest();
             
-             
+            $id = $_custData['customer_id'];
+            $initials = $_POST['initials'];
+            $firstname = $_POST['firstName'];
+            $surname = $_POST['surName'];
+            $email = $_POST['email'];
+            $phone = $_POST['pTelephone'];
+            if(isset($_POST['sTelephone'])){$sec_phone = $_POST['sTelephone'];}
+            if(isset($_POST['faxNumber'])){$fax = $_POST['fax'];}
+
+        if($customer->addContactPerson($initials, $firstname, $surname, $email, $phone, $sec_phone)){}
+
     }
+
+
 
 }

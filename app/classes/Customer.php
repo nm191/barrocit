@@ -20,7 +20,7 @@ class Customer
     public function getAlldata()
     {
         $sql = "SELECT * FROM tbl_customers";
-        $result = $this->db->pdo->query($sql);
+        $result = $this->db->pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
         return $result;
     }
 
@@ -32,6 +32,12 @@ class Customer
         $result = $stmt->execute();
         return $result;
         
+    }
+
+    public function getLatest() {
+        $sql = "SELECT customer_id FROM `tbl_customers` ORDER BY customer_id DESC LIMIT 1";
+        $result = $this->db->pdo->query($sql)->fetch(PDO::FETCH_ASSOC);
+        return $result;
     }
 
     public function addGeneralData($customer_company_name, $customer_sales_agent, $customer_is_prospect, $customer_maintenance_contract){
@@ -48,10 +54,10 @@ class Customer
         
     }
 
-    public function addAddress($pAddress, $pZipcode, $pCity, $sAddress, $sZipcode, $sCity) {
+    public function addAddress($customer_address, $customer_zipcode, $customer_city, $customer_sec_address, $customer_sec_zipcode, $customer_sec_city, $id) {
 
-        $sql = "INSERT INTO `tbl_customers`(customer_address, customer_zipcode, customer_city, custoemr_sec_address, customer_sec_zipcode, customer_sec_city)
-                VALUES (:customer_address, :customer_zipcode, :customer_city, :customer_sec_address, :customer_sec_zipcode, :customer_sec_city)";
+        $sql = "UPDATE `tbl_customers` SET customer_address = :customer_address, customer_zipcode = :customer_zipcode, customer_city = :customer_city, customer_sec_address = :customer_sec_address, 
+                customer_sec_zipcode = :customer_sec_zipcode, customer_sec_city = :customer_sec_city WHERE customer_id = :id";
         $stmt = $this->db->pdo->prepare($sql);
         $stmt->bindParam(':customer_address', $customer_address);
         $stmt->bindParam(':customer_zipcode', $customer_zipcode);
@@ -59,8 +65,26 @@ class Customer
         $stmt->bindParam(':customer_sec_address', $customer_sec_address);
         $stmt->bindParam(':customer_sec_zipcode', $customer_sec_zipcode);
         $stmt->bindParam(':customer_sec_city', $customer_sec_city);
+        $stmt->bindParam(':id', $id);
         $result = $stmt->execute();
         return $result;
 
     }
+
+//    public function addContactPerson($initials, $firstname, $surname, $email, $phone, $sec_phone, $fax, $id){
+//        $sql = "INSERT INTO `tbl_customers`(customer_contact_intitials, customer_contact_firstname, customer_contact_surname, customer_contact_email, customer_contact_phone, customer_contact_sec_phone, customer_fax)
+//                VALUES(:cc_initials, :cc_firstname, :cc_surname, :cc_email, :cc_phone, :cc_sec_phone, :cc_fax) WHERE customer_id = :id";
+//        $stmt = $this->db->pdo->prepare($sql);
+//        $stmt->bindParam(':cc_initials', $initials);
+//        $stmt->bindParam(':cc_firstname', $firstname);
+//        $stmt->bindParam(':cc_surname', $surname);
+//        $stmt->bindParam(':cc_email', $email);
+//        $stmt->bindParam(':cc_phone', $phone);
+//        $stmt->bindParam(':cc_sec_phone', $sec_phone);
+//        $stmt->bindParam(':cc_fax', $fax);
+//        $stmt->bindParam(':id', $id);
+//        $result = $stmt->execute();
+//        return $result;
+//
+//    }
 }

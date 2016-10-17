@@ -104,6 +104,9 @@ switch ($current_page){
         break;
     case 'customer_addresses':
         ?>
+        <?php $custData = $customer->getLatest();
+        
+        ?>
         <form action="<?php echo BASE_URL; ?>/app/controllers/customerController.php" method="POST" class="form-horizontal">
             <fieldset>
                 <legend class="text-center">Customer Addresses</legend>
@@ -125,11 +128,17 @@ switch ($current_page){
                 </div>
                 <div class="form-group">
                     <label class="col-sm-offset-2 col-sm-2 control-label" for="secundaryZipcode">Secundary Zipcode:</label>
-                    <div class="col-sm-4"><input class="form-control" id="secundaryZipcode" name="secundaryHousenumber" type="text"></div>
+                    <div class="col-sm-4"><input class="form-control" id="secundaryZipcode" name="secundaryZipcode" type="text"></div>
                 </div>
                 <div class="form-group">
                     <label class="col-sm-offset-2 col-sm-2 control-label" for="secundaryCity">Secundary City:</label>
                     <div class="col-sm-4"><input class="form-control" id="secundaryCity" name="secundaryCity" type="text"></div>
+                </div>
+                <div class="form-group">
+                    <input type="hidden" name="id" value="<?php $custData['customer_id'] ?>">
+                </div>
+                <div class="formname">
+                    <input type="hidden" name="formname" value="Addresses">
                 </div>
 
                 <div class="col-sm-offset-4 col-sm-4"><input type="submit" name='saveGeneralData' value='Save' class="btn btn-block btn-success"> </div>
@@ -143,37 +152,38 @@ switch ($current_page){
             <fieldset>
                 <legend class="text-center">Customer Contact Person</legend>
                 <div class="form-group">
-                    <label class="col-sm-offset-2 col-sm-2 control-label" for="customerName">Primary Address:</label>
-                    <div class="col-sm-4"><input class="form-control" id="customerName" name="customerName" type="text" required></div>
+                    <label class="col-sm-offset-2 col-sm-2 control-label" for="initials">Initials:</label>
+                    <div class="col-sm-4"><input class="form-control" id="initials" name="initials" type="text" required></div>
                 </div>
                 <div class="form-group">
-                    <label class="col-sm-offset-2 col-sm-2 control-label" for="customerName">Primary Housenumber</label>
-                    <div class="col-sm-4"><input class="form-control" id="customerName" name="customerName" type="text" required></div>
+                    <label class="col-sm-offset-2 col-sm-2 control-label" for="firstName">Firstname:</label>
+                    <div class="col-sm-4"><input class="form-control" id="firstName" name="firstName" type="text" required></div>
                 </div>
                 <div class="form-group">
-                    <label class="col-sm-offset-2 col-sm-2 control-label" for="customerName">Primary Zipcode:</label>
-                    <div class="col-sm-4"><input class="form-control" id="customerName" name="customerName" type="text" required></div>
+                    <label class="col-sm-offset-2 col-sm-2 control-label" for="surName">Lastname:</label>
+                    <div class="col-sm-4"><input class="form-control" id="surName" name="surName" type="text" required></div>
                 </div>
                 <div class="form-group">
-                    <label class="col-sm-offset-2 col-sm-2 control-label" for="customerName">Primary City:</label>
-                    <div class="col-sm-4"><input class="form-control" id="customerName" name="customerName" type="text" required></div>
+                    <label class="col-sm-offset-2 col-sm-2 control-label" for="email">Email:</label>
+                    <div class="col-sm-4"><input class="form-control" id="email" name="email" type="text" required></div>
                 </div>
                 <div class="form-group">
-                    <label class="col-sm-offset-2 col-sm-2 control-label" for="customerName">Secundary Address:</label>
-                    <div class="col-sm-4"><input class="form-control" id="customerName" name="customerName" type="text"></div>
+                    <label class="col-sm-offset-2 col-sm-2 control-label" for="pTelephone">Primary telephone:</label>
+                    <div class="col-sm-4"><input class="form-control" id="pTelephone" name="pTelephone" type="text" required></div>
                 </div>
                 <div class="form-group">
-                    <label class="col-sm-offset-2 col-sm-2 control-label" for="customerName">Secundary Housenumber</label>
-                    <div class="col-sm-4"><input class="form-control" id="customerName" name="customerName" type="text"></div>
+                    <label class="col-sm-offset-2 col-sm-2 control-label" for="sTelephone">Secondary telephone:</label>
+                    <div class="col-sm-4"><input class="form-control" id="sTelephone" name="sTelephone" type="text"></div>
                 </div>
                 <div class="form-group">
-                    <label class="col-sm-offset-2 col-sm-2 control-label" for="customerName">Secundary Zipcode:</label>
-                    <div class="col-sm-4"><input class="form-control" id="customerName" name="customerName" type="text"></div>
+                    <label class="col-sm-offset-2 col-sm-2 control-label" for="faxNumber">Fax number:</label>
+                    <div class="col-sm-4"><input class="form-control" id="faxNumber" name="faxNumber" type="text"></div>
                 </div>
-                <div class="form-group">
-                    <label class="col-sm-offset-2 col-sm-2 control-label" for="customerName">Secundary City:</label>
-                    <div class="col-sm-4"><input class="form-control" id="customerName" name="customerName" type="text"></div>
+
+                <div class="formname">
+                    <input type="hidden" name="formname" value="contact_person">
                 </div>
+
                 <div class="col-sm-offset-4 col-sm-4"><input type="submit" name='saveGeneralData' value='Save' class="btn btn-block btn-success"> </div>
             </fieldset>
         </form>
