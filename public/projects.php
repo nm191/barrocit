@@ -121,10 +121,23 @@ switch($current_page){
         }
 
         ?>
-        <div class="well">
-            <?php
-             var_dump($project);
-            ?>
+        <div class="col-sm-10 col-sm-offset-1">
+            <div class="well well-lg">
+                <?php
+                 echo '<h3>'.$project->getProjectName().'</h3>  ';
+                 ?>
+                <table class="table table-responisve table-striped table-hover">
+                    <?php
+                        echo '<tr><td>Customer:</td><td>'.$project->getProjectCustomer().'</td></tr>';
+                        echo '<tr><td>Priority:</td><td>'.$project->getProjectPrio().'</td></tr>';
+                        echo '<tr><td>Deadline:</td><td> '.$project->getProjectDeadline().'</td></tr>';
+                        echo '<tr><td>Start:</td><td> '.$project->getProjectStart().'</td></tr>';
+                        echo '<tr><td>Version:</td><td> '.$project->getProjectVersion().'</td></tr>';
+                        echo '<tr><td>Finished:</td><td> '.$project->getProjectFinished().'</td></tr>';
+                        echo '<tr><td>Description:</td><td> '.$project->getProjectDescription().'</td></tr>';
+                    ?>
+                </table>
+            </div>
         </div>
         <?php
         break;

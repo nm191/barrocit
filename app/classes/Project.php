@@ -126,4 +126,36 @@ class Project
         $result = $stmt->fetchAll(PDO::FETCH_OBJ);
         return $result;
     }
+
+    public function getProjectName(){
+        return $this->project_name;
+    }
+
+    public function getProjectPrio(){
+        return $this->project_priority;
+    }
+
+    public function getProjectCustomer(){
+        return $this->project_customer;
+    }
+
+    public function getProjectStart(){
+        return $this->project_start_date;
+    }
+
+    public function getProjectDeadline(){
+        return $this->project_deadline;
+    }
+
+    public function getProjectVersion(){
+        return $this->project_version;
+    }
+
+    public function getProjectDescription(){
+        return $this->project_description;
+    }
+
+    public function getProjectFinished(){
+        return ($this->project_is_finished ? 'Yes' : 'No');
+    }
 }
