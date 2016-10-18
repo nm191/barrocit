@@ -51,11 +51,6 @@ switch ($current_page){
         ?>
         <form action="<?php echo BASE_URL; ?>/app/controllers/invoiceController.php" method="POST" class="form-horizontal">
             <fieldset>
-                <legend class="text-center">Invoice Data</legend>
-                <div class="form-group">
-                    <label class="col-sm-offset-2 col-sm-2 control-label" for="customerName">Invoice number:</label>
-                    <div class="col-sm-4"><input class="form-control" id="invoiceNumber" name="invoiceNumber" type="text" required></div>
-                </div>
                 <div class="form-group">
                     <label class="col-sm-offset-2 col-sm-2 control-label" for="project">Project:</label>
                     <div class="col-sm-4">
@@ -122,40 +117,40 @@ switch ($current_page){
         break;
     case 'list_invoices':
         ?>
-            <table class="table table-striped table-hover table-responsive">
-                <thead>
-                <tr>
-                    <th>Invoice Number</th>
-                    <th>Customer</th>
-                    <th>Invoice Date</th>
-                    <th>Invoice Total</th>
-                    <th>Invoice Term</th>
-                    <th>Sent?</th>
-                    <th>Confirmed?</th>
-                    <th>Options</th>
-                </tr>
-                </thead>
-
-                <?php
-                $invoiceData = $invoices->getAllData();
-                foreach ($invoiceData as $invoice) {
-                    echo '<tr>';
-                    echo '<td>' . $invoice['invoice_number'] . '</td>';
-                    echo '<td>' . $invoice['project_id'] . '</td>';
-                    echo '<td>' . $invoice['invoice_date'] . '</td>';
-                    echo '<td> € ' . $invoice['invoice_total'] . '</td>';
-                    echo '<td>' . $invoice['invoice_date'] . '</td>';
-                    echo '<td>' . ( $invoice['invoice_is_sent'] == 1 ? 'Yes' : 'No' ). '</td>';
-                    echo '<td>' . ( $invoice['invoice_is_confirmed'] == 1 ? 'Yes' : 'No' ). '</td>';
-                    echo '<td> <a href="invoices.php?page=add_invoice?id='.$invoice['invoice_id'].'">
-                  <span style="color: blue;" class="glyphicon glyphicon-edit"></span></a>
-                  <a href="../app/controllers/deleteController.php?invoice_id='.$invoice['invoice_id'].'" style="color: red;"><span class="glyphicon glyphicon-remove"></span></a></td>';
-                    echo '</tr>';
-                }
-
-
-                ?>
-             </table>
+        <div class="col-sm-10 col-sm-offset-1">
+            <div class="well well-lg">
+                    <table class="table table-striped table-hover table-responsive">
+                        <thead>
+                        <tr>
+                            <th>Invoice Number</th>
+                            <th>Customer</th>
+                            <th>Invoice Date</th>
+                            <th>Invoice Total</th>
+                            <th>Sent?</th>
+                            <th>Confirmed?</th>
+                            <th>Options</th>
+                        </tr>
+                        </thead>
+                        <?php
+                        $invoiceData = $invoices->getAllData();
+                        foreach ($invoiceData as $invoice) {
+                            echo '<tr>';
+                            echo '<td> #' . str_replace("-","",$invoice['invoice_date']) . $invoice['invoice_id'] . '</td>';
+                            echo '<td>' . $invoice['project_id'] . '</td>';
+                            echo '<td>' . $invoice['invoice_date'] . '</td>';
+                            echo '<td> € ' . $invoice['invoice_total'] . '</td>';
+                            echo '<td>' . ( $invoice['invoice_is_sent'] == 1 ? 'Yes' : 'No' ). '</td>';
+                            echo '<td>' . ( $invoice['invoice_is_confirmed'] == 1 ? 'Yes' : 'No' ). '</td>';
+                            echo '<td>
+                            <a href="invoices.php?page=add_invoice?id='.$invoice['invoice_id'].'" class="btn btn-small btn-primary btn-options"><span class="glyphicon glyphicon-eye-open"></span></a>
+                            <a href="invoices.php?page=add_invoice?id='.$invoice['invoice_id'].'" class="btn btn-small btn-warning btn-options"><span class="glyphicon glyphicon-edit"></span></a>
+                            <a href="../app/controllers/deleteController.php?invoice_id='.$invoice['invoice_id'].'" class="btn btn-small btn-danger btn-options"><span class="glyphicon glyphicon-remove"></span></a></td>';
+                            echo '</tr>';
+                        }
+                        ?>
+                     </table>
+                </div>
+            </div>
         <?php
         break;
 
