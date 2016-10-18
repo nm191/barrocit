@@ -42,7 +42,46 @@ class Project
     }
 
     public function updateProject(User $user, $posted_values = array()){
+        unset($posted_values['type']);
+        unset($posted_values['customer_name']);
+        $project_id = $posted_values['project_id'];
+        unset($posted_values['project_id']);
 
+        $fields_ar = array_keys($posted_values);
+        $sql_ar[] = "UPDATE `tbl_projects` SET";
+        foreach($fields_ar as $field){
+            $set_ar[] = $field.' = :'.$field;
+        }
+        $sql_ar[] = implode(', ', $set_ar);
+        $sql_ar[] = 'WHERE project_id = :project_id';
+
+        $stmt = $this->db->pdo->prepare(implode(' ', $sql_ar));
+
+        $stmt->bindParam(':project_id', $project_id);
+        $stmt->bindParam(':project_name', $posted_values['project_name']);
+        $stmt->bindParam(':customer_id', $posted_values['customer_id']);
+        $stmt->bindParam(':project_priority', $posted_values['project_priority']);
+        $stmt->bindParam(':project_start_date', $posted_values['project_start_date']);
+        $stmt->bindParam(':project_deadline', $posted_values['project_deadline']);
+        $stmt->bindParam(':project_version', $posted_values['project_version']);
+        $stmt->bindParam(':project_description', $posted_values['project_description']);
+
+        $result = $stmt->execute();
+
+        if($result){
+            $message = 'Project has been editted!';
+            $user->redirect('projects.php?page=edit_project&pid='.$project_id.'&success='.$message);
+        }
+
+    }
+
+    public function deleteProject(User $user, $project_id){
+        $sql = 'UPDATE `tbl_projects` SET project_is_active = 0 WHERE project_id = :project_id';
+        $stmt = $this->db->pdo->prepare($sql);
+        $stmt->bindParam(':project_id', $project_id);
+        $result = $stmt->execute();
+
+        return $result;
     }
 
     public function addProject(User $user, $posted_values = array()){
@@ -82,6 +121,7 @@ class Project
                 FROM `tbl_projects` p
                 INNER JOIN `tbl_customers` c
                 ON p.customer_id = c.customer_id
+                WHERE p.project_is_active = 1
                 ORDER BY p.project_id';
         $stmt = $this->db->pdo->prepare($sql);
         $stmt->execute();
@@ -99,7 +139,7 @@ class Project
 
             $options_ar[] = '<a href="projects.php?page=view_project&pid='.$project->project_id.'" class="btn btn-small btn-primary btn-options" title="View project: '.$project->project_name.'"><span class="glyphicon glyphicon-eye-open"></span></a>';
             $options_ar[] = '<a href="projects.php?page=edit_project&pid='.$project->project_id.'" class="btn btn-small btn-warning btn-options"><span class="glyphicon glyphicon-edit"></span></a>';
-            $options_ar[] = '<a href="#" class="btn btn-small btn-danger btn-options"><span class="glyphicon glyphicon-remove"></span></a>';
+            $options_ar[] = '<a href="../app/controllers/projectController.php?pid='.$project->project_id.'" class="btn btn-small btn-danger btn-options" id="deleteProject"><span class="glyphicon glyphicon-remove"></span></a>';
 
             $td_ar[] = '<td>'.$project->project_id.'</td>';
             $td_ar[] = '<td>'.$project->project_priority.'</td>';

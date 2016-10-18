@@ -16,7 +16,6 @@ require_once ('includes/menus.php');
     if(isset($_GET['pid'])){
         $project = new Project($_GET['pid']);
         $posted_values = $project->getProjectData();
-        var_dump($posted_values);
     }else{
         $project = new Project();
     }
@@ -102,7 +101,7 @@ switch($current_page){
                 </div>
                 <div class="form-group">
                     <label class="col-sm-offset-2 col-sm-2 control-label" for="project_deadline">Deadline:</label>
-                    <div class="col-sm-4"><input class="form-control" id="project_deadline" name="project_deadline" type="date"></div>
+                    <div class="col-sm-4"><input class="form-control" id="project_deadline" name="project_deadline" type="date" <?php if(isset($posted_values) && !empty($posted_values['project_deadline'])){ echo 'value="'.$posted_values['project_deadline'].'"';} ?>></div>
                 </div>
                 <div class="form-group  <?php if(isset($posted_values) && empty($posted_values['project_version'])){ echo 'has-error';} ?>">
                     <label class="col-sm-offset-2 col-sm-2 control-label" for="project_version">Version:</label>
@@ -184,7 +183,13 @@ switch($current_page){
             $('#customer_name').val(customer_name);
             $('#customersModal').modal('toggle');
         });
+
+        $("#deleteProject").click(function(){
+            confirm('Are you sure you want to delete this project?');
+        });
     });
+    
+    
 </script>
 <?php
     require_once ('includes/footer.php');
