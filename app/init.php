@@ -21,6 +21,7 @@ if(isset($_SESSION['uid'])){
     $user = new User();
 }
 
+$modal = new Modals();
 
 
 
