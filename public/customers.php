@@ -135,6 +135,11 @@ switch ($current_page){
                     <div class="col-sm-4"><input class="form-control" id="secundaryCity" name="secundaryCity" type="text"></div>
                 </div>
                 <div class="form-group">
+                    <label class="col-sm-offset-2 col-sm-2 control-label" for="secundaryCity">Secundary City:</label>
+                    <div class="col-sm-4"><input class="form-control" id="secundaryCity" name="secundaryCity" type="text"></div>
+                </div>
+
+                <div class="form-group">
                     <input type="hidden" name="id" value="<?php $custData['customer_id'] ?>">
                 </div>
                 <div class="formname">
@@ -147,8 +152,11 @@ switch ($current_page){
         <?php
         break;
     case 'customer_contact_person':
+        
+        $custData = $customer->getLatest();
+        
         ?>
-        <form action="<?php echo BASE_URL; ?>/app/controllers/authController.php" method="POST" class="form-horizontal">
+        <form action="<?php echo BASE_URL; ?>/app/controllers/customerController.php" method="POST" class="form-horizontal">
             <fieldset>
                 <legend class="text-center">Customer Contact Person</legend>
                 <div class="form-group">
@@ -180,11 +188,15 @@ switch ($current_page){
                     <div class="col-sm-4"><input class="form-control" id="faxNumber" name="faxNumber" type="text"></div>
                 </div>
 
+                <div class="form-group">
+                    <input type="hidden" name="id" value="<?php $custData['customer_id'] ?>">
+                </div>
+
                 <div class="formname">
                     <input type="hidden" name="formname" value="contact_person">
                 </div>
 
-                <div class="col-sm-offset-4 col-sm-4"><input type="submit" name='saveGeneralData' value='Save' class="btn btn-block btn-success"> </div>
+                <div class="col-sm-offset-4 col-sm-4"><input type="submit" name='saveContactPerson' value='Save' class="btn btn-block btn-success"> </div>
             </fieldset>
         </form>
         <?php

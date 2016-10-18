@@ -71,20 +71,22 @@ class Customer
 
     }
 
-//    public function addContactPerson($initials, $firstname, $surname, $email, $phone, $sec_phone, $fax, $id){
-//        $sql = "INSERT INTO `tbl_customers`(customer_contact_intitials, customer_contact_firstname, customer_contact_surname, customer_contact_email, customer_contact_phone, customer_contact_sec_phone, customer_fax)
-//                VALUES(:cc_initials, :cc_firstname, :cc_surname, :cc_email, :cc_phone, :cc_sec_phone, :cc_fax) WHERE customer_id = :id";
-//        $stmt = $this->db->pdo->prepare($sql);
-//        $stmt->bindParam(':cc_initials', $initials);
-//        $stmt->bindParam(':cc_firstname', $firstname);
-//        $stmt->bindParam(':cc_surname', $surname);
-//        $stmt->bindParam(':cc_email', $email);
-//        $stmt->bindParam(':cc_phone', $phone);
-//        $stmt->bindParam(':cc_sec_phone', $sec_phone);
-//        $stmt->bindParam(':cc_fax', $fax);
-//        $stmt->bindParam(':id', $id);
-//        $result = $stmt->execute();
-//        return $result;
-//
-//    }
+    public function addContactPerson($initials, $firstname, $surname, $email, $phone, $sec_phone, $fax, $id){
+        $sql = "UPDATE `tbl_customers` 
+                SET customer_contact_initials = :cc_initials, customer_contact_firstname = :cc_firstname, customer_contact_surname = :cc_surname, customer_contact_email = :cc_email, 
+                customer_contact_phone = :cc_phone, customer_contact_sec_phone = :cc_sec_phone, customer_fax = :cc_fax
+                WHERE customer_id = :id";
+        $stmt = $this->db->pdo->prepare($sql);
+        $stmt->bindParam(':cc_initials', $initials);
+        $stmt->bindParam(':cc_firstname', $firstname);
+        $stmt->bindParam(':cc_surname', $surname);
+        $stmt->bindParam(':cc_email', $email);
+        $stmt->bindParam(':cc_phone', $phone);
+        $stmt->bindParam(':cc_sec_phone', $sec_phone);
+        $stmt->bindParam(':cc_fax', $fax);
+        $stmt->bindParam(':id', $id);
+        $result = $stmt->execute();
+        return $result;
+
+    }
 }

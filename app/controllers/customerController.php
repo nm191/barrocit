@@ -62,18 +62,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
         case 'contact_person':
 
             $custData = $customer->getLatest();
-            
-            $id = $_custData['customer_id'];
+
+            $id = $custData['customer_id'];
             $initials = $_POST['initials'];
             $firstname = $_POST['firstName'];
             $surname = $_POST['surName'];
             $email = $_POST['email'];
             $phone = $_POST['pTelephone'];
             if(isset($_POST['sTelephone'])){$sec_phone = $_POST['sTelephone'];}
-            if(isset($_POST['faxNumber'])){$fax = $_POST['fax'];}
+            if(isset($_POST['faxNumber'])){$fax = $_POST['faxNumber'];}
 
-        if($customer->addContactPerson($initials, $firstname, $surname, $email, $phone, $sec_phone)){}
+        if($customer->addContactPerson($initials, $firstname, $surname, $email, $phone, $sec_phone, $fax, $id)){
 
+        }
+            $user->redirect('customers.php?page=customer_visits');
     }
 
 
