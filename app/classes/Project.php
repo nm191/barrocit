@@ -14,7 +14,8 @@ class Project
     private $project_deadline;
     private $project_start_date;
     private $project_description;
-    private $project_customer;
+    private $project_customer_name;
+    private $project_customer_id;
     private $project_version;
     private $project_is_finished;
     private $project_name;
@@ -25,7 +26,7 @@ class Project
         $this->db = Database::getInstance();
 
         if($project_id && $this->projectExists($project_id)){
-            $current_project = $this->getProjectByID($project_id)[0];
+            $current_project = $this->getProjectByID($project_id);
             $this->project_id = $project_id;
             $this->project_name = $current_project->project_name;
             $this->project_priority = $current_project->project_priority;
@@ -34,12 +35,21 @@ class Project
             $this->project_description = $current_project->project_description;
             $this->project_version = $current_project->project_version;
             $this->project_is_finished = $current_project->project_is_finished;
-            $this->project_customer = $current_project->customer_company_name;
+            $this->project_customer_name = $current_project->customer_company_name;
+            $this->project_customer_id = $current_project->customer_id;
+
         }
+    }
+
+    public function updateProject(User $user, $posted_values = array()){
+
     }
 
     public function addProject(User $user, $posted_values = array()){
         unset($posted_values['type']);
+        unset($posted_values['customer_name']);
+        unset($posted_values['project_id']);
+
         $fields_ar = array_keys($posted_values);
         $sql_ar[] = "INSERT INTO `tbl_projects`";
         $sql_ar[] = "(".implode(', ', $fields_ar).")";
@@ -88,7 +98,7 @@ class Project
             $options_ar =$td_ar = array();
 
             $options_ar[] = '<a href="projects.php?page=view_project&pid='.$project->project_id.'" class="btn btn-small btn-primary btn-options" title="View project: '.$project->project_name.'"><span class="glyphicon glyphicon-eye-open"></span></a>';
-            $options_ar[] = '<a href="#" class="btn btn-small btn-warning btn-options"><span class="glyphicon glyphicon-edit"></span></a>';
+            $options_ar[] = '<a href="projects.php?page=edit_project&pid='.$project->project_id.'" class="btn btn-small btn-warning btn-options"><span class="glyphicon glyphicon-edit"></span></a>';
             $options_ar[] = '<a href="#" class="btn btn-small btn-danger btn-options"><span class="glyphicon glyphicon-remove"></span></a>';
 
             $td_ar[] = '<td>'.$project->project_id.'</td>';
@@ -123,10 +133,13 @@ class Project
         $stmt = $this->db->pdo->prepare($sql);
         $stmt->bindParam(':project_id', $project_id);
         $stmt->execute();
-        $result = $stmt->fetchAll(PDO::FETCH_OBJ);
+        $result = $stmt->fetch(PDO::FETCH_OBJ);
         return $result;
     }
 
+    public function getProjectId(){
+        return $this->project_id;
+    }
     public function getProjectName(){
         return $this->project_name;
     }
@@ -135,8 +148,12 @@ class Project
         return $this->project_priority;
     }
 
-    public function getProjectCustomer(){
-        return $this->project_customer;
+    public function getProjectCustomerName(){
+        return $this->project_customer_name;
+    }
+
+    public function getProjectCustomerId(){
+        return $this->project_customer_id;
     }
 
     public function getProjectStart(){
@@ -157,5 +174,21 @@ class Project
 
     public function getProjectFinished(){
         return ($this->project_is_finished ? 'Yes' : 'No');
+    }
+
+    public function getProjectData(){
+        $return_ar = array();
+        $return_ar['project_id'] = $this->getProjectId();
+        $return_ar['project_name'] = $this->getProjectName();
+        $return_ar['project_priority'] = $this->getProjectPrio();
+        $return_ar['project_start_date'] = $this->getProjectStart();
+        $return_ar['project_deadline'] = $this->getProjectDeadline();
+        $return_ar['project_version'] = $this->getProjectVersion();
+        $return_ar['project_description'] = $this->getProjectDescription();
+        $return_ar['project_is_finished'] = $this->getProjectFinished();
+        $return_ar['customer_name'] = $this->getProjectCustomerName();
+        $return_ar['customer_id'] = $this->getProjectCustomerId();
+
+        return $return_ar;
     }
 }

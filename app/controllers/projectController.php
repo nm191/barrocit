@@ -11,14 +11,14 @@ if($_SERVER['REQUEST_METHOD'] = 'POST'){
     $form_name = $_POST['type'];
     $posted_values = $_POST;
     $_SESSION['posted_values'] = $posted_values;
-    
     switch($form_name){
         case 'Add Project':
-            $required_fields_ar = array('project_name', 'project_priority', 'project_version', 'project_description', 'project_start_date');
+            $required_fields_ar = array('customer_id', 'project_name', 'project_priority', 'project_version', 'project_description', 'project_start_date');
             foreach($required_fields_ar as $required_field){
                 if(empty($posted_values[$required_field])){
                     $message = 'Fill in all required fields!';
                     $user->redirect('projects.php?page=add_project&error='.$message);
+                    exit();
                 }
             }
            $project->addProject($user, $posted_values);

@@ -11,9 +11,12 @@ require_once ('includes/header.php');
 require_once ('includes/menus.php');
 
     $project_id = $current_page = $error = $success = '';
+    $customer = new Customer();
 
     if(isset($_GET['pid'])){
         $project = new Project($_GET['pid']);
+        $posted_values = $project->getProjectData();
+        var_dump($posted_values);
     }else{
         $project = new Project();
     }
@@ -64,18 +67,30 @@ if(!empty($success)){
 }
 
 switch($current_page){
+    case 'edit_project':
     case 'add_project':
+        echo $modal->getCustomersModal($customer, 'customersModal', 'Select Customer');
         ?>
         <form action="<?php echo BASE_URL; ?>/app/controllers/projectController.php" method="POST" class="form-horizontal">
             <fieldset>
-                <legend class="text-center">Add Project</legend>
+                <legend class="text-center"><?php echo ($current_page == 'add_project' ? 'Add' : 'Edit'); ?> Project</legend>
                 <div class="form-group <?php if(isset($posted_values) && empty($posted_values['project_name'])){ echo 'has-error';} ?>">
                     <label class="col-sm-offset-2 col-sm-2 control-label" for="project_name">Project Name:</label>
-                    <div class="col-sm-4"><input class="form-control" id="project_name" name="project_name" type="text" <?php if(isset($posted_values) && !empty($posted_values['project_name'])){ echo 'value="'.$posted_values['project_name'].'"';} ?> ></div>
+                    <div class="col-sm-4">
+                        <input class="form-control" id="project_name" name="project_name" type="text" <?php if(isset($posted_values) && !empty($posted_values['project_name'])){ echo 'value="'.$posted_values['project_name'].'"';} ?> >
+                        <input class="form-control" id="project_id" name="project_id" type="hidden" <?php if(isset($posted_values) && !empty($posted_values['project_id'])){ echo 'value="'.$posted_values['project_id'].'"';} ?> >
+                    </div>
                 </div>
                 <div class="form-group  <?php if(isset($posted_values) && empty($posted_values['customer_id'])){ echo 'has-error';} ?>">
-                    <label class="col-sm-offset-2 col-sm-2 control-label" for="customer_id">Customer:</label>
-                    <div class="col-sm-4"><input class="form-control" id="customer_id" name="customer_id" type="number" <?php if(isset($posted_values) && !empty($posted_values['customer_id'])){ echo 'value="'.$posted_values['customer_id'].'"';} ?>></div>
+                    <label class="col-sm-offset-2 col-sm-2 control-label" for="customer_name">Customer:</label>
+                    <div class="col-sm-4">
+                        <input class="form-control" id="customer_name_disabled" name="customer_name_disabled" type="text" disabled <?php if(isset($posted_values) && !empty($posted_values['customer_name'])){ echo 'value="'.$posted_values['customer_name'].'"';} ?>>
+                        <input class="form-control" id="customer_name" name="customer_name" type="hidden" <?php if(isset($posted_values) && !empty($posted_values['customer_name'])){ echo 'value="'.$posted_values['customer_name'].'"';} ?>>
+                        <input class="form-control" id="customer_id" name="customer_id" type="hidden" <?php if(isset($posted_values) && !empty($posted_values['customer_id'])){ echo 'value="'.$posted_values['customer_id'].'"';} ?>>
+                    </div>
+                    <div class="col-sm-1">
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#customersModal">Select Customer</button>
+                    </div>
                 </div>
                 <div class="form-group <?php if(isset($posted_values) && empty($posted_values['project_priority'])){ echo 'has-error';} ?>">
                     <label class="col-sm-offset-2 col-sm-2 control-label" for="project_priority">Priority:</label>
@@ -100,7 +115,16 @@ switch($current_page){
                     </div>
                 </div>
 
-                <div class="col-sm-offset-4 col-sm-4"><input type="submit" name='type' value='Add Project' class="btn btn-block btn-success"> </div>
+                <div class="col-sm-offset-4 col-sm-4">
+                    <?php
+                        if($current_page == 'add_project'){
+                            echo '<input type="submit" name=\'type\' value=\'Add Project\' class="btn btn-block btn-success">';
+                        }
+                        else{
+                            echo '<input type="submit" name=\'type\' value=\'Edit Project\' class="btn btn-block btn-success">';
+                        }
+                    ?>
+                </div>
             </fieldset>
         </form>
 
@@ -128,7 +152,7 @@ switch($current_page){
                  ?>
                 <table class="table table-responisve table-striped table-hover">
                     <?php
-                        echo '<tr><td>Customer:</td><td>'.$project->getProjectCustomer().'</td></tr>';
+                        echo '<tr><td>Customer:</td><td>'.$project->getProjectCustomerName().'</td></tr>';
                         echo '<tr><td>Priority:</td><td>'.$project->getProjectPrio().'</td></tr>';
                         echo '<tr><td>Deadline:</td><td> '.$project->getProjectDeadline().'</td></tr>';
                         echo '<tr><td>Start:</td><td> '.$project->getProjectStart().'</td></tr>';
@@ -149,8 +173,19 @@ switch($current_page){
 }
 ?>
 
-
-
+<script>
+    $(document).ready(function(){
+        $("input:radio[name=customer]").click(function(){
+            var customer_id = $("input:radio[name=customer]:checked").val();
+            var customer_name = $("input:radio[name=customer]:checked").data('customer_name');
+            console.log(customer_id);
+            $('#customer_id').val(customer_id);
+            $('#customer_name_disabled').val(customer_name);
+            $('#customer_name').val(customer_name);
+            $('#customersModal').modal('toggle');
+        });
+    });
+</script>
 <?php
-require_once ('includes/footer.php');
+    require_once ('includes/footer.php');
 ?>
