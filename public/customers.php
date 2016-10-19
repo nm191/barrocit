@@ -64,13 +64,38 @@ switch ($current_page){
 
     case 'customer_overall':
 
+    $id = $_GET['customer_id'];
+    $custTableData = $customer->getCustomerById($id);
+
+
     echo '<table class="table table-striped table-hover table-responsive">';
-    echo '<h3>'. $customer->getCompanyName() . '</h3>';
-    echo '<tr><td>General Data</td></tr>';
-    echo '<tr><td>Contact Person:</td><td>'.$customer->getContactPerson().'</td>';
-    echo '<tr><td>Proe</td><td>'.$customer->getAddress().'</td>';
-    echo '<tr><td>Customer:</td><td>'.$project->getProjectCustomerName().'</td>';
-    echo '<tr><td>Address</td><td>'.$customer->getAddress().'</td>';
+    echo '<h3>'. $custTableData['customer_company_name'] . '</h3>';
+    echo '<tr><td><b>General Data</b></td><td></td></td></tr>';
+    echo '<tr><td>Contact Person:</td><td>' . $custTableData['customer_contact_firstname'] . ' ' . $custTableData['customer_contact_surname'] . '</td></tr>';
+    echo '<tr><td>Prospect Status:</td><td>' . $custTableData['customer_is_prospect'] . '</td></tr>';
+    echo '<tr><td>Maintenance Contract:</td><td>' . $custTableData['customer_maintenance_contract'] . '</td></tr>';
+    echo '<tr><td>Sales Agent:</td><td>' . $custTableData['customer_sales_agent'].'</td></tr>';
+    echo '<tr><td>Open Projects:</td><td>'. $custTableData['customer_open_projects'] .'</td></tr>';
+    echo '<tr><td><b>Addresses</b></td><td></td></tr>';
+    echo '<tr><td>Address</td><td>'. $custTableData['customer_address'] .'</td></tr>';
+    echo '<tr><td>Zipcode</td><td>'. $custTableData['customer_zipcode'] .'</td></tr>';
+    echo '<tr><td>City</td><td>'. $custTableData['customer_city'] .'</td></tr>';
+    if($custTableData['customer_sec_address'] != 'NULL'){echo '<tr><td>Secundary Address</td><td>'. $custTableData['customer_sec_address'] . '</td></tr>';}
+    if($custTableData['customer_sec_zipcode'] != 'NULL'){echo '<tr><td>Secundary Zipcode</td><td>' . $custTableData['customer_sec_zipcode'] . '</td></tr>';}
+    if($custTableData['customer_sec_city'] != 'NULL'){echo '<tr><td>Secundary City</td><td>' . $custTableData['customer_sec_city'] . ' </td></tr>';}
+    echo '<tr><td><b>Contact Information</b></td><td></td></tr>';
+    echo '<tr><td>Emailaddress</td><td>'. $custTableData['customer_contact_email'] .'</td></tr>';
+    echo '<tr><td>Phonenumber</td><td>'. $custTableData['customer_contact_phone'] .'</td></tr>';
+    echo '<tr><td>Secundary Phonenumber</td><td>'. $custTableData['customer_contact_sec_phone'] .'</td></tr>';
+    echo '<tr><td>Faxnumber</td><td>'. $custTableData['customer_fax'] .'</td></tr>';
+    echo '<tr><td><b>Financial Data</b></td><td></td></tr>';
+    echo '<tr><td>Discount</td><td>'. $custTableData['customer_discount'] .'</td></tr>';
+    echo '<tr><td>Overdraft</td><td>'. $custTableData['customer_overdraft'] .'</td></tr>';
+    echo '<tr><td>Pay term</td><td>'. $custTableData['customer_pay_term'] .'</td></tr>';
+    echo '<tr><td>Bank Account</td><td>'. $custTableData['customer_bank_account'] .'</td></tr>';
+    echo '<tr><td>Ledger Account</td><td>'. $custTableData['customer_ledger_account'] .'</td></tr>';
+    echo '<tr><td>Revenue</td><td>'. $custTableData['customer_revenue'] .'</td></tr>';
+    echo '</table>';
 
 
 
@@ -376,7 +401,7 @@ switch ($current_page){
 
         foreach($custData as $cust){
             $options_ar = array();
-            $options_ar[] = '<a href="#" class="btn btn-small btn-primary btn-options"><span class="glyphicon glyphicon-eye-open"></span></a>';
+            $options_ar[] = '<a href="customers.php?page=customer_overall&customer_id='. $cust['customer_id'].'" class="btn btn-small btn-primary btn-options"><span class="glyphicon glyphicon-eye-open"></span></a>';
             $options_ar[] = '<a href="customers.php?page=customer_addresses&customer_id='. $cust['customer_id'].'" class="btn btn-small btn-warning btn-options"><span class="glyphicon glyphicon-edit"></span></a>';
             $options_ar[] = '<a href="../app/controllers/deleteController.php?customer_id='.$cust['customer_id'].'" class="btn btn-small btn-danger btn-options"><span class="glyphicon glyphicon-remove"></span></a>';
             echo '<tr>';
