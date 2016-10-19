@@ -16,26 +16,37 @@ class Invoice
 
     }
     
-    public function addInvoice($invoiceNumber, $project, $invoiceTotal, $invoiceDate) {
-        $sql = "INSERT INTO tbl_invoices (invoice_number, project_id, invoice_total, invoice_date) VALUES(:invoiceNumber, :project, :invoiceTotal, :invoiceDate)";
+    public function addInvoice($project, $invoiceTotal, $invoiceDate) {
+        $sql = "INSERT INTO tbl_invoices (project_id, invoice_total, invoice_date) VALUES(:project, :invoiceTotal, :invoiceDate)";
 
         $stmt = $this->db->pdo->prepare($sql);
-        $stmt->bindParam(':invoiceNumber', $invoiceNumber);
         $stmt->bindParam(':project', $project);
         $stmt->bindParam(':invoiceTotal', $invoiceTotal);
         $stmt->bindParam(':invoiceDate', $invoiceDate);
         $stmt->execute();
     }
 
+
+
     public function getAllData() {
-        $sql = "SELECT * FROM tbl_invoices";
-        $result = $this->db->pdo->query($sql);
+        $sql = 'SELECT * 
+                FROM `tbl_invoices` i
+                INNER JOIN `tbl_projects` p
+                ON i.project_id = p.project_id
+                INNER JOIN `tbl_customers` c
+                ON p.customer_id = c.customer_id
+                WHERE p.project_is_active = 1
+                ORDER BY i.invoice_id';
+        $stmt = $this->db->pdo->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->fetchAll(PDO::FETCH_OBJ);
         return $result;
     }
 
     public function deleteInvoice() {
         $sql = "DELETE FROM tbl_invoice WHERE invoice_id = todo";
     }
+    
 
     public function redirect($path){
         header('location: ' . BASE_URL . '/public/' . $path);

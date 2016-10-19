@@ -13,6 +13,8 @@ require_once ('includes/menus.php');
 $current_page = $error = $success = '';
 
 $invoices = new Invoice();
+$customer = new Customer();
+$project = new Project();
 
 if(isset($_GET['page'])){
     $current_page = $_GET['page'];
@@ -48,6 +50,65 @@ if(!empty($success)){
 }
 switch ($current_page){
     case 'add_invoice':
+        echo $modal->getCustomersModal($customer, 'customersModal', 'Select Customer');
+        echo $modal->getProjectsModal($project, 'projectsModal', 'Select Project');
+        ?>
+        <form action="<?php echo BASE_URL; ?>/app/controllers/invoiceController.php" method="POST" class="form-horizontal">
+            <fieldset>
+                <div class="form-group  <?php if(isset($posted_values) && empty($posted_values['customer_id'])){ echo 'has-error';} ?>">
+                    <label class="col-sm-offset-2 col-sm-2 control-label" for="customer_name">Customer:</label>
+                    <div class="col-sm-4">
+                        <input class="form-control" id="customer_name_disabled" name="customer_name_disabled" type="text" disabled <?php if(isset($posted_values) && !empty($posted_values['customer_name'])){ echo 'value="'.$posted_values['customer_name'].'"';} ?>>
+                        <input class="form-control" id="customer_name" name="customer_name" type="hidden" <?php if(isset($posted_values) && !empty($posted_values['customer_name'])){ echo 'value="'.$posted_values['customer_name'].'"';} ?>>
+                        <input class="form-control" id="customer_id" name="customer_id" type="hidden" <?php if(isset($posted_values) && !empty($posted_values['customer_id'])){ echo 'value="'.$posted_values['customer_id'].'"';} ?>>
+                    </div>
+                    <div class="col-sm-1">
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#customersModal">Select Customer</button>
+                    </div>
+                </div>
+                <div class="form-group  <?php if(isset($posted_values) && empty($posted_values['project_id'])){ echo 'has-error';} ?>">
+                    <label class="col-sm-offset-2 col-sm-2 control-label" for="project_name">Project:</label>
+                    <div class="col-sm-4">
+                        <input class="form-control" id="project_name_disabled" name="project_name_disabled" type="text" disabled <?php if(isset($posted_values) && !empty($posted_values['project_name'])){ echo 'value="'.$posted_values['project_name'].'"';} ?>>
+                        <input class="form-control" id="project_name" name="project_name" type="hidden" <?php if(isset($posted_values) && !empty($posted_values['project_name'])){ echo 'value="'.$posted_values['project_name'].'"';} ?>>
+                        <input class="form-control" id="project_id" name="project_id" type="hidden" <?php if(isset($posted_values) && !empty($posted_values['project_id'])){ echo 'value="'.$posted_values['project_id'].'"';} ?>>
+                    </div>
+                    <div class="col-sm-1">
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#projectsModal">Select Project</button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-offset-2 col-sm-2 control-label" for="invoiceTotal">Invoice Total:</label>
+                    <div class="col-sm-4"><input class="form-control" id="invoiceTotal" name="invoiceTotal" type="text" required></div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-offset-2 col-sm-2 control-label" for="project">Date:</label>
+                        <div class="col-sm-4">
+                            <input type='date' name="invoiceDate" id="invoiceDate" class="form-control" />
+                        </div>
+                    </div>
+                <div class="form-group">
+                    <div class="checkbox col-sm-offset-4 col-sm-4">
+                        <label>
+                            <input type="checkbox" value="prospect" name="prospect" >
+                            Sent?
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="checkbox col-sm-offset-4 col-sm-4">
+                        <label>
+                            <input type="checkbox" value="maintenanceContract" name="maintenanceContract" >
+                            Confirmed?
+                        </label>
+                    </div>
+                </div>
+                <div class="col-sm-offset-4 col-sm-4"><input type="submit" name='type' value='addInvoice' class="btn btn-block btn-success"> </div>
+            </fieldset>
+        </form>
+        <?php
+        break;
+    case 'edit_invoice':
         ?>
         <form action="<?php echo BASE_URL; ?>/app/controllers/invoiceController.php" method="POST" class="form-horizontal">
             <fieldset>
@@ -85,15 +146,15 @@ switch ($current_page){
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-sm-offset-2 col-sm-2 control-label" for="customerName">Invoice Total:</label>
+                    <label class="col-sm-offset-2 col-sm-2 control-label" for="invoiceTotal">Invoice Total:</label>
                     <div class="col-sm-4"><input class="form-control" id="invoiceTotal" name="invoiceTotal" type="text" required></div>
                 </div>
                 <div class="form-group">
                     <label class="col-sm-offset-2 col-sm-2 control-label" for="project">Date:</label>
-                        <div class="col-sm-4">
-                            <input type='date' name="invoiceDate" id="invoiceDate" class="form-control" />
-                        </div>
+                    <div class="col-sm-4">
+                        <input type='date' name="invoiceDate" id="invoiceDate" class="form-control" />
                     </div>
+                </div>
                 <div class="form-group">
                     <div class="checkbox col-sm-offset-4 col-sm-4">
                         <label>
@@ -124,10 +185,11 @@ switch ($current_page){
                         <tr>
                             <th>Invoice Number</th>
                             <th>Customer</th>
+                            <th>Project</th>
                             <th>Invoice Date</th>
                             <th>Invoice Total</th>
-                            <th>Sent?</th>
-                            <th>Confirmed?</th>
+                            <th>Sent</th>
+                            <th>Paid</th>
                             <th>Options</th>
                         </tr>
                         </thead>
@@ -135,16 +197,17 @@ switch ($current_page){
                         $invoiceData = $invoices->getAllData();
                         foreach ($invoiceData as $invoice) {
                             echo '<tr>';
-                            echo '<td> #' . str_replace("-","",$invoice['invoice_date']) . $invoice['invoice_id'] . '</td>';
-                            echo '<td>' . $invoice['project_id'] . '</td>';
-                            echo '<td>' . $invoice['invoice_date'] . '</td>';
-                            echo '<td> € ' . $invoice['invoice_total'] . '</td>';
-                            echo '<td>' . ( $invoice['invoice_is_sent'] == 1 ? 'Yes' : 'No' ). '</td>';
-                            echo '<td>' . ( $invoice['invoice_is_confirmed'] == 1 ? 'Yes' : 'No' ). '</td>';
+                            echo '<td> #' . str_replace("-","",$invoice->invoice_date) . $invoice->invoice_id . '</td>';
+                            echo '<td>' . $invoice->customer_company_name . '</td>';
+                            echo '<td>' . $invoice->project_name . '</td>';
+                            echo '<td>' . $invoice->invoice_date . '</td>';
+                            echo '<td> € ' . $invoice->invoice_total . '</td>';
+                            echo '<td>' . ( $invoice->invoice_is_sent == 1 ? 'Yes' : 'No' ). '</td>';
+                            echo '<td>' . ( $invoice->invoice_is_confirmed == 1 ? 'Yes' : 'No' ). '</td>';
                             echo '<td>
-                            <a href="invoices.php?page=add_invoice?id='.$invoice['invoice_id'].'" class="btn btn-small btn-primary btn-options"><span class="glyphicon glyphicon-eye-open"></span></a>
-                            <a href="invoices.php?page=add_invoice?id='.$invoice['invoice_id'].'" class="btn btn-small btn-warning btn-options"><span class="glyphicon glyphicon-edit"></span></a>
-                            <a href="../app/controllers/deleteController.php?invoice_id='.$invoice['invoice_id'].'" class="btn btn-small btn-danger btn-options"><span class="glyphicon glyphicon-remove"></span></a></td>';
+                            <a href="invoices.php?page=add_invoice?id='.$invoice->invoice_id.'" class="btn btn-small btn-primary btn-options"><span class="glyphicon glyphicon-eye-open"></span></a>
+                            <a href="invoices.php?page=add_invoice?id='.$invoice->invoice_id.'" class="btn btn-small btn-warning btn-options"><span class="glyphicon glyphicon-edit"></span></a>
+                            <a href="../app/controllers/deleteController.php?invoice_id='.$invoice->invoice_id.'" class="btn btn-small btn-danger btn-options"><span class="glyphicon glyphicon-remove"></span></a></td>';
                             echo '</tr>';
                         }
                         ?>
@@ -158,6 +221,25 @@ switch ($current_page){
         echo 'This page does not exists!';
 
 }
+?>
+<script>
+    $(document).ready(function(){
+        $("input:radio[name=customer]").click(function(){
+            var customer_id = $("input:radio[name=customer]:checked").val();
+            var customer_name = $("input:radio[name=customer]:checked").data('customer_name');
+            console.log(customer_id);
+            $('#customer_id').val(customer_id);
+            $('#customer_name_disabled').val(customer_name);
+            $('#customer_name').val(customer_name);
+            $('#customersModal').modal('toggle');
+        });
+
+        $("#deleteProject").click(function(){
+            confirm('Are you sure you want to delete this project?');
+        });
+    });
+</script>
+<?php
 require_once ('includes/footer.php');
 
 ?>

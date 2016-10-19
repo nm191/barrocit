@@ -12,21 +12,20 @@ $invoice = new Invoice();
 
 var_dump($_POST);
 
+
 if($_SERVER['REQUEST_METHOD'] = 'POST'); {
     switch($_POST['type']) {
         case 'addInvoice':
-            if (!empty($_POST['invoiceNumber'])
+            if (!empty($_POST['project'])
                 && !empty($_POST['invoiceTotal'])
-                && !empty($_POST['project'])
                 && !empty($_POST['invoiceDate'])
             ) {
 
-                $invoiceNumber = $_POST['invoiceNumber'];
-                $invoiceTotal = $_POST['invoiceTotal'];
                 $project = $_POST['project'];
+                $invoiceTotal = $_POST['invoiceTotal'];
                 $invoiceDate = $_POST['invoiceDate'];
 
-                $invoice->addInvoice($invoiceNumber, $invoiceTotal, $project, $invoiceDate);
+                $invoice->addInvoice($project,$invoiceTotal , $invoiceDate);
                 $message = 'Invoice is added!';
                 $invoice->redirect('../public/invoices.php?page=list_invoices&success=' . $message);
             }
