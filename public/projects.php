@@ -175,6 +175,7 @@ switch($current_page){
 <script>
     $(document).ready(function(){
         $("input:radio[name=customer]").click(function(){
+            console.log("Clicked");
             var customer_id = $("input:radio[name=customer]:checked").val();
             var customer_name = $("input:radio[name=customer]:checked").data('customer_name');
             console.log(customer_id);
@@ -196,6 +197,17 @@ switch($current_page){
             var value = $('#searchBox').val();
             $.post('../app/controllers/searchController.php?search=customers',{value:value}, function(data){
                 $("#searchResults").html(data);
+                
+                $("input:radio[name=customer]").click(function(){
+                    console.log("Clicked");
+                    var customer_id = $("input:radio[name=customer]:checked").val();
+                    var customer_name = $("input:radio[name=customer]:checked").data('customer_name');
+                    console.log(customer_id);
+                    $('#customer_id').val(customer_id);
+                    $('#customer_name_disabled').val(customer_name);
+                    $('#customer_name').val(customer_name);
+                    $('#customersModal').modal('toggle');
+                });
             });
             return false;
         });
