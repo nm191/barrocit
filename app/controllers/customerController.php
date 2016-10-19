@@ -39,12 +39,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
 
         case 'Addresses':
             if (!isset($_POST['primaryAddress']) || !isset($_POST['primaryZipcode']) || !isset($_POST['primaryCity'])){
-                header('location: '. BASE_URL . '/public/customers.php?page=customer_addresses');
+                $user->redirect('customers.php?page=customer_addresses');
             }
-
-            $custData = $customer->getLatest();
-
-            $id = $custData['customer_id'];
+            
+            $id = $_POST['id'];
             $pAddress = $_POST['primaryAddress'];
             $pZipcode = $_POST['primaryZipcode'];
             $pCity = $_POST['primaryCity'];

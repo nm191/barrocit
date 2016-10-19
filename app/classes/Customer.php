@@ -33,6 +33,15 @@ class Customer
         return $result;
         
     }
+    
+    public function getCustomerById($id){
+        $sql = "SELECT * FROM `tbl_customers` WHERE customer_id = :id";
+        $stmt = $this->db->pdo->prepare($sql);
+        $stmt->bindParam(':id', $id);
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result;
+    }
 
     public function getLatest() {
         $sql = "SELECT customer_id FROM `tbl_customers` ORDER BY customer_id DESC LIMIT 1";

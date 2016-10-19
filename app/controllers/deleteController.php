@@ -12,11 +12,12 @@ $customer = new Customer();
 
 if ($_SERVER['REQUEST_METHOD'] == 'GET'){
     
-    $customer_id = $_GET['customer_id'];
+        $customer_id = $_GET['customer_id'];
+
     if ($customer->delete($customer_id)){
         echo 'Customer deleted';
 
-        header('location: ../public/customers.php');
+        $user->redirect('customers.php');
     }
 
     $invoice_id = $_GET['invoice_id'];

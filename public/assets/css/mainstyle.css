@@ -96,6 +96,10 @@ a.navbar-brand {
     background: #CFC1B5;
 }
 
+.btn {
+    border: none;
+}
+
 .notification-btn a{
     border: none;
     color: whitesmoke !important;

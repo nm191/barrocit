@@ -31,7 +31,11 @@ if(isset($_GET['success'])){
 
 ?>
 
+
+
 <h1 class="text-center">Customers</h1>
+
+<div class="col-sm-10 col-sm-offset-1">
 
 <ul class="nav nav-tabs flex tab-menu">
     <li role="presentation" <?php echo ($current_page == 'customer_general_data' ? 'class="active"' : ''); ?>><a href="customers.php?page=customer_general_data">General Data</a></li>
@@ -57,6 +61,22 @@ if(!empty($success)){
 }
 
 switch ($current_page){
+
+    case 'customer_overall':
+
+    echo '<table class="table table-striped table-hover table-responsive">';
+    echo '<h3>'. $customer->getCompanyName() . '</h3>';
+    echo '<tr><td>General Data</td></tr>';
+    echo '<tr><td>Contact Person:</td><td>'.$customer->getContactPerson().'</td>';
+    echo '<tr><td>Proe</td><td>'.$customer->getAddress().'</td>';
+    echo '<tr><td>Customer:</td><td>'.$project->getProjectCustomerName().'</td>';
+    echo '<tr><td>Address</td><td>'.$customer->getAddress().'</td>';
+
+
+
+    break;
+
+
     case 'customer_general_data':
         ?>
         <form action="<?php echo BASE_URL; ?>/app/controllers/customerController.php" method="POST" class="form-horizontal">
@@ -104,8 +124,18 @@ switch ($current_page){
         break;
     case 'customer_addresses':
         ?>
-        <?php $custData = $customer->getLatest();
-        
+        <?php
+
+        if(!isset($_GET['customer_id'])){
+
+            $custData = $customer->getLatest();
+
+        } else {
+            $id = $_GET['customer_id'];
+            $custData = $customer->getCustomerById($id);
+        }
+
+
         ?>
         <form action="<?php echo BASE_URL; ?>/app/controllers/customerController.php" method="POST" class="form-horizontal">
             <fieldset>
@@ -140,8 +170,9 @@ switch ($current_page){
                 </div>
 
                 <div class="form-group">
-                    <input type="hidden" name="id" value="<?php $custData['customer_id'] ?>">
+                    <input type="hidden" name="id" value="<?php echo $custData['customer_id'];?>">
                 </div>
+
                 <div class="formname">
                     <input type="hidden" name="formname" value="Addresses">
                 </div>
@@ -342,7 +373,12 @@ switch ($current_page){
 
         <?php
         $custData = $customer->getAlldata();
+
         foreach($custData as $cust){
+            $options_ar = array();
+            $options_ar[] = '<a href="#" class="btn btn-small btn-primary btn-options"><span class="glyphicon glyphicon-eye-open"></span></a>';
+            $options_ar[] = '<a href="customers.php?page=customer_addresses&customer_id='. $cust['customer_id'].'" class="btn btn-small btn-warning btn-options"><span class="glyphicon glyphicon-edit"></span></a>';
+            $options_ar[] = '<a href="../app/controllers/deleteController.php?customer_id='.$cust['customer_id'].'" class="btn btn-small btn-danger btn-options"><span class="glyphicon glyphicon-remove"></span></a>';
             echo '<tr>';
             echo '<td>' . $cust['customer_company_name'] . '</td>';
             echo '<td>' . $cust['customer_address'] . '</td>';
@@ -352,17 +388,15 @@ switch ($current_page){
             echo '<td>' . $cust['customer_sales_agent'] . '</td>';
             echo '<td>' . $cust['customer_open_projects'] . '</td>';
             echo '<td>' . $cust['customer_is_prospect'] . '</td>';
-            echo '<td> <a href="customers.php?page=customer_general_data?id='.$cust['customer_id'].'">
-                  <span style="color: blue;" class="glyphicon glyphicon-edit"></span></a>
-                  <a href="../app/controllers/deleteController.php?customer_id='.$cust['customer_id'].'" style="color: red;"><span class="glyphicon glyphicon-remove"></span></a>
-                  </td>';
+            echo '<td>'.implode('', $options_ar).'</td>';
+
             echo '</tr>';
         }
         ?>
 
 </table>
 
-
+</div>
 <?php
         break;
 
