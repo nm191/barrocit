@@ -153,8 +153,8 @@ switch($current_page){
                     <?php
                         echo '<tr><td>Customer:</td><td>'.$project->getProjectCustomerName().'</td></tr>';
                         echo '<tr><td>Priority:</td><td>'.$project->getProjectPrio().'</td></tr>';
-                        echo '<tr><td>Deadline:</td><td> '.$project->getProjectDeadline().'</td></tr>';
-                        echo '<tr><td>Start:</td><td> '.$project->getProjectStart().'</td></tr>';
+                        echo '<tr><td>Deadline:</td><td> '.date('d-m-Y', strtotime($project->getProjectDeadline())).'</td></tr>';
+                        echo '<tr><td>Start:</td><td> '.date('d-m-Y', strtotime($project->getProjectStart())).'</td></tr>';
                         echo '<tr><td>Version:</td><td> '.$project->getProjectVersion().'</td></tr>';
                         echo '<tr><td>Finished:</td><td> '.$project->getProjectFinished().'</td></tr>';
                         echo '<tr><td>Description:</td><td> '.$project->getProjectDescription().'</td></tr>';
@@ -184,9 +184,14 @@ switch($current_page){
             $('#customersModal').modal('toggle');
         });
 
-        $("#deleteProject").click(function(){
-            confirm('Are you sure you want to delete this project?');
+        $("a#deleteProject").click(function(e){
+            if(!confirm('Are you sure you want to delete this project?')){
+                e.preventDefault();
+                return false;
+            }
+            return true;
         });
+
     });
     
     

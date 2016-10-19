@@ -3,12 +3,25 @@ require_once ('../init.php');
 
 $project = new Project();
 
-if(isset($_GET['pid'])){
+if(isset($_GET['pid']) && isset($_GET['page'])){
     if($project->projectExists($_GET['pid'])){
-        $project->deleteProject($user, $_GET['pid']);
-        $message = 'Project is deleted!';
-        $user->redirect('projects.php?success='.$message);
-        exit();
+        if($_GET['page'] == 'delete'){
+            $project->deleteProject($user, $_GET['pid']);
+            $message = 'Project is deleted!';
+            $user->redirect('projects.php?success='.$message);
+            exit();
+        }elseif ($_GET['page'] == 'finish'){
+            if($project->getProjectFinished() != 'Yes') {
+                $project->finishProject($user, $_GET['pid']);
+                $message = 'Project has been set to finished!';
+                $user->redirect('projects.php?success=' . $message);
+                exit();
+            }else{
+                $message = 'This project has already been finished!';
+                $user->redirect('projects.php?error='.$message);
+                exit();
+            }
+        }
     }
     $message = 'Project doesn\'t exists!';
     $user->redirect('projects.php?error='.$message);

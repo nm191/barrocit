@@ -80,7 +80,14 @@ class Project
         $stmt = $this->db->pdo->prepare($sql);
         $stmt->bindParam(':project_id', $project_id);
         $result = $stmt->execute();
+        return $result;
+    }
 
+    public function finishProject(User $user, $project_id){
+        $sql = 'UPDATE `tbl_projects` SET project_is_finished = 1 WHERE project_id = :project_id';
+        $stmt = $this->db->pdo->prepare($sql);
+        $stmt->bindParam(':project_id', $project_id);
+        $result = $stmt->execute();
         return $result;
     }
 
@@ -112,7 +119,7 @@ class Project
 //        var_dump($prepared_ar);
         if($result){
             $message = 'Project has been added!';
-            $user->redirect('projects.php?page=add_project&success='.$message);
+            $user->redirect('projects.php?success='.$message);
         }
     }
 
@@ -137,17 +144,19 @@ class Project
 
             $options_ar =$td_ar = array();
 
+            $options_ar[] = '<a href="../app/controllers/projectController.php?page=finish&pid='.$project->project_id.'" class="btn btn-small btn-success btn-options '.($project->project_is_finished ? " disabled" : "").'" title="Finished project: '.$project->project_name.'" '.($project->project_is_finished ? "disabled='disabled'" : "").' ><span class="glyphicon glyphicon-ok"></span></a>';
             $options_ar[] = '<a href="projects.php?page=view_project&pid='.$project->project_id.'" class="btn btn-small btn-primary btn-options" title="View project: '.$project->project_name.'"><span class="glyphicon glyphicon-eye-open"></span></a>';
-            $options_ar[] = '<a href="projects.php?page=edit_project&pid='.$project->project_id.'" class="btn btn-small btn-warning btn-options"><span class="glyphicon glyphicon-edit"></span></a>';
-            $options_ar[] = '<a href="../app/controllers/projectController.php?pid='.$project->project_id.'" class="btn btn-small btn-danger btn-options" id="deleteProject"><span class="glyphicon glyphicon-remove"></span></a>';
+            $options_ar[] = '<a href="projects.php?page=edit_project&pid='.$project->project_id.'" class="btn btn-small btn-warning btn-options" title="Edit project: '.$project->project_name.'"><span class="glyphicon glyphicon-edit"></span></a>';
+            $options_ar[] = '<a href="../app/controllers/projectController.php?page=delete&pid='.$project->project_id.'" class="btn btn-small btn-danger btn-options" id="deleteProject" title="Delete project: '.$project->project_name.'"><span class="glyphicon glyphicon-remove"></span></a>';
+
 
             $td_ar[] = '<td>'.$project->project_id.'</td>';
             $td_ar[] = '<td>'.$project->project_priority.'</td>';
             $td_ar[] = '<td>'.$project->project_name.'</td>';
             $td_ar[] = '<td>'.$project->customer_company_name.'</td>';
-            $td_ar[] = '<td>'.$project->project_deadline.'</td>';
+            $td_ar[] = '<td>'.date('d-m-Y', strtotime($project->project_deadline)).'</td>';
             $td_ar[] = '<td>'.$project->project_version.'</td>';
-            $td_ar[] = '<td>'.$project->project_is_finished.'</td>';
+            $td_ar[] = '<td>'.($project->project_is_finished ? 'Yes' : 'No').'</td>';
             $td_ar[] = '<td>'.implode('', $options_ar).'</td>';
             $table .= '<tr>'.implode('', $td_ar).'</tr>';
         }
