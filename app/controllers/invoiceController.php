@@ -10,9 +10,6 @@ require_once ('../init.php');
 
 $invoice = new Invoice();
 
-var_dump($_POST);
-
-
 if($_SERVER['REQUEST_METHOD'] = 'POST'); {
     switch($_POST['type']) {
         case 'addInvoice':

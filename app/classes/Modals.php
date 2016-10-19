@@ -26,8 +26,8 @@ class Modals
                                     <h4 class="modal-title">'.$modal_title.'</h4>
                                 </div>
                                 <div class="modal-body">
-                                    <div class="search form-group"><input type="text" name="searchBox" id="searchBox" placeholder="Search" class="form-control"></div>
-                                    <div id="searchResults">'.$content.'</div>
+                                    <div class="search form-group"><input type="text" name="searchBox" id="searchBox'.$modal_name.'" placeholder="Search" class="form-control"></div>
+                                    <div id="searchResults'.$modal_name.'">'.$content.'</div>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -51,5 +51,18 @@ class Modals
 
         return $this->getModal($table, $modal_name, $modal_title);
     }
+
+    public function getProjectsModal(Project $project, $modal_name, $modal_title){
+        $project_ar = $project->getProjects();
+        $table = '<table class="table">';
+        $table .= '<thead><tr><th>Select</th><th>Project</th></tr>';
+        foreach($project_ar as $project){
+            $table .= '<tr><td><input data-project_name="'.$project->project_name.'" type="radio" name="project" id="project" value="'.$project->project_id.'"></td><td>'.$project->project_name.'</td></tr>';
+        }
+        $table .= '</table>';
+
+        return $this->getModal($table, $modal_name, $modal_title);
+    }
+
 
 }

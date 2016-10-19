@@ -193,11 +193,11 @@ switch($current_page){
             return true;
         });
 
-        $("#searchBox").change(function() {
-            var value = $('#searchBox').val();
+        $("#searchBoxcustomersModal").change(function() {
+            var value = $('#searchBoxcustomersModal').val();
             $.post('../app/controllers/searchController.php?search=customers',{value:value}, function(data){
-                $("#searchResults").html(data);
-                
+                $("#searchResultscustomersModal").html(data);
+
                 $("input:radio[name=customer]").click(function(){
                     console.log("Clicked");
                     var customer_id = $("input:radio[name=customer]:checked").val();

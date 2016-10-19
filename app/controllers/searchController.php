@@ -21,6 +21,24 @@ if(isset($_GET['search']) && isset($_POST['value'])){
             }
             die();
             break;
+        case 'projects':
+            $project_obj = new Project();
+            $projects_ar = $project_obj->searchProjectName($_POST['value']);
+            if(empty($projects_ar)){
+                echo "<h3>No projects found!</h3>";
+            }
+            else {
+                $table = '<table class="table">';
+                $table .= '<thead><tr><th>Select</th><th>Project</th></tr>';
+                foreach ($projects_ar as $project) {
+                    $table .= '<tr><td><input data-project_name="' . $project->project_name . '" type="radio" name="project" id="project" value="' . $project->project_id . '"></td><td>' . $project->project_name . '</td></tr>';
+                }
+                $table .= '</table>';
+
+                echo $table;
+            }
+            die();
+            break;
     }
 }
 ?>

@@ -186,6 +186,16 @@ class Project
         return $result;
     }
 
+    public function searchProjectName($search_value){
+        $sql = "SELECT * FROM `tbl_projects` WHERE project_name LIKE :search_value";
+        $stmt = $this->db->pdo->prepare($sql);
+        $search_value = '%'.$search_value.'%';
+        $stmt->bindParam(':search_value', $search_value);
+        $stmt->execute();
+        $result = $stmt->fetchAll(PDO::FETCH_OBJ);
+        return $result;
+    }
+
     public function getProjectId(){
         return $this->project_id;
     }

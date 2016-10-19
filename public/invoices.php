@@ -225,6 +225,7 @@ switch ($current_page){
 <script>
     $(document).ready(function(){
         $("input:radio[name=customer]").click(function(){
+            console.log("Clicked");
             var customer_id = $("input:radio[name=customer]:checked").val();
             var customer_name = $("input:radio[name=customer]:checked").data('customer_name');
             console.log(customer_id);
@@ -234,10 +235,70 @@ switch ($current_page){
             $('#customersModal').modal('toggle');
         });
 
-        $("#deleteProject").click(function(){
-            confirm('Are you sure you want to delete this project?');
+        $("input:radio[name=project]").click(function(){
+            console.log("Clicked");
+            var project_id = $("input:radio[name=project]:checked").val();
+            var project_name = $("input:radio[name=project]:checked").data('project_name');
+            console.log(project_id);
+            $('#project_id').val(project_id);
+            $('#project_name_disabled').val(project_name);
+            $('#project_name').val(project_name);
+            $('#projectsModal').modal('toggle');
         });
+
+        $("a#deleteProject").click(function(e){
+            if(!confirm('Are you sure you want to delete this project?')){
+                e.preventDefault();
+                return false;
+            }
+            return true;
+        });
+
+        $("#searchBoxcustomersModal").change(function() {
+            var value = $('#searchBoxcustomersModal').val();
+            $.post('../app/controllers/searchController.php?search=customers',{value:value}, function(data){
+                $("#searchResultscustomersModal").html(data);
+
+                $("input:radio[name=customer]").click(function(){
+                    console.log("Clicked");
+                    var customer_id = $("input:radio[name=customer]:checked").val();
+                    var customer_name = $("input:radio[name=customer]:checked").data('customer_name');
+                    console.log(customer_id);
+                    $('#customer_id').val(customer_id);
+                    $('#customer_name_disabled').val(customer_name);
+                    $('#customer_name').val(customer_name);
+                    $('#customersModal').modal('toggle');
+                });
+            });
+            return false;
+        });
+
+        $("#searchBoxprojectsModal").change(function() {
+            var value = $('#searchBoxprojectsModal').val();
+            $.post('../app/controllers/searchController.php?search=projects',{value:value}, function(data){
+                $("#searchResultsprojectsModal").html(data);
+
+                $("input:radio[name=project]").click(function(){
+                    console.log("Clicked");
+                    var project_id = $("input:radio[name=project]:checked").val();
+                    var project_name = $("input:radio[name=project]:checked").data('project_name');
+                    console.log(project_id);
+                    $('#project_id').val(project_id);
+                    $('#project_name_disabled').val(project_name);
+                    $('#project_name').val(project_name);
+                    $('#projectsModal').modal('toggle');
+                });
+            });
+            return false;
+        });
+
     });
+
+
+
+
+
+
 </script>
 <?php
 require_once ('includes/footer.php');
