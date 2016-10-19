@@ -192,6 +192,14 @@ switch($current_page){
             return true;
         });
 
+        $("#searchBox").change(function() {
+            var value = $('#searchBox').val();
+            $.post('../app/controllers/searchController.php?search=customers',{value:value}, function(data){
+                $("#searchResults").html(data);
+            });
+            return false;
+        });
+
     });
     
     

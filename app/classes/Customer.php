@@ -98,4 +98,14 @@ class Customer
         return $result;
 
     }
+
+    public function searchCustomerName($search_value){
+        $sql = "SELECT * FROM `tbl_customers` WHERE customer_company_name LIKE :search_value";
+        $stmt = $this->db->pdo->prepare($sql);
+        $search_value = '%'.$search_value.'%';
+        $stmt->bindParam(':search_value', $search_value);
+        $stmt->execute();
+        $result = $stmt->fetchAll(PDO::FETCH_OBJ);
+        return $result;
+    }
 }

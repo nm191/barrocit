@@ -26,8 +26,8 @@ class Modals
                                     <h4 class="modal-title">'.$modal_title.'</h4>
                                 </div>
                                 <div class="modal-body">
-                                    <div class="search form-group"><input type="text" name="searchBox" placeholder="Search" class="form-control"></div>
-                                    <div class="searchResults">'.$content.'</div>
+                                    <div class="search form-group"><input type="text" name="searchBox" id="searchBox" placeholder="Search" class="form-control"></div>
+                                    <div id="searchResults">'.$content.'</div>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
