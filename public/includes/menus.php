@@ -23,7 +23,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="#">Barroc IT.</a>
+                <a class="navbar-brand" href="home.php">Barroc IT.</a>
             </div>
 
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -75,7 +75,7 @@
                 </div>
                 <div class="navbar-collapse collapse sidebar-navbar-collapse">
                     <ul class="nav navbar-nav">
-                        <li class="active"><a href="#">Home</a></li>
+                        <li class="active"><a href="home.php">Home</a></li>
                         <li>
                             <a href="#" data-toggle="collapse" data-target="#toggleProjects" data-parent="#sidenav01" class="collapsed">
                                 </span> Projects <span class="caret pull-right"></span>
@@ -115,7 +115,7 @@ Finance <span class="caret pull-right"></span>
                             </a>
                             <div class="collapse" id="toggleAdmin" style="height: 0px;">
                                 <ul class="nav nav-list">
-                                    <li><a href="#">Users</a></li>
+                                    <li><a href="admin.php">Users</a></li>
                                     <li><a href="admin.php?page=add_user">Add User</a></li>
                                 </ul>
                             </div>
