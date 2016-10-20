@@ -67,15 +67,15 @@ switch ($current_page){
     $id = $_GET['customer_id'];
     $custTableData = $customer->getCustomerById($id);
 
+    echo '<div class="col-sm-10 col-sm-offset-1">';
 
     echo '<table class="table table-striped table-hover table-responsive">';
-    echo '<h3>'. $custTableData['customer_company_name'] . '</h3>';
+    echo '<h3 class="text-center">'. $custTableData['customer_company_name'] . '</h3>';
     echo '<tr><td><b>General Data</b></td><td></td></td></tr>';
-    echo '<tr><td>Contact Person:</td><td>' . $custTableData['customer_contact_firstname'] . ' ' . $custTableData['customer_contact_surname'] . '</td></tr>';
+    echo '<tr><td style="width: 50%; margin-left: 25%;">Contact Person:</td><td style="width: 50%;">' . $custTableData['customer_contact_firstname'] . ' ' . $custTableData['customer_contact_surname'] . '</td></tr>';
     echo '<tr><td>Prospect Status:</td><td>' . $custTableData['customer_is_prospect'] . '</td></tr>';
     echo '<tr><td>Maintenance Contract:</td><td>' . $custTableData['customer_maintenance_contract'] . '</td></tr>';
     echo '<tr><td>Sales Agent:</td><td>' . $custTableData['customer_sales_agent'].'</td></tr>';
-    echo '<tr><td>Open Projects:</td><td>'. $custTableData['customer_open_projects'] .'</td></tr>';
     echo '<tr><td><b>Addresses</b></td><td></td></tr>';
     echo '<tr><td>Address</td><td>'. $custTableData['customer_address'] .'</td></tr>';
     echo '<tr><td>Zipcode</td><td>'. $custTableData['customer_zipcode'] .'</td></tr>';
@@ -95,7 +95,10 @@ switch ($current_page){
     echo '<tr><td>Bank Account</td><td>'. $custTableData['customer_bank_account'] .'</td></tr>';
     echo '<tr><td>Ledger Account</td><td>'. $custTableData['customer_ledger_account'] .'</td></tr>';
     echo '<tr><td>Revenue</td><td>'. $custTableData['customer_revenue'] .'</td></tr>';
+    echo '<tr><td>Open Projects</td><td>'. $custTableData['open_projects'] .'</td></tr>';
     echo '</table>';
+
+    echo '</div>';
 
 
 
@@ -155,6 +158,8 @@ switch ($current_page){
 
             $custData = $customer->getLatest();
 
+            var_dump($custData);
+
         } else {
             $id = $_GET['customer_id'];
             $custData = $customer->getCustomerById($id);
@@ -167,31 +172,27 @@ switch ($current_page){
                 <legend class="text-center">Customer Addresses</legend>
                 <div class="form-group">
                     <label class="col-sm-offset-2 col-sm-2 control-label" for="primaryAddress">Primary Address:</label>
-                    <div class="col-sm-4"><input class="form-control" id="primaryAddress" name="primaryAddress" type="text" required></div>
+                    <div class="col-sm-4"><input class="form-control" id="primaryAddress" name="primaryAddress" placeholder="<?php echo $custData['customer_address']; ?>" type="text" required></div>
                 </div>
                 <div class="form-group">
                     <label class="col-sm-offset-2 col-sm-2 control-label" for="primaryZipcode">Primary Zipcode:</label>
-                    <div class="col-sm-4"><input class="form-control" id="primaryZipcode" name="primaryZipcode" type="text" required></div>
+                    <div class="col-sm-4"><input class="form-control" id="primaryZipcode" name="primaryZipcode" placeholder="<?php echo $custData['customer_zipcode']; ?>" type="text" required></div>
                 </div>
                 <div class="form-group" style="margin-bottom: 40px;">
                     <label class="col-sm-offset-2 col-sm-2 control-label" for="primaryCity">Primary City:</label>
-                    <div class="col-sm-4"><input class="form-control" id="primaryCity" name="primaryCity" type="text" required></div>
+                    <div class="col-sm-4"><input class="form-control" id="primaryCity" name="primaryCity" placeholder="<?php echo $custData['customer_city']; ?>" type="text" required></div>
                 </div>
                 <div class="form-group">
                     <label class="col-sm-offset-2 col-sm-2 control-label" for="secundaryAddress">Secundary Address:</label>
-                    <div class="col-sm-4"><input class="form-control" id="secundaryAddress" name="secundaryAddress" type="text"></div>
+                    <div class="col-sm-4"><input class="form-control" id="secundaryAddress" name="secundaryAddress" placeholder="<?php echo $custData['customer_sec_address']; ?>" type="text"></div>
                 </div>
                 <div class="form-group">
                     <label class="col-sm-offset-2 col-sm-2 control-label" for="secundaryZipcode">Secundary Zipcode:</label>
-                    <div class="col-sm-4"><input class="form-control" id="secundaryZipcode" name="secundaryZipcode" type="text"></div>
+                    <div class="col-sm-4"><input class="form-control" id="secundaryZipcode" name="secundaryZipcode" placeholder="<?php echo $custData['customer_sec_zipcode']; ?>" type="text"></div>
                 </div>
                 <div class="form-group">
                     <label class="col-sm-offset-2 col-sm-2 control-label" for="secundaryCity">Secundary City:</label>
-                    <div class="col-sm-4"><input class="form-control" id="secundaryCity" name="secundaryCity" type="text"></div>
-                </div>
-                <div class="form-group">
-                    <label class="col-sm-offset-2 col-sm-2 control-label" for="secundaryCity">Secundary City:</label>
-                    <div class="col-sm-4"><input class="form-control" id="secundaryCity" name="secundaryCity" type="text"></div>
+                    <div class="col-sm-4"><input class="form-control" id="secundaryCity" name="secundaryCity" placeholder="<?php echo $custData['customer_sec_city']; ?>" type="text"></div>
                 </div>
 
                 <div class="form-group">
@@ -208,8 +209,15 @@ switch ($current_page){
         <?php
         break;
     case 'customer_contact_person':
-        
-        $custData = $customer->getLatest();
+
+        if(!isset($_GET['customer_id'])){
+
+            $custData = $customer->getLatest();
+
+        } else {
+            $id = $_GET['customer_id'];
+            $custData = $customer->getCustomerById($id);
+        }
         
         ?>
         <form action="<?php echo BASE_URL; ?>/app/controllers/customerController.php" method="POST" class="form-horizontal">
@@ -388,7 +396,6 @@ switch ($current_page){
                 <th>Contact email</th>
                 <th>Maintenance contract</th>
                 <th>Sales agent</th>
-                <th>Open projects</th>
                 <th>Prospectstatus</th>
                 <th>Option buttons</th>
 
@@ -411,7 +418,6 @@ switch ($current_page){
             echo '<td>' . $cust['customer_contact_email'] . '</td>';
             echo '<td>' . $cust['customer_maintenance_contract'] . '</td>';
             echo '<td>' . $cust['customer_sales_agent'] . '</td>';
-            echo '<td>' . $cust['customer_open_projects'] . '</td>';
             echo '<td>' . $cust['customer_is_prospect'] . '</td>';
             echo '<td>'.implode('', $options_ar).'</td>';
 

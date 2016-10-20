@@ -19,14 +19,16 @@ class Customer
 
     public function getAlldata()
     {
-        $sql = "SELECT * FROM tbl_customers";
+        $sql = "SELECT * FROM tbl_customers WHERE customer_is_active = 1";
         $result = $this->db->pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
         return $result;
     }
 
     public function delete($customer_id)
     {
-        $sql = "DELETE FROM `tbl_customers` WHERE customer_id = :customer_id";
+        $sql = "UPDATE `tbl_customers`  
+                SET customer_is_active = 0
+                WHERE customer_id = :customer_id";
         $stmt = $this->db->pdo->prepare($sql);
         $stmt->bindParam(':customer_id', $customer_id);
         $result = $stmt->execute();
@@ -35,7 +37,13 @@ class Customer
     }
     
     public function getCustomerById($id){
-        $sql = "SELECT * FROM `tbl_customers` WHERE customer_id = :id";
+        $sql = "SELECT tbl_customers.*, COUNT(tbl_projects.project_id) AS open_projects  FROM tbl_customers 
+                LEFT JOIN tbl_projects 
+                ON tbl_customers.customer_id = tbl_projects.customer_id 
+                AND tbl_projects.project_is_finished = 0 
+                AND tbl_projects.project_is_active = 1
+                WHERE tbl_customers.customer_id = :id 
+                GROUP BY tbl_customers.customer_id";
         $stmt = $this->db->pdo->prepare($sql);
         $stmt->bindParam(':id', $id);
         $stmt->execute();
@@ -44,7 +52,7 @@ class Customer
     }
 
     public function getLatest() {
-        $sql = "SELECT customer_id FROM `tbl_customers` ORDER BY customer_id DESC LIMIT 1";
+        $sql = "SELECT * FROM `tbl_customers` ORDER BY customer_id DESC LIMIT 1";
         $result = $this->db->pdo->query($sql)->fetch(PDO::FETCH_ASSOC);
         return $result;
     }
