@@ -70,6 +70,21 @@ class Customer
         return $result;
         
     }
+    
+    public function updateGeneralData($cc_name, $cs_agent, $prospect, $contract, $id){
+        $sql = "UPDATE `tbl_customers` 
+                SET customer_company_name = :cc_name, customer_sales_agent = :cs_agent, customer_is_prospect = :prospect, customer_maintenance_contract = :contract
+                WHERE customer_id = :id";
+        $stmt = $this->db->pdo->prepare($sql);
+        $stmt->bindParam(':cc_name', $cc_name);
+        $stmt->bindParam(':cs_agent', $cs_agent);
+        $stmt->bindParam(':prospect', $prospect);
+        $stmt->bindParam(':contract', $contract);
+        $stmt->bindParam(':id', $id);
+        $result = $stmt->execute();
+        return $result;
+    }
+
 
     public function addAddress($customer_address, $customer_zipcode, $customer_city, $customer_sec_address, $customer_sec_zipcode, $customer_sec_city, $id) {
 

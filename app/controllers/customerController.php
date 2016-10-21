@@ -24,16 +24,37 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
             echo "set Customer name and/or Salesagent";
         }
 
+
+
+            if ($_POST['edit'] == 'edit '){
+
+                $id = $_POST['id'];
+                $cc_name = $_POST['customerName'];
+                $cs_agent = $_POST['salesAgent'];
+                isset($_POST['prospect']) ? $prospect = $_POST['prospect'] : $prospect = 0;
+                (isset($_POST['maintenanceContract']) ? $contract = $_POST['maintenanceContract'] : $contract = 0);
+
+
+                if($customer->updateGeneralData($cc_name, $cs_agent, $prospect, $contract, $id)){
+                    echo 'Edit complete';
+
+
+                }
+
+            }else{
+
             $customer_company_name = $_POST['customerName'];
             $customer_sales_agent = $_POST['salesAgent'];
             (isset($_POST['prospect']) ? $customer_is_prospect = $_POST['prospect'] : $customer_is_prospect = 0);
             (isset($_POST['maintenanceContract']) ? $customer_maintenance_contract = $_POST['maintenanceContract'] : $customer_maintenance_contract = 0);
 
-        if ($customer->addGeneralData($customer_company_name, $customer_sales_agent, $customer_is_prospect, $customer_maintenance_contract)){
+        if ($customer->addGeneralData($customer_company_name, $customer_sales_agent, $customer_is_prospect, $customer_maintenance_contract)) {
             echo 'Added with success';
 
-            $user->redirect('customers.php?page=customer_addresses');
         }
+
+        }
+            $user->redirect('customers.php?page=customer_addresses');
 
         break;
 

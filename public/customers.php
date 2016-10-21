@@ -38,7 +38,7 @@ if(isset($_GET['success'])){
 <div class="col-sm-10 col-sm-offset-1">
 
 <ul class="nav nav-tabs flex tab-menu">
-    <li role="presentation" <?php echo ($current_page == 'customer_general_data' ? 'class="active"' : ''); ?>><a href="customers.php?page=customer_general_data">General Data</a></li>
+    <li role="presentation" <?php echo ($current_page == 'customer_general_data' ? 'class="active"' : ''); ?>><a href="customers.php?page=customer_general_data&type=insert">General Data</a></li>
     <li role="presentation" <?php echo ($current_page == 'customer_addresses' ? 'class="active"' : ''); ?>><a href="customers.php?page=customer_addresses">Addresses</a></li>
     <li role="presentation" <?php echo ($current_page == 'customer_contact_person' ? 'class="active"' : ''); ?>><a href="customers.php?page=customer_contact_person">Contact Person</a></li>
     <li role="presentation" <?php echo ($current_page == 'customer_visits' ? 'class="active"' : ''); ?>><a href="customers.php?page=customer_visits">Visits</a></li>
@@ -106,18 +106,35 @@ switch ($current_page){
 
 
     case 'customer_general_data':
+
+        if(!isset($_GET['customer_id'])) {
+
+                    $custData = $customer->getLatest();
+                }
+                 else {
+                    $id = $_GET['customer_id'];
+                    $custData = $customer->getCustomerById($id);
+                }
+            
+
+
+
+
         ?>
         <form action="<?php echo BASE_URL; ?>/app/controllers/customerController.php" method="POST" class="form-horizontal">
             <fieldset>
                 <legend class="text-center">Customer General Data</legend>
                 <div class="form-group">
-                    <label class="col-sm-offset-2 col-sm-2 control-label" for="customerName">Customer name:</label>
-                    <div class="col-sm-4"><input class="form-control" id="customerName" name="customerName" type="text" required></div>
+                    <label class="col-sm-offset-2 col-sm-2 control-label" for="customerName">Company name:</label>
+                    <div class="col-sm-4"><input class="form-control" id="customerName" value="<?php if($_SERVER['REQUEST_METHOD'] == 'GET')
+                        { if($_GET['type'] == 'insert'){  }
+                        else{echo $custData['customer_company_name']; }} ?>" name="customerName" type="text" required></div>
                 </div>
                 <div class="form-group">
                     <label class="col-sm-offset-2 col-sm-2 control-label" for="salesAgent">Sales agent:</label>
                     <div class="col-sm-4">
                         <select class="form-control" name="salesAgent" id="salesAgent">
+                            <option></option>
                             <option>Nick</option>
                             <option>Ronald</option>
                             <option>Tim</option>
@@ -127,7 +144,10 @@ switch ($current_page){
                 <div class="form-group">
                     <div class="checkbox col-sm-offset-4 col-sm-4">
                         <label>
-                            <input type="checkbox" value="1" name="prospect">
+                            <input type="checkbox" value="1" name="prospect"
+                                <?php if($_SERVER['REQUEST_METHOD'] == 'GET')
+                            { if($_GET['type'] == 'insert'){ $custData['customer_is_prospect'] = 0; }
+                            else{if($custData['customer_is_prospect'] == 1){ echo 'checked';}}} ?>>
                             Prospect?
                         </label>
                     </div>
@@ -135,7 +155,9 @@ switch ($current_page){
                 <div class="form-group">
                     <div class="checkbox col-sm-offset-4 col-sm-4">
                         <label>
-                            <input type="checkbox" value="1" name="maintenanceContract">
+                            <input type="checkbox" value="1" name="maintenanceContract" <?php if($_SERVER['REQUEST_METHOD'] == 'GET')
+                            { if($_GET['type'] == 'insert'){ $custData['customer_maintenance_contract'] = 0; }
+                            else{if($custData['customer_maintenance_contract'] == 1){ echo 'checked';}}} ?>>
                             Maintenance contract?
                         </label>
                     </div>
@@ -143,6 +165,13 @@ switch ($current_page){
                 <div class="formname">
                     <input type="hidden" name="formname" value="generalData">
                 </div>
+                <div class="formname">
+                    <input type="hidden" name="edit" value="<?php if($_SERVER['REQUEST_METHOD'] == 'POST'){if ($_GET['type'] == 'edit'){ echo 'edit';}}?> ">
+                </div>
+                <div class="formname">
+                    <input type="hidden" name="id" value="<?php echo $custData['customer_id'];?> ">
+                </div>
+
                 <div class="col-sm-offset-4 col-sm-4"><input type="submit" name='saveGeneralData' value='Save' class="btn btn-block btn-success"> </div>
             </fieldset>
         </form>
@@ -158,8 +187,6 @@ switch ($current_page){
 
             $custData = $customer->getLatest();
 
-            var_dump($custData);
-
         } else {
             $id = $_GET['customer_id'];
             $custData = $customer->getCustomerById($id);
@@ -172,27 +199,27 @@ switch ($current_page){
                 <legend class="text-center">Customer Addresses</legend>
                 <div class="form-group">
                     <label class="col-sm-offset-2 col-sm-2 control-label" for="primaryAddress">Primary Address:</label>
-                    <div class="col-sm-4"><input class="form-control" id="primaryAddress" name="primaryAddress" placeholder="<?php echo $custData['customer_address']; ?>" type="text" required></div>
+                    <div class="col-sm-4"><input class="form-control" id="primaryAddress" name="primaryAddress" value="<?php echo $custData['customer_address']; ?>" placeholder="<?php echo $custData['customer_address']; ?>" type="text"></div>
                 </div>
                 <div class="form-group">
                     <label class="col-sm-offset-2 col-sm-2 control-label" for="primaryZipcode">Primary Zipcode:</label>
-                    <div class="col-sm-4"><input class="form-control" id="primaryZipcode" name="primaryZipcode" placeholder="<?php echo $custData['customer_zipcode']; ?>" type="text" required></div>
+                    <div class="col-sm-4"><input class="form-control" id="primaryZipcode" name="primaryZipcode" value="<?php echo $custData['customer_zipcode']; ?>" type="text" required></div>
                 </div>
                 <div class="form-group" style="margin-bottom: 40px;">
                     <label class="col-sm-offset-2 col-sm-2 control-label" for="primaryCity">Primary City:</label>
-                    <div class="col-sm-4"><input class="form-control" id="primaryCity" name="primaryCity" placeholder="<?php echo $custData['customer_city']; ?>" type="text" required></div>
+                    <div class="col-sm-4"><input class="form-control" id="primaryCity" name="primaryCity" value="<?php echo $custData['customer_city']; ?>" type="text" required></div>
                 </div>
                 <div class="form-group">
                     <label class="col-sm-offset-2 col-sm-2 control-label" for="secundaryAddress">Secundary Address:</label>
-                    <div class="col-sm-4"><input class="form-control" id="secundaryAddress" name="secundaryAddress" placeholder="<?php echo $custData['customer_sec_address']; ?>" type="text"></div>
+                    <div class="col-sm-4"><input class="form-control" id="secundaryAddress" name="secundaryAddress" value="<?php echo $custData['customer_sec_address']; ?>" type="text"></div>
                 </div>
                 <div class="form-group">
                     <label class="col-sm-offset-2 col-sm-2 control-label" for="secundaryZipcode">Secundary Zipcode:</label>
-                    <div class="col-sm-4"><input class="form-control" id="secundaryZipcode" name="secundaryZipcode" placeholder="<?php echo $custData['customer_sec_zipcode']; ?>" type="text"></div>
+                    <div class="col-sm-4"><input class="form-control" id="secundaryZipcode" name="secundaryZipcode" value="<?php echo $custData['customer_sec_zipcode']; ?>" type="text"></div>
                 </div>
                 <div class="form-group">
                     <label class="col-sm-offset-2 col-sm-2 control-label" for="secundaryCity">Secundary City:</label>
-                    <div class="col-sm-4"><input class="form-control" id="secundaryCity" name="secundaryCity" placeholder="<?php echo $custData['customer_sec_city']; ?>" type="text"></div>
+                    <div class="col-sm-4"><input class="form-control" id="secundaryCity" name="secundaryCity" value="<?php echo $custData['customer_sec_city']; ?>" type="text"></div>
                 </div>
 
                 <div class="form-group">
@@ -225,31 +252,31 @@ switch ($current_page){
                 <legend class="text-center">Customer Contact Person</legend>
                 <div class="form-group">
                     <label class="col-sm-offset-2 col-sm-2 control-label" for="initials">Initials:</label>
-                    <div class="col-sm-4"><input class="form-control" id="initials" name="initials" type="text" required></div>
+                    <div class="col-sm-4"><input class="form-control" id="initials" value="<?php echo $custData['customer_contact_initials']; ?>" name="initials" type="text" required></div>
                 </div>
                 <div class="form-group">
                     <label class="col-sm-offset-2 col-sm-2 control-label" for="firstName">Firstname:</label>
-                    <div class="col-sm-4"><input class="form-control" id="firstName" name="firstName" type="text" required></div>
+                    <div class="col-sm-4"><input class="form-control" id="firstName" value="<?php echo $custData['customer_contact_firstname']; ?>" name="firstName" type="text" required></div>
                 </div>
                 <div class="form-group">
                     <label class="col-sm-offset-2 col-sm-2 control-label" for="surName">Lastname:</label>
-                    <div class="col-sm-4"><input class="form-control" id="surName" name="surName" type="text" required></div>
+                    <div class="col-sm-4"><input class="form-control" id="surName" name="surName" value="<?php echo $custData['customer_contact_surname']; ?>" type="text" required></div>
                 </div>
                 <div class="form-group">
                     <label class="col-sm-offset-2 col-sm-2 control-label" for="email">Email:</label>
-                    <div class="col-sm-4"><input class="form-control" id="email" name="email" type="text" required></div>
+                    <div class="col-sm-4"><input class="form-control" id="email" name="email" type="text" value="<?php echo $custData['customer_contact_email']; ?>" required></div>
                 </div>
                 <div class="form-group">
                     <label class="col-sm-offset-2 col-sm-2 control-label" for="pTelephone">Primary telephone:</label>
-                    <div class="col-sm-4"><input class="form-control" id="pTelephone" name="pTelephone" type="text" required></div>
+                    <div class="col-sm-4"><input class="form-control" id="pTelephone" name="pTelephone" type="text" value="<?php echo $custData['customer_contact_phone']; ?>" required></div>
                 </div>
                 <div class="form-group">
                     <label class="col-sm-offset-2 col-sm-2 control-label" for="sTelephone">Secondary telephone:</label>
-                    <div class="col-sm-4"><input class="form-control" id="sTelephone" name="sTelephone" type="text"></div>
+                    <div class="col-sm-4"><input class="form-control" id="sTelephone" name="sTelephone" value="<?php echo $custData['customer_contact_sec_phone']; ?>" type="text"></div>
                 </div>
                 <div class="form-group">
                     <label class="col-sm-offset-2 col-sm-2 control-label" for="faxNumber">Fax number:</label>
-                    <div class="col-sm-4"><input class="form-control" id="faxNumber" name="faxNumber" type="text"></div>
+                    <div class="col-sm-4"><input class="form-control" id="faxNumber" name="faxNumber" value="<?php echo $custData['customer_fax']; ?>" type="text"></div>
                 </div>
 
                 <div class="form-group">
@@ -266,22 +293,38 @@ switch ($current_page){
         <?php
         break;
     case 'customer_visits':
+
+        if(!isset($_GET['customer_id'])){
+
+            $custData = $customer->getLatest();
+
+        } else {
+            $id = $_GET['customer_id'];
+            $custData = $customer->getCustomerById($id);
+        }
+
         ?>
         <form action="<?php echo BASE_URL; ?>/app/controllers/authController.php" method="POST" class="form-horizontal">
             <fieldset>
                 <legend class="text-center">Customer Visits</legend>
                 <div class="form-group">
-                    <label class="col-sm-offset-2 col-sm-2 control-label" for="customerName">Customer name:</label>
-                    <div class="col-sm-4"><input class="form-control" id="customerName" name="customerName" type="text" required></div>
+                    <label class="col-sm-offset-2 col-sm-2 control-label" for="customerName">Company name:</label>
+                    <div class="col-sm-4"><input class="form-control" id="customerName" value="" name="customerName" type="text" required></div>
                 </div>
                 <div class="form-group">
-                    <label class="col-sm-offset-2 col-sm-2 control-label" for="salesAgent">Sales agent:</label>
+                    <label class="col-sm-offset-2 col-sm-2 control-label" for="customerName">Company name:</label>
                     <div class="col-sm-4">
-                        <select class="form-control" name="salesAgent" id="salesAgent">
-                            <option>Nick</option>
-                            <option>Ronald</option>
-                            <option>Tim</option>
-                        </select>
+                        <select name="visitType" id="visitType">
+                            <option value="?"></option>
+                            <option value="?"></option>
+                            <option value="?"></option>
+                            <option value="?"></option>
+                        </select></div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-offset-2 col-sm-2 control-label" for="salesAgent">Visit Date:</label>
+                    <div class="col-sm-4">
+                        <input type="text" value="Hier moet een kalender komen, hetzelfde als bij Sales">
                     </div>
                 </div>
                 <div class="form-group">
@@ -409,7 +452,7 @@ switch ($current_page){
         foreach($custData as $cust){
             $options_ar = array();
             $options_ar[] = '<a href="customers.php?page=customer_overall&customer_id='. $cust['customer_id'].'" class="btn btn-small btn-primary btn-options"><span class="glyphicon glyphicon-eye-open"></span></a>';
-            $options_ar[] = '<a href="customers.php?page=customer_addresses&customer_id='. $cust['customer_id'].'" class="btn btn-small btn-warning btn-options"><span class="glyphicon glyphicon-edit"></span></a>';
+            $options_ar[] = '<a href="customers.php?page=customer_general_data&customer_id='. $cust['customer_id'].'&type=edit" class="btn btn-small btn-warning btn-options"><span class="glyphicon glyphicon-edit"></span></a>';
             $options_ar[] = '<a href="../app/controllers/deleteController.php?customer_id='.$cust['customer_id'].'" class="btn btn-small btn-danger btn-options"><span class="glyphicon glyphicon-remove"></span></a>';
             echo '<tr>';
             echo '<td>' . $cust['customer_company_name'] . '</td>';
