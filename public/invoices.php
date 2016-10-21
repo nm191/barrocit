@@ -16,20 +16,27 @@ $invoices = new Invoice();
 $customer = new Customer();
 $project = new Project();
 
-if(isset($_GET['page'])){
-    $current_page = $_GET['page'];
-} else {
-    $current_page = 'customers';
-}
+    if(isset($_GET['page'])){
+        $current_page = $_GET['page'];
+    } else {
+        $current_page = 'customers';
+    }
+
+    if(isset($_GET['pid'])){
+        $invoice = new Invoice($_GET['pid']);
+        $posted_values = $invoice->getAllData();
+    }else{
+        $invoice = new Invoice();
+    }
 
 //Message handling
-if(isset($_GET['error'])){
-    $error = $_GET['error'];
-}
+    if(isset($_GET['error'])){
+        $error = $_GET['error'];
+    }
 
-if(isset($_GET['success'])){
-    $success = $_GET['success'];
-}
+    if(isset($_GET['success'])){
+        $success = $_GET['success'];
+    }
 
 ?>
 
@@ -52,13 +59,27 @@ switch ($current_page){
     case 'add_invoice':
         echo $modal->getCustomersModal($customer, 'customersModal', 'Select Customer');
         echo $modal->getProjectsModal($project, 'projectsModal', 'Select Project');
-        ?>
+
+        if(!isset($_GET['invoice_id'])){
+
+            $invoiceData = 0;
+            
+
+        } else {
+            $id = $_GET['invoice_id'];
+            $invoiceData = $invoice->getInvoiceByID($id);
+/*            var_dump($invoiceData);
+            exit;*/
+        }
+
+
+    ?>
         <form action="<?php echo BASE_URL; ?>/app/controllers/invoiceController.php" method="POST" class="form-horizontal">
             <fieldset>
                 <div class="form-group  <?php if(isset($posted_values) && empty($posted_values['customer_id'])){ echo 'has-error';} ?>">
                     <label class="col-sm-offset-2 col-sm-2 control-label" for="customer_name">Customer:</label>
                     <div class="col-sm-4">
-                        <input class="form-control" id="customer_name_disabled" name="customer_name_disabled" type="text" disabled <?php if(isset($posted_values) && !empty($posted_values['customer_name'])){ echo 'value="'.$posted_values['customer_name'].'"';} ?>>
+                        <input class="form-control" id="customer_name_disabled" name="customer_name_disabled" type="text" disabled placeholder="<?php echo $invoiceData['customer_company_name']; ?>" required<?php if(isset($posted_values) && !empty($posted_values['customer_name'])){ echo 'value="'.$posted_values['customer_name'].'"';} ?>>
                         <input class="form-control" id="customer_name" name="customer_name" type="hidden" <?php if(isset($posted_values) && !empty($posted_values['customer_name'])){ echo 'value="'.$posted_values['customer_name'].'"';} ?>>
                         <input class="form-control" id="customer_id" name="customer_id" type="hidden" <?php if(isset($posted_values) && !empty($posted_values['customer_id'])){ echo 'value="'.$posted_values['customer_id'].'"';} ?>>
                     </div>
@@ -69,7 +90,7 @@ switch ($current_page){
                 <div class="form-group  <?php if(isset($posted_values) && empty($posted_values['project_id'])){ echo 'has-error';} ?>">
                     <label class="col-sm-offset-2 col-sm-2 control-label" for="project_name">Project:</label>
                     <div class="col-sm-4">
-                        <input class="form-control" id="project_name_disabled" name="project_name_disabled" type="text" disabled <?php if(isset($posted_values) && !empty($posted_values['project_name'])){ echo 'value="'.$posted_values['project_name'].'"';} ?>>
+                        <input class="form-control" id="project_name_disabled" name="project_name_disabled" type="text" disabled placeholder="<?php echo $invoiceData['project_name']; ?>" required>
                         <input class="form-control" id="project_name" name="project_name" type="hidden" <?php if(isset($posted_values) && !empty($posted_values['project_name'])){ echo 'value="'.$posted_values['project_name'].'"';} ?>>
                         <input class="form-control" id="project_id" name="project_id" type="hidden" <?php if(isset($posted_values) && !empty($posted_values['project_id'])){ echo 'value="'.$posted_values['project_id'].'"';} ?>>
                     </div>
@@ -79,12 +100,12 @@ switch ($current_page){
                 </div>
                 <div class="form-group">
                     <label class="col-sm-offset-2 col-sm-2 control-label" for="invoiceTotal">Invoice Total:</label>
-                    <div class="col-sm-4"><input class="form-control" id="invoiceTotal" name="invoiceTotal" type="text" required></div>
+                    <div class="col-sm-4"><input class="form-control" id="invoiceTotal" name="invoiceTotal" type="text" placeholder="<?php echo $invoiceData['invoice_total']; ?>" required></div>
                 </div>
                 <div class="form-group">
                     <label class="col-sm-offset-2 col-sm-2 control-label" for="project">Date:</label>
                         <div class="col-sm-4">
-                            <input type='date' name="invoiceDate" id="invoiceDate" class="form-control" />
+                            <input type='date' name="invoiceDate" id="invoiceDate" class="form-control" placeholder="<?php echo $invoiceData['invoice_date']; ?>" required>
                         </div>
                     </div>
                 <div class="form-group">
@@ -109,50 +130,55 @@ switch ($current_page){
         <?php
         break;
     case 'edit_invoice':
+        echo $modal->getCustomersModal($customer, 'customersModal', 'Select Customer');
+        echo $modal->getProjectsModal($project, 'projectsModal', 'Select Project');
+
+        if(!isset($_GET['invoice_id'])){
+
+            $invoiceData = 0;
+
+
+        } else {
+            $id = $_GET['invoice_id'];
+            $invoiceData = $invoice->getInvoiceByID($id);
+            /*            var_dump($invoiceData);
+                        exit;*/
+        }
+
+
         ?>
         <form action="<?php echo BASE_URL; ?>/app/controllers/invoiceController.php" method="POST" class="form-horizontal">
             <fieldset>
-                <div class="form-group">
-                    <label class="col-sm-offset-2 col-sm-2 control-label" for="project">Project:</label>
+                <div class="form-group  <?php if(isset($posted_values) && empty($posted_values['customer_id'])){ echo 'has-error';} ?>">
+                    <label class="col-sm-offset-2 col-sm-2 control-label" for="customer_name">Customer:</label>
                     <div class="col-sm-4">
-                        <select class="form-control" name="project" id="project">
-                            <option>Project</option>
-                            <option>Top</option>
-                            <option>Fucking</option>
-                            <option>Kek</option>
-                        </select>
+                        <input class="form-control" id="customer_name_disabled" name="customer_name_disabled" type="text" disabled placeholder="<?php echo $invoiceData['customer_company_name']; ?>" required<?php if(isset($posted_values) && !empty($posted_values['customer_name'])){ echo 'value="'.$posted_values['customer_name'].'"';} ?>>
+                        <input class="form-control" id="customer_name" name="customer_name" type="hidden" <?php if(isset($posted_values) && !empty($posted_values['customer_company_name'])){ echo 'value="'.$posted_values['customer_company_name'].'"';} ?>>
+                        <input class="form-control" id="customer_id" name="customer_id" type="hidden" <?php if(isset($posted_values) && !empty($posted_values['customer_id'])){ echo 'value="'.$posted_values['customer_id'].'"';} ?>>
                     </div>
                     <div class="col-sm-1">
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">Select project</button>
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#customersModal">Select Customer</button>
                     </div>
-                    <div id="myModal" class="modal fade" role="dialog">
-                        <div class="modal-dialog">
-
-                            <!-- Modal content-->
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                    <h4 class="modal-title">Select Project</h4>
-                                </div>
-                                <div class="modal-body">
-                                    <p>Some text in the modal.</p>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                </div>
-                            </div>
-
-                        </div>
+                </div>
+                <div class="form-group  <?php if(isset($posted_values) && empty($posted_values['project_id'])){ echo 'has-error';} ?>">
+                    <label class="col-sm-offset-2 col-sm-2 control-label" for="project_name">Project:</label>
+                    <div class="col-sm-4">
+                        <input class="form-control" id="project_name_disabled" name="project_name_disabled" type="text" disabled placeholder="<?php echo $invoiceData['project_name']; ?>" required>
+                        <input class="form-control" id="project_name" name="project_name" type="hidden" <?php if(isset($posted_values) && !empty($posted_values['project_name'])){ echo 'value="'.$posted_values['project_name'].'"';} ?>>
+                        <input class="form-control" id="project_id" name="project_id" type="hidden" <?php if(isset($posted_values) && !empty($posted_values['project_id'])){ echo 'value="'.$posted_values['project_id'].'"';} ?>>
+                    </div>
+                    <div class="col-sm-1">
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#projectsModal">Select Project</button>
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-sm-offset-2 col-sm-2 control-label" for="invoiceTotal">Invoice Total:</label>
-                    <div class="col-sm-4"><input class="form-control" id="invoiceTotal" name="invoiceTotal" type="text" required></div>
+                    <div class="col-sm-4"><input class="form-control" id="invoiceTotal" name="invoiceTotal" type="text" placeholder="<?php echo $invoiceData['invoice_total']; ?>" required></div>
                 </div>
                 <div class="form-group">
                     <label class="col-sm-offset-2 col-sm-2 control-label" for="project">Date:</label>
                     <div class="col-sm-4">
-                        <input type='date' name="invoiceDate" id="invoiceDate" class="form-control" />
+                        <input type='date' name="invoiceDate" id="invoiceDate" class="form-control" placeholder="<?php echo $invoiceData['invoice_date']; ?>" required>
                     </div>
                 </div>
                 <div class="form-group">
@@ -206,8 +232,8 @@ switch ($current_page){
                             echo '<td>' . ( $invoice->invoice_is_confirmed == 1 ? 'Yes' : 'No' ). '</td>';
                             echo '<td>
                             <a href="invoices.php?page=add_invoice?id='.$invoice->invoice_id.'" class="btn btn-small btn-primary btn-options"><span class="glyphicon glyphicon-eye-open"></span></a>
-                            <a href="invoices.php?page=add_invoice?id='.$invoice->invoice_id.'" class="btn btn-small btn-warning btn-options"><span class="glyphicon glyphicon-edit"></span></a>
-                            <a href="../app/controllers/deleteController.php?invoice_id='.$invoice->invoice_id.'" class="btn btn-small btn-danger btn-options"><span class="glyphicon glyphicon-remove"></span></a></td>';
+                            <a href="invoices.php?page=edit_invoice&invoice_id='.$invoice->invoice_id.'" class="btn btn-small btn-warning btn-options"><span class="glyphicon glyphicon-edit"></span></a>
+                            <a href="../app/controllers/invoiceController.php?invoice_id='.$invoice->invoice_id.'" class="btn btn-small btn-danger btn-options"><span class="glyphicon glyphicon-remove"></span></a></td>';
                             echo '</tr>';
                         }
                         ?>
