@@ -12,11 +12,12 @@ $customer = new Customer();
 $formname = 'invalid_form';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST'){
-    
+
+
+
     if (isset($_POST['formname'])){
         $formname = $_POST['formname'];
     }
-
 
     switch ($formname){
         case 'generalData':
@@ -26,7 +27,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
 
 
 
-            if ($_POST['edit'] == 'edit '){
+            if ($_POST['edit'] == 'edit'){
+
 
                 $id = $_POST['id'];
                 $cc_name = $_POST['customerName'];
