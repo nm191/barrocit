@@ -56,6 +56,10 @@ if(!empty($success)){
     <?php
 }
 
+if(!$user->hasAccess('admin')){
+    $current_page = 'no_access';
+}
+
 switch ($current_page){
     case 'user_rights':
 
@@ -131,6 +135,11 @@ switch ($current_page){
         break;
     case 'admin':
         var_dump($user);
+        break;
+    case 'no_access':
+        ?>
+        <div class="alert alert-warning" role="alert">You do not have access for this page.</div>
+        <?php
         break;
     default:
         echo 'This page does not exists!';
