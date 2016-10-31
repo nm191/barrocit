@@ -10,7 +10,7 @@ require_once ('includes/header.php');
 
 require_once ('includes/menus.php');
 
-$current_page = $error = $success = '';
+$current_page = $error = $success = $section = '';
 
 $admin = new Admin();
 
@@ -18,6 +18,10 @@ if(isset($_GET['page'])){
     $current_page = $_GET['page'];
 } else {
     $current_page = 'users';
+}
+
+if(isset($_GET['section'])){
+    $section = $_GET['section'];
 }
 
 //Message handling
@@ -53,10 +57,37 @@ if(!empty($success)){
 }
 
 switch ($current_page){
+    case 'user_rights':
+
+        ?>
+        <div class="col-sm-10 col-sm-offset-1">
+            <form action="<?php echo BASE_URL; ?>/app/controllers/rightsController.php" method="POST" class="form-horizontal">
+               <fieldset>
+                   <legend class="text-center">Edit user rights</legend>
+                   <div class="col-sm-2">
+                       <?php
+                            echo $admin->getUserRightsTable();
+                        ?>
+                   </div>
+                   <div class="col-sm-9 col-sm-offset-1">
+                       <?php
+                            echo $admin->getUserRightsFormTable($section);
+                        ?>
+                       <div class="form-group">
+                            <input type="hidden" name="section_id" value="<?php echo $section ?>">
+                           <input type="hidden" name="formname" value="user_rights">
+                            <input type="submit" class="btn btn-block btn-success" value="Save User Rights">
+                       </div>
+                   </div>
+               </fieldset>
+            </form>
+        </div>
+        <?php
+        break;
     case 'add_user':
 
         ?>
-            <form action="<?php echo BASE_URL; ?>/app/controllers/authController.php" method="POST" class="form-horizontal">
+        <form action="<?php echo BASE_URL; ?>/app/controllers/authController.php" method="POST" class="form-horizontal">
            <fieldset>
            <legend class="text-center">Add user</legend>
             <div class="form-group">

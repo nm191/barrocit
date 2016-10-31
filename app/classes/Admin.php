@@ -54,4 +54,58 @@ class Admin
         }
         return $options;
     }
+
+    private function getUserRights(){
+        $sql = 'SELECT * FROM `tbl_user_rights`';
+        $stmt = $this->db->pdo->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->fetchAll(PDO::FETCH_OBJ);
+        return $result;
+    }
+
+    private function getUserToUserRights($section){
+        $sql = 'SELECT * FROM `tbl_user_to_user_rights` WHERE user_right_id = :user_right_id';
+        $stmt = $this->db->pdo->prepare($sql);
+        $stmt->bindParam(':user_right_id', $section);
+        $stmt->execute();
+        $result = $stmt->fetchAll(PDO::FETCH_OBJ);
+        return $result;
+    }
+
+    public function getUserRightsTable(){
+        $user_rights_ar = self::getUserRights();
+        $table = '<table class="table table-responsive table-hover table-striped">';
+        $table .= '<thead><tr><th>User Right</th></tr>';
+        foreach($user_rights_ar as $user_right){
+            $table .= '<tr><td><a href="admin.php?page=user_rights&section='.$user_right->user_right_id.'">'.$user_right->user_right_description.'</a> </td></tr>';
+        }
+        $table .= '</table>';
+
+        return $table;
+    }
+
+    public function getUserRightsFormTable($section){
+        if(!$section){
+            return false;
+        }
+        $users_ar = $this->getAllUsers();
+        $user_rights_ar = $this->getUserToUserRights($section);
+        $input_ar = array();
+        foreach($users_ar as $user){
+            if(!$user_rights_ar){
+                $input_ar[] = '<div class="checkbox"><label><input type="checkbox" name="user_id_'.$user->user_id.'" value="'.$user->user_id.'">'.$user->username.'</label></div>';
+                continue;
+            }
+            foreach($user_rights_ar as $user_right){
+                if($user->user_id != $user_right->user_id){
+                    $input_ar[] = '<div class="checkbox"><label><input type="checkbox" name="user_id_'.$user->user_id.'" value="'.$user->user_id.'">'.$user->username.'</label></div>';
+                }else {
+                    $input_ar[] = '<div class="checkbox"><label><input type="checkbox" name="user_id_' . $user->user_id . '" value="' . $user->user_id . '" checked>' . $user->username . '</label></div>';
+                }
+            }
+        }
+
+        return implode('', $input_ar);
+
+    }
 }
