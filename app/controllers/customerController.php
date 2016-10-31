@@ -11,6 +11,13 @@ $customer = new Customer();
 
 $formname = 'invalid_form';
 
+if (isset($_GET['customer_id']))
+{
+    $addition = '&customer_id=' . $_GET['customer_id'];
+} else {
+    $addition = '';
+}
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST'){
 
 
