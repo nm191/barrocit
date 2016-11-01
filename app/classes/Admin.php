@@ -54,4 +54,93 @@ class Admin
         }
         return $options;
     }
+
+    private function getUserRights(){
+        $sql = 'SELECT * FROM `tbl_user_rights`';
+        $stmt = $this->db->pdo->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->fetchAll(PDO::FETCH_OBJ);
+        return $result;
+    }
+
+    private function getUserToUserRights($section){
+        $sql = 'SELECT * FROM `tbl_user_to_user_rights` WHERE user_right_id = :user_right_id';
+        $stmt = $this->db->pdo->prepare($sql);
+        $stmt->bindParam(':user_right_id', $section);
+        $stmt->execute();
+        $result = $stmt->fetchAll(PDO::FETCH_OBJ);
+        return $result;
+    }
+
+    public function getUserRightsTable(){
+        $user_rights_ar = self::getUserRights();
+        $table = '<table class="table table-responsive table-hover table-striped">';
+        $table .= '<thead><tr><th>User Right</th></tr>';
+        foreach($user_rights_ar as $user_right){
+            $table .= '<tr><td><a href="admin.php?page=user_rights&section='.$user_right->user_right_id.'">'.$user_right->user_right_description.'</a> </td></tr>';
+        }
+        $table .= '</table>';
+
+        return $table;
+    }
+
+    public function getUserRightsFormTable($section){
+        if(!$section){
+            return false;
+        }
+        $users_ar = $this->getAllUsers();
+        $user_rights_ar = $this->getUserToUserRights($section);
+        $input_ar = array();
+        $rights_ar = array();
+        foreach($user_rights_ar as $user_right){
+            $rights_ar[$user_right->user_id] = $user_right->user_id;
+        }
+
+        foreach($users_ar as $user){
+            if(!in_array($user->user_id, $rights_ar)){
+                $input_ar[] = '<div class="checkbox"><label><input type="checkbox" name="user_id_'.$user->user_id.'" value="'.$user->user_id.'">'.$user->username.'</label></div>';
+            }else {
+                $input_ar[] = '<div class="checkbox"><label><input type="checkbox" name="user_id_' . $user->user_id . '" value="' . $user->user_id . '" checked>' . $user->username . '</label></div>';
+            }
+
+        }
+
+        return implode('', $input_ar);
+    }
+
+    public function deleteUserRights($section){
+        $sql = "DELETE FROM `tbl_user_to_user_rights` WHERE user_right_id = :section";
+        $stmt = $this->db->pdo->prepare($sql);
+        $stmt->bindParam(':section', $section);
+        $result = $stmt->execute();
+        return $result;
+    }
+
+    public function insertUserRight($user_id, $section){
+        $sql = "INSERT INTO `tbl_user_to_user_rights` (user_id, user_right_id) VALUES (:user_id, :section)";
+        $stmt = $this->db->pdo->prepare($sql);
+        $stmt->bindParam(':user_id', $user_id);
+        $stmt->bindParam(':section', $section);
+        $result = $stmt->execute();
+        return $result;
+    }
+
+    public function getUserRightId($user_right){
+        $sql = "SELECT user_right_id FROM `tbl_user_rights` WHERE user_right_description = :user_right";
+        $stmt = $this->db->pdo->prepare($sql);
+        $stmt->bindParam(':user_right', $user_right);
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_OBJ);
+        return $result;
+    }
+
+    public function userHasAccess($user_id, $section){
+        $sql = "SELECT COUNT(id) as count FROM `tbl_user_to_user_rights` WHERE user_id = :user_id AND user_right_id = :section";
+        $stmt = $this->db->pdo->prepare($sql);
+        $stmt->bindParam(':user_id', $user_id);
+        $stmt->bindParam(':section', $section);
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_OBJ);
+        return $result->count;
+    }
 }

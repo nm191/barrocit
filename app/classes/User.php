@@ -9,6 +9,7 @@
 class User
 {
     private $db;
+    private $user_id;
     public $username;
     private $password;
     public $isLoggedIn = false; //camel-case: eerste woord kleine letter, de volgende woorden hoofdletter
@@ -25,6 +26,7 @@ class User
             if($result){
                 $this->isLoggedIn = true;
                 $this->username = $result->username;
+                $this->user_id = $result->user_id;
             }
 
         }
@@ -86,6 +88,20 @@ class User
 
     public function redirect($path){
         header('location: ' . BASE_URL . '/public/' . $path);
+    }
+
+    public function hasAccess($user_right){
+        $admin = new Admin();
+        $user_right = trim(strtolower($user_right));
+
+        //get section id
+        $section = $admin->getUserRightId($user_right);
+        
+        //check if user has access.
+        if(!$admin->userHasAccess($this->user_id, $section->user_right_id)){
+         return false;
+        }
+        return true;
     }
 
 }

@@ -11,12 +11,20 @@ $customer = new Customer();
 
 $formname = 'invalid_form';
 
+if (isset($_GET['customer_id']))
+{
+    $addition = '&customer_id=' . $_GET['customer_id'];
+} else {
+    $addition = '';
+}
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST'){
-    
+
+
+
     if (isset($_POST['formname'])){
         $formname = $_POST['formname'];
     }
-
 
     switch ($formname){
         case 'generalData':
@@ -24,16 +32,38 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
             echo "set Customer name and/or Salesagent";
         }
 
+
+
+            if ($_POST['edit'] == 'edit'){
+
+
+                $id = $_POST['id'];
+                $cc_name = $_POST['customerName'];
+                $cs_agent = $_POST['salesAgent'];
+                isset($_POST['prospect']) ? $prospect = $_POST['prospect'] : $prospect = 0;
+                (isset($_POST['maintenanceContract']) ? $contract = $_POST['maintenanceContract'] : $contract = 0);
+
+
+                if($customer->updateGeneralData($cc_name, $cs_agent, $prospect, $contract, $id)){
+                    echo 'Edit complete';
+
+
+                }
+
+            }else{
+
             $customer_company_name = $_POST['customerName'];
             $customer_sales_agent = $_POST['salesAgent'];
             (isset($_POST['prospect']) ? $customer_is_prospect = $_POST['prospect'] : $customer_is_prospect = 0);
             (isset($_POST['maintenanceContract']) ? $customer_maintenance_contract = $_POST['maintenanceContract'] : $customer_maintenance_contract = 0);
 
-        if ($customer->addGeneralData($customer_company_name, $customer_sales_agent, $customer_is_prospect, $customer_maintenance_contract)){
+        if ($customer->addGeneralData($customer_company_name, $customer_sales_agent, $customer_is_prospect, $customer_maintenance_contract)) {
             echo 'Added with success';
 
-            $user->redirect('customers.php?page=customer_addresses');
         }
+
+        }
+            $user->redirect('customers.php?page=customer_addresses&customer_id='.$id);
 
         break;
 
@@ -52,7 +82,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
 
         if ($customer->addAddress($pAddress, $pZipcode, $pCity, $sAddress, $sZipcode, $sCity, $id)){
 
-            $user->redirect('customers.php?page=customer_contact_person');
+            $user->redirect('customers.php?page=customer_contact_person&customer_id='.$id);
         }
 
         break;
@@ -61,7 +91,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
 
             $custData = $customer->getLatest();
 
-            $id = $custData['customer_id'];
+            $id = $_POST['id'];
             $initials = $_POST['initials'];
             $firstname = $_POST['firstName'];
             $surname = $_POST['surName'];
@@ -73,9 +103,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
         if($customer->addContactPerson($initials, $firstname, $surname, $email, $phone, $sec_phone, $fax, $id)){
 
         }
-            $user->redirect('customers.php?page=customer_visits');
-    }
+                  $user->redirect('customers.php?page=customer_visits&customer_id='.$id);
+            break;
 
 
+        case 'customer_visits':
+            
+            
+            break;
+
+
+
+}
 
 }
