@@ -103,11 +103,40 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
         if($customer->addContactPerson($initials, $firstname, $surname, $email, $phone, $sec_phone, $fax, $id)){
 
         }
-                  $user->redirect('customers.php?page=customer_visits&customer_id='.$id);
+                  $user->redirect('customers.php?page=customer_financial&customer_id='.$id);
             break;
 
 
-        case 'customer_visits':
+        case 'financial':
+            
+            $id = $_POST['id'];
+            $discount = $_POST['discountRate'];
+            $overdraft = $_POST['overdraftLimit'];
+            $payterm = $_POST['paymentTerm'];
+            $bankaccount = $_POST['bankaccountNumber'];
+            $ledgeraccount = $_POST['legderAccountNumber'];
+            $revenue = $_POST['grossRevenue'];
+            $tax_id = $_POST['taxCode'];
+
+            if($customer->addFinancial($discount, $overdraft, $payterm, $bankaccount, $ledgeraccount, $revenue, $tax_id, $id)){
+
+            }
+
+            $user->redirect('customers.php?page=customer_financial&customer_id='.$id);
+            
+            break;
+        
+        
+        
+        case 'visits':
+            
+            
+            
+            break;
+        
+        
+        case 'soft_hard':
+            
             
             
             break;

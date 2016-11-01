@@ -122,6 +122,30 @@ class Customer
 
     }
 
+    public function addFinancial($discount, $overdraft, $payterm, $bankaccount, $ledgeraccount, $revenue, $tax_id, $id){
+        $sql = "UPDATE `tbl_customers`
+                SET customer_discount = :c_discount, customer_overdraft = :c_overdraft, customer_pay_term = :c_p_term, 
+                customer_bank_account = :c_bankaccount, customer_ledger_account = :c_ledgeraccount, 
+                customer_revenue = :c_revenue, tax_code_id = :tax_id
+                WHERE customer_id = :id";
+        $stmt = $this->db->pdo->prepare($sql);
+        $stmt->bindParam(':c_discount', $discount);
+        $stmt->bindParam(':c_overdraft', $overdraft);
+        $stmt->bindParam(':c_p_term', $payterm);
+        $stmt->bindParam(':c_bankaccount', $bankaccount);
+        $stmt->bindParam(':c_ledgeraccount', $ledgeraccount);
+        $stmt->bindParam(':c_revenue', $revenue);
+        $stmt->bindParam(':tax_id', $tax_id);
+        $stmt->bindParam(':id', $id);
+        $result = $stmt->execute();
+        return $result;
+    }
+
+    public function addVisits(){
+        $sql = "UPDATE `tbl_customers`
+                SET ";
+    }
+
     public function searchCustomerName($search_value){
         $sql = "SELECT * FROM `tbl_customers` WHERE customer_company_name LIKE :search_value";
         $stmt = $this->db->pdo->prepare($sql);

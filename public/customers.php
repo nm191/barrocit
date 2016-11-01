@@ -47,8 +47,8 @@ if (isset($_GET['customer_id']))
     <li role="presentation" <?php echo ($current_page == 'customer_general_data' ? 'class="active"' : ''); ?>><a href="customers.php?page=customer_general_data&type=insert<?php echo $addition;?>">General Data</a></li>
     <li role="presentation" <?php echo ($current_page == 'customer_addresses' ? 'class="active"' : ''); ?>><a href="customers.php?page=customer_addresses<?php echo $addition;?>">Addresses</a></li>
     <li role="presentation" <?php echo ($current_page == 'customer_contact_person' ? 'class="active"' : ''); ?>><a href="customers.php?page=customer_contact_person<?php echo $addition;?>">Contact Person</a></li>
-    <li role="presentation" <?php echo ($current_page == 'customer_visits' ? 'class="active"' : ''); ?>><a href="customers.php?page=customer_visits<?php echo $addition;?>">Visits</a></li>
     <li role="presentation" <?php echo ($current_page == 'customer_financial' ? 'class="active"' : ''); ?>><a href="customers.php?page=customer_financial<?php echo $addition;?>">Financial</a></li>
+    <li role="presentation" <?php echo ($current_page == 'customer_visits' ? 'class="active"' : ''); ?>><a href="customers.php?page=customer_visits<?php echo $addition;?>">Visits</a></li>
     <li role="presentation" <?php echo ($current_page == 'customer_soft_hard' ? 'class="active"' : ''); ?>><a href="customers.php?page=customer_soft_hard<?php echo $addition;?>">Software/Hardware</a></li>
 </ul>
 
@@ -326,69 +326,7 @@ switch ($current_page){
         </form>
         <?php
         break;
-    case 'customer_visits':
-
-        if(!isset($_GET['customer_id'])){
-
-            $custData = $customer->getLatest();
-
-        } else {
-            $id = $_GET['customer_id'];
-            $custData = $customer->getCustomerById($id);
-        }
-
-        ?>
-        <form action="<?php echo BASE_URL; ?>/app/controllers/customerController.php" method="POST" class="form-horizontal">
-            <fieldset>
-                <legend class="text-center">Customer Visits</legend>
-                <div class="form-group">
-                    <label class="col-sm-offset-2 col-sm-2 control-label" for="customerName">Visit type:</label>
-                    <div class="col-sm-4">
-                        <select class="form-control" name="visittype" id="visittype">
-                            <option value=""></option> <!-- foreach maken en de data vanuit de database halenn: email, langsgaan, telefoon, per post, fax -->
-
-                        </select>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label class="col-sm-offset-2 col-sm-2 control-label" for="visitDate">Visit Date:</label>
-                    <div class="col-sm-4">
-                        <input type="date" value="<?php echo date('Y-m-d'); ?>">
-                    </div>
-                </div>
-                <div class="form-group">
-
-                        <label class="col-sm-offset-2 col-sm-2 control-label">Visit text:</label>
-                        <div class="col-sm-4"><textarea name="" id="" cols="30" rows="10"></textarea></div>
-
-                </div>
-                <div class="form-group">
-                    <label class="col-sm-offset-2 col-sm-2 control-label" for="actionDate">Action Date:</label>
-                    <div class="col-sm-4">
-                        <input type="date" value="<?php echo date('Y-m-d'); ?>">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="checkbox col-sm-offset-4 col-sm-4">
-                        <label>
-                            <input type="checkbox" value="actionDate" name="actionDate" >
-                            Action finished?
-                        </label>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <input type="hidden" name="id" value="<?php echo $custData['customer_id'];?>">
-                </div>
-
-                <div class="col-sm-offset-4 col-sm-4"><input type="submit" name='saveAddresses' value='Save' class="btn btn-block btn-success"> </div>
-            </fieldset>
-        </form>
-        <?php
-        break;
-
-    case 'customer_financial':
+case 'customer_financial':
 
         if(!isset($_GET['customer_id'])){
 
@@ -404,31 +342,31 @@ switch ($current_page){
                 <legend class="text-center">Customer Financial</legend>
                 <div class="form-group">
                     <label class="col-sm-offset-2 col-sm-2 control-label" for="discountRate">Discount rate:</label>
-                    <div class="col-sm-4"><input class="form-control" id="discountRate" name="discountRate" type="text"></div>
+                    <div class="col-sm-4"><input class="form-control" id="discountRate" name="discountRate" type="number" value="<?php echo $custData['discount']; ?>"></div>
                 </div>
                 <div class="form-group">
                     <label class="col-sm-offset-2 col-sm-2 control-label" for="discountRate">Overdraft limit:</label>
-                    <div class="col-sm-4"><input class="form-control" id="discountRate" name="discountRate" type="text"></div>
+                    <div class="col-sm-4"><input class="form-control" id="discountRate" name="overdraftLimit" type="number"></div>
                 </div>
                 <div class="form-group">
                     <label class="col-sm-offset-2 col-sm-2 control-label" for="discountRate">Payment Term:</label>
-                    <div class="col-sm-4"><input class="form-control" id="discountRate" name="discountRate" type="text"></div>
+                    <div class="col-sm-4"><input class="form-control" id="discountRate" name="paymentTerm" type="text"></div>
                 </div>
                 <div class="form-group">
                     <label class="col-sm-offset-2 col-sm-2 control-label" for="discountRate">Bank account number:</label>
-                    <div class="col-sm-4"><input class="form-control" id="discountRate" name="discountRate" type="text" required></div>
+                    <div class="col-sm-4"><input class="form-control" id="discountRate" name="bankaccountNumber" type="text" required></div>
                 </div>
                 <div class="form-group">
                     <label class="col-sm-offset-2 col-sm-2 control-label" for="discountRate">Ledger Account number:</label>
-                    <div class="col-sm-4"><input class="form-control" id="discountRate" name="discountRate" type="text"  required></div>
+                    <div class="col-sm-4"><input class="form-control" id="discountRate" name="legderAccountNumber" type="text"  required></div>
                 </div>
                 <div class="form-group">
                     <label class="col-sm-offset-2 col-sm-2 control-label" for="discountRate">Gross revenue:</label>
-                    <div class="col-sm-4"><input class="form-control" id="discountRate" name="discountRate" type="text"></div>
+                    <div class="col-sm-4"><input class="form-control" id="discountRate" name="grossRevenue" type="text"></div>
                 </div>
                 <div class="form-group">
                     <label class="col-sm-offset-2 col-sm-2 control-label" for="discountRate">Tax code:</label>
-                    <div class="col-sm-4"><input class="form-control" id="discountRate" name="discountRate" type="text" required></div>
+                    <div class="col-sm-4"><input class="form-control" id="discountRate" name="taxCode" type="number" required></div>
                 </div>
 
                 <div class="form-group">
@@ -438,6 +376,9 @@ switch ($current_page){
                             Credit worthy?
                         </label>
                     </div>
+                </div>
+                <div class="formname">
+                    <input type="hidden" name="formname" value="financial">
                 </div>
 
                 <div class="form-group">
@@ -449,7 +390,74 @@ switch ($current_page){
         <?php
         break;
 
-    case 'customer_soft_hard':
+case 'customer_visits':
+
+    if(!isset($_GET['customer_id'])){
+
+        $custData = $customer->getLatest();
+
+    } else {
+        $id = $_GET['customer_id'];
+        $custData = $customer->getCustomerById($id);
+    }
+
+    ?>
+    <form action="<?php echo BASE_URL; ?>/app/controllers/customerController.php" method="POST" class="form-horizontal">
+        <fieldset>
+            <legend class="text-center">Customer Visits</legend>
+            <div class="form-group">
+                <label class="col-sm-offset-2 col-sm-2 control-label" for="customerName">Visit type:</label>
+                <div class="col-sm-4">
+                    <select class="form-control" name="visittype" id="visittype">
+                        <option value=""></option> <!-- foreach maken en de data vanuit de database halenn: email, langsgaan, telefoon, per post, fax -->
+
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-offset-2 col-sm-2 control-label" for="visitDate">Visit Date:</label>
+                <div class="col-sm-4">
+                    <input type="date" value="<?php echo date('Y-m-d'); ?>">
+                </div>
+            </div>
+            <div class="form-group">
+
+                <label class="col-sm-offset-2 col-sm-2 control-label">Visit text:</label>
+                <div class="col-sm-4"><textarea name="" id="" cols="30" rows="10"></textarea></div>
+
+            </div>
+            <div class="form-group">
+                <label class="col-sm-offset-2 col-sm-2 control-label" for="actionDate">Action Date:</label>
+                <div class="col-sm-4">
+                    <input type="date" value="<?php echo date('Y-m-d'); ?>">
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="checkbox col-sm-offset-4 col-sm-4">
+                    <label>
+                        <input type="checkbox" value="actionDate" name="actionDate" >
+                        Action finished?
+                    </label>
+                </div>
+            </div>
+
+            <div class="formname">
+                <input type="hidden" name="formname" value="visits">
+            </div>
+
+            <div class="form-group">
+                <input type="hidden" name="id" value="<?php echo $custData['customer_id'];?>">
+            </div>
+
+            <div class="col-sm-offset-4 col-sm-4"><input type="submit" name='saveAddresses' value='Save' class="btn btn-block btn-success"> </div>
+        </fieldset>
+    </form>
+    <?php
+    break;
+
+
+case 'customer_soft_hard':
 
         if(!isset($_GET['customer_id'])){
 
@@ -493,6 +501,11 @@ switch ($current_page){
                         </label>
                     </div>
                 </div>
+
+                <div class="formname">
+                    <input type="hidden" name="formname" value="soft_hard">
+                </div>
+
                 <div class="form-group">
                     <input type="hidden" name="id" value="<?php echo $custData['customer_id'];?>">
                 </div>
