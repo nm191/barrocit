@@ -63,7 +63,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
         }
 
         }
-            $user->redirect('customers.php?page=customer_addresses');
+            $user->redirect('customers.php?page=customer_addresses&customer_id='.$id);
 
         break;
 
@@ -82,7 +82,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
 
         if ($customer->addAddress($pAddress, $pZipcode, $pCity, $sAddress, $sZipcode, $sCity, $id)){
 
-            $user->redirect('customers.php?page=customer_contact_person');
+            $user->redirect('customers.php?page=customer_contact_person&customer_id='.$id);
         }
 
         break;
@@ -91,7 +91,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
 
             $custData = $customer->getLatest();
 
-            $id = $custData['customer_id'];
+            $id = $_POST['id'];
             $initials = $_POST['initials'];
             $firstname = $_POST['firstName'];
             $surname = $_POST['surName'];
@@ -103,9 +103,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
         if($customer->addContactPerson($initials, $firstname, $surname, $email, $phone, $sec_phone, $fax, $id)){
 
         }
-            $user->redirect('customers.php?page=customer_visits');
-    }
+                  $user->redirect('customers.php?page=customer_visits&customer_id='.$id);
+            break;
 
 
+        case 'customer_visits':
+            
+            
+            break;
+
+
+
+}
 
 }

@@ -117,17 +117,22 @@ switch ($current_page){
         var_dump($_POST);
         var_dump($_GET);
 
-        if(!isset($_GET['customer_id'])) {
+        if ($_GET['type'] == 'edit'){
+            $id = $_GET['customer_id'];
+            $custData = $customer->getCustomerById($id);
+        }
 
-                    $custData = $customer->getLatest();
-                }
-                 else {
-                    $id = $_GET['customer_id'];
-                    $custData = $customer->getCustomerById($id);
-                }
+//        if(!isset($_GET['customer_id'])) {
+//
+//                    $custData = $customer->getLatest();
+//                }
+//                 else {
+//                    $id = $_GET['customer_id'];
+//                    $custData = $customer->getCustomerById($id);
+//                }
 
         ?>
-        <form action="<?php echo BASE_URL; ?>/app/controllers/customerController.php?" method="POST" class="form-horizontal">
+        <form action="<?php echo BASE_URL; ?>/app/controllers/customerController.php" method="POST" class="form-horizontal">
             <fieldset>
                 <legend class="text-center">Customer General Data</legend>
                 <div class="form-group">
@@ -186,7 +191,7 @@ switch ($current_page){
                         <input type="submit" name='saveGeneralData' value='Save' class="btn btn-block btn-success">
                     <?php endif; ?>
                 </div>
-                <div class="col-sm-offset-4 col-sm-4"><?php if(isset($_GET['customer_id'])){ echo '<a href="customers.php?page=customer_addresses' . $addition . '"';}?><button class="btn btn-success btn-block">Edit only</button></a><input type="submit" name='saveGeneralData' value='Save' class="btn btn-block btn-success"></a> </div>
+                <div class="col-sm-offset-4 col-sm-4"><input type="submit" name='saveGeneralData' value='Save' class="btn btn-block btn-success"></div>
             </fieldset>
         </form>
 
@@ -203,12 +208,6 @@ switch ($current_page){
         var_dump($_GET);
 
 
-        if ($_GET['type'] == 'edit' || $_POST['edit'] == 'edit'){
-            $id = $_GET['customer_id'];
-            $custData = $customer->getCustomerById($id);
-
-        }
-
         if(!isset($_GET['customer_id'])){
 
             $custData = $customer->getLatest();
@@ -217,6 +216,8 @@ switch ($current_page){
             $id = $_GET['customer_id'];
             $custData = $customer->getCustomerById($id);
         }
+
+        var_dump($custData);
 
 
         ?>
@@ -258,8 +259,11 @@ switch ($current_page){
                     <input type="hidden" name="formname" value="Addresses">
                 </div>
 
-                <div class="col-sm-offset-4 col-sm-4"><?php if(isset($_GET['customer_id'])){ echo '<a href="customers.php?page=customer_contact_person' . $addition . '"';}?><button class="btn btn-success btn-block">Edit only</button></a><input type="submit" name='saveAddresses' value='Save' class="btn btn-block btn-success"></a> </div>
+                <div class="col-sm-offset-4 col-sm-4"><input type="submit" name='saveAddresses' value='Save' class="btn btn-block btn-success"> </div>
             </fieldset>
+
+<!--            --><?php //if(isset($_GET['customer_id'])){ echo '<a href="customers.php?page=customer_contact_person' . $addition . '"';}?><!--<button class="btn btn-success btn-block">Edit only</button></a>-->
+
         </form>
         <?php
         break;
@@ -309,16 +313,15 @@ switch ($current_page){
                     <label class="col-sm-offset-2 col-sm-2 control-label" for="faxNumber">Fax number:</label>
                     <div class="col-sm-4"><input class="form-control" id="faxNumber" name="faxNumber" value="<?php echo $custData['customer_fax']; ?>" type="text"></div>
                 </div>
-
                 <div class="form-group">
-                    <input type="hidden" name="id" value="<?php $custData['customer_id'] ?>">
+                    <input type="hidden" name="id" value="<?php echo $custData['customer_id'];?>">
                 </div>
 
                 <div class="formname">
                     <input type="hidden" name="formname" value="contact_person">
                 </div>
 
-                <div class="col-sm-offset-4 col-sm-4"><?php if(isset($_GET['customer_id'])){ echo '<a href="customers.php?page=customer_visits' . $addition . '"';}?><button class="btn btn-success btn-block">Edit only</button></a><input type="submit" name='saveContactPerson' value='Save' class="btn btn-block btn-success"></a> </div>
+                <div class="col-sm-offset-4 col-sm-4"><input type="submit" name='saveContactPerson' value='Save' class="btn btn-block btn-success"></div>
             </fieldset>
         </form>
         <?php
@@ -335,86 +338,129 @@ switch ($current_page){
         }
 
         ?>
-        <form action="<?php echo BASE_URL; ?>/app/controllers/authController.php" method="POST" class="form-horizontal">
+        <form action="<?php echo BASE_URL; ?>/app/controllers/customerController.php" method="POST" class="form-horizontal">
             <fieldset>
                 <legend class="text-center">Customer Visits</legend>
                 <div class="form-group">
-                    <label class="col-sm-offset-2 col-sm-2 control-label" for="customerName">Company name:</label>
-                    <div class="col-sm-4"><input class="form-control" id="customerName" value="" name="customerName" type="text" required></div>
+                    <label class="col-sm-offset-2 col-sm-2 control-label" for="customerName">Visit type:</label>
+                    <div class="col-sm-4">
+                        <select class="form-control" name="visittype" id="visittype">
+                            <option value=""></option> <!-- foreach maken en de data vanuit de database halenn: email, langsgaan, telefoon, per post, fax -->
+
+                        </select>
+                    </div>
                 </div>
 
                 <div class="form-group">
                     <label class="col-sm-offset-2 col-sm-2 control-label" for="visitDate">Visit Date:</label>
                     <div class="col-sm-4">
-                        <input type="text" value="Hier moet een kalender komen, hetzelfde als bij Sales en FInance">
+                        <input type="date" value="<?php echo date('Y-m-d'); ?>">
+                    </div>
+                </div>
+                <div class="form-group">
+
+                        <label class="col-sm-offset-2 col-sm-2 control-label">Visit text:</label>
+                        <div class="col-sm-4"><textarea name="" id="" cols="30" rows="10"></textarea></div>
+
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-offset-2 col-sm-2 control-label" for="actionDate">Action Date:</label>
+                    <div class="col-sm-4">
+                        <input type="date" value="<?php echo date('Y-m-d'); ?>">
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="checkbox col-sm-offset-4 col-sm-4">
                         <label>
-                            <input type="checkbox" value="prospect" name="prospect" >
-                            Prospect?
+                            <input type="checkbox" value="actionDate" name="actionDate" >
+                            Action finished?
                         </label>
                     </div>
                 </div>
+
                 <div class="form-group">
-                    <div class="checkbox col-sm-offset-4 col-sm-4">
-                        <label>
-                            <input type="checkbox" value="maintenanceContract" name="maintenanceContract" >
-                            Maintenance contract?
-                        </label>
-                    </div>
+                    <input type="hidden" name="id" value="<?php echo $custData['customer_id'];?>">
                 </div>
-                <div class="col-sm-offset-4 col-sm-4"><?php if(isset($_GET['customer_id'])){ echo '<a href="customers.php?page=customer_financial' . $addition . '"';}?><button class="btn btn-success btn-block">Edit only</button></a><input type="submit" name='saveAddresses' value='Save' class="btn btn-block btn-success"></a> </div>
+
+                <div class="col-sm-offset-4 col-sm-4"><input type="submit" name='saveAddresses' value='Save' class="btn btn-block btn-success"> </div>
             </fieldset>
         </form>
         <?php
         break;
 
     case 'customer_financial':
+
+        if(!isset($_GET['customer_id'])){
+
+            $custData = $customer->getLatest();
+
+        } else {
+            $id = $_GET['customer_id'];
+            $custData = $customer->getCustomerById($id);
+        }
         ?>
-        <form action="<?php echo BASE_URL; ?>/app/controllers/authController.php" method="POST" class="form-horizontal">
+        <form action="<?php echo BASE_URL; ?>/app/controllers/customerController.php" method="POST" class="form-horizontal">
             <fieldset>
                 <legend class="text-center">Customer Financial</legend>
                 <div class="form-group">
-                    <label class="col-sm-offset-2 col-sm-2 control-label" for="customerName">Customer name:</label>
-                    <div class="col-sm-4"><input class="form-control" id="customerName" name="customerName" type="text" required></div>
+                    <label class="col-sm-offset-2 col-sm-2 control-label" for="discountRate">Discount rate:</label>
+                    <div class="col-sm-4"><input class="form-control" id="discountRate" name="discountRate" type="text"></div>
                 </div>
                 <div class="form-group">
-                    <label class="col-sm-offset-2 col-sm-2 control-label" for="salesAgent">Sales agent:</label>
-                    <div class="col-sm-4">
-                        <select class="form-control" name="salesAgent" id="salesAgent">
-                            <option>Nick</option>
-                            <option>Ronald</option>
-                            <option>Tim</option>
-                        </select>
-                    </div>
+                    <label class="col-sm-offset-2 col-sm-2 control-label" for="discountRate">Overdraft limit:</label>
+                    <div class="col-sm-4"><input class="form-control" id="discountRate" name="discountRate" type="text"></div>
                 </div>
+                <div class="form-group">
+                    <label class="col-sm-offset-2 col-sm-2 control-label" for="discountRate">Payment Term:</label>
+                    <div class="col-sm-4"><input class="form-control" id="discountRate" name="discountRate" type="text"></div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-offset-2 col-sm-2 control-label" for="discountRate">Bank account number:</label>
+                    <div class="col-sm-4"><input class="form-control" id="discountRate" name="discountRate" type="text" required></div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-offset-2 col-sm-2 control-label" for="discountRate">Ledger Account number:</label>
+                    <div class="col-sm-4"><input class="form-control" id="discountRate" name="discountRate" type="text"  required></div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-offset-2 col-sm-2 control-label" for="discountRate">Gross revenue:</label>
+                    <div class="col-sm-4"><input class="form-control" id="discountRate" name="discountRate" type="text"></div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-offset-2 col-sm-2 control-label" for="discountRate">Tax code:</label>
+                    <div class="col-sm-4"><input class="form-control" id="discountRate" name="discountRate" type="text" required></div>
+                </div>
+
                 <div class="form-group">
                     <div class="checkbox col-sm-offset-4 col-sm-4">
                         <label>
-                            <input type="checkbox" value="prospect" name="prospect" >
-                            Prospect?
+                            <input type="checkbox" value="creditWorthy" name="creditWorthy" >
+                            Credit worthy?
                         </label>
                     </div>
                 </div>
+
                 <div class="form-group">
-                    <div class="checkbox col-sm-offset-4 col-sm-4">
-                        <label>
-                            <input type="checkbox" value="maintenanceContract" name="maintenanceContract" >
-                            Maintenance contract?
-                        </label>
-                    </div>
+                    <input type="hidden" name="id" value="<?php echo $custData['customer_id'];?>">
                 </div>
-                <div class="col-sm-offset-4 col-sm-4"><?php if(isset($_GET['customer_id'])){ echo '<a href="customers.php?page=customer_soft_hard' . $addition . '"';}?><button class="btn btn-success btn-block">Edit only</button></a><input type="submit" name='saveAddresses' value='Save' class="btn btn-block btn-success"></a> </div>
+                <div class="col-sm-offset-4 col-sm-4"><input type="submit" name='saveAddresses' value='Save' class="btn btn-block btn-success"></div>
             </fieldset>
         </form>
         <?php
         break;
 
     case 'customer_soft_hard':
+
+        if(!isset($_GET['customer_id'])){
+
+            $custData = $customer->getLatest();
+
+        } else {
+            $id = $_GET['customer_id'];
+            $custData = $customer->getCustomerById($id);
+        }
         ?>
-        <form action="<?php echo BASE_URL; ?>/app/controllers/authController.php" method="POST" class="form-horizontal">
+        <form action="<?php echo BASE_URL; ?>/app/controllers/customerController.php" method="POST" class="form-horizontal">
             <fieldset>
                 <legend class="text-center">Customer Software / Hardware</legend>
                 <div class="form-group">
@@ -447,7 +493,10 @@ switch ($current_page){
                         </label>
                     </div>
                 </div>
-                <div class="col-sm-offset-4 col-sm-4"><?php if(isset($_GET['customer_id'])){ echo '<a href="customers.php?page=customers' . $addition . '"';}?><button class="btn btn-success btn-block">Edit only</button></a><input type="submit" name='saveAddresses' value='Save' class="btn btn-block btn-success"></a> </div>
+                <div class="form-group">
+                    <input type="hidden" name="id" value="<?php echo $custData['customer_id'];?>">
+                </div>
+                <div class="col-sm-offset-4 col-sm-4"><input type="submit" name='saveAddresses' value='Save' class="btn btn-block btn-success"></div>
             </fieldset>
         </form>
         <?php
