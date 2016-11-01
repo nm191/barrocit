@@ -11,8 +11,11 @@ require_once ('../init.php');
 $customer = new Customer();
 
 if ($_SERVER['REQUEST_METHOD'] == 'GET'){
-    
-        $customer_id = $_GET['customer_id'];
+
+/*    var_dump($_GET);
+    exit;*/
+    $customer_id = $_GET['customer_id'];
+    $invoice_id = $_GET['invoice_id'];
 
     if ($customer->delete($customer_id)){
         echo 'Customer deleted';
@@ -20,10 +23,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET'){
         $user->redirect('customers.php');
     }
 
-    $invoice_id = $_GET['invoice_id'];
-    if ($invoice->delete($invoice_id)){
+    if ($invoice->deleteInvoice($invoice_id)){
         echo 'Invoice deleted';
 
-        header('location: ../public/invoice.php');
+        $user->redirect('invoice.php');
     }
 }

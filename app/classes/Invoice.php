@@ -9,6 +9,7 @@
 class Invoice
 {
     private $db;
+    private $invoice_id;
 
     public function __construct($uid = 0)
     {
@@ -31,30 +32,26 @@ class Invoice
 
     }
 
-    public function addInvoice($project, $invoiceTotal, $invoiceDate) {
-        $sql = "INSERT INTO tbl_invoices (project_id, invoice_total, invoice_date) VALUES(:project, :invoiceTotal, :invoiceDate)";
+    private function countInvoices($project){
+        $sql = "SELECT COUNT(*) AS count FROM tbl_invoices WHERE project_id = :project";
+        $stmt = $this->db->pdo->prepare($sql);
+        $stmt->bindParam(':project', $project);
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_OBJ);
+        return $result->count;
+    }
 
+    public function addInvoice($project, $invoiceTotal, $invoiceDate) {
+        $invoiceCount = $this->countInvoices($project);
+        $invoiceNumber = date("Ymd"). $project .$invoiceCount;
+
+        $sql = "INSERT INTO tbl_invoices (project_id, invoice_total, invoice_date, invoice_number) VALUES(:project, :invoiceTotal, :invoiceDate, :invoiceNumber)";
         $stmt = $this->db->pdo->prepare($sql);
         $stmt->bindParam(':project', $project);
         $stmt->bindParam(':invoiceTotal', $invoiceTotal);
         $stmt->bindParam(':invoiceDate', $invoiceDate);
+        $stmt->bindParam(':invoiceNumber', $invoiceNumber);
         $stmt->execute();
-    }
-
-    public function getAllData() {
-        $sql = 'SELECT * 
-                FROM `tbl_invoices` i
-                INNER JOIN `tbl_projects` p
-                ON i.project_id = p.project_id
-                INNER JOIN `tbl_customers` c
-                ON p.customer_id = c.customer_id
-                WHERE p.project_is_active = 1
-                AND i.invoice_is_active = 1
-                ORDER BY i.invoice_id';
-        $stmt = $this->db->pdo->prepare($sql);
-        $stmt->execute();
-        $result = $stmt->fetchAll(PDO::FETCH_OBJ);
-        return $result;
     }
 
     public function getInvoiceByID($id) {
@@ -71,6 +68,31 @@ class Invoice
         $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         return $result;
+    }
+
+    public function getAllInvoiceData() {
+        $sql = 'SELECT * 
+                FROM `tbl_invoices` i
+                INNER JOIN `tbl_projects` p
+                ON i.project_id = p.project_id
+                INNER JOIN `tbl_customers` c
+                ON p.customer_id = c.customer_id
+                WHERE p.project_is_active = 1
+                AND i.invoice_is_active = 1
+                ORDER BY i.invoice_id';
+        $stmt = $this->db->pdo->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->fetchAll(PDO::FETCH_OBJ);
+        return $result;
+    }
+
+    public function invoiceExists($invoice_id){
+        $sql = "SELECT COUNT(invoice_id) as count FROM tbl_invoices WHERE invoice_id = :invoice_id";
+        $stmt = $this->db->pdo->prepare($sql);
+        $stmt->bindParam(':invoice_id', $invoice_id);
+        $stmt->execute();
+        $result = $stmt->fetchObject();
+        return $result->count;
     }
 
     public function getLatestInvoice() {
@@ -92,10 +114,10 @@ class Invoice
         header('location: ' . BASE_URL . '/public/' . $path);
     }
 
-/*    public function getProjectId(){
-        return $this->project_id;
+/*    public function getInvoiceId(){
+        return $this->invoice_id;
     }
-    public function getProjectName(){
+    public function getInvoiceNumber(){
         return $this->project_name;
     }
 

@@ -24,7 +24,7 @@ $project = new Project();
 
     if(isset($_GET['pid'])){
         $invoice = new Invoice($_GET['pid']);
-        $posted_values = $invoice->getAllData();
+        $posted_values = $invoice->getAllInvoiceData();
     }else{
         $invoice = new Invoice();
     }
@@ -68,8 +68,7 @@ switch ($current_page){
         } else {
             $id = $_GET['invoice_id'];
             $invoiceData = $invoice->getInvoiceByID($id);
-/*            var_dump($invoiceData);
-            exit;*/
+
         }
 
 
@@ -144,22 +143,22 @@ switch ($current_page){
             /*            var_dump($invoiceData);
                         exit;*/
         }
-
+        var_dump($invoiceData);
 
         ?>
         <form action="<?php echo BASE_URL; ?>/app/controllers/invoiceController.php" method="POST" class="form-horizontal">
             <fieldset>
-                <div class="form-group  <?php if(isset($posted_values) && empty($posted_values['customer_id'])){ echo 'has-error';} ?>">
+<!--                <div class="form-group  <?php /*if(isset($posted_values) && empty($posted_values['customer_id'])){ echo 'has-error';} */?>">
                     <label class="col-sm-offset-2 col-sm-2 control-label" for="customer_name">Customer:</label>
                     <div class="col-sm-4">
-                        <input class="form-control" id="customer_name_disabled" name="customer_name_disabled" type="text" disabled placeholder="<?php echo $invoiceData['customer_company_name']; ?>" required<?php if(isset($posted_values) && !empty($posted_values['customer_name'])){ echo 'value="'.$posted_values['customer_name'].'"';} ?>>
-                        <input class="form-control" id="customer_name" name="customer_name" type="hidden" <?php if(isset($posted_values) && !empty($posted_values['customer_company_name'])){ echo 'value="'.$posted_values['customer_company_name'].'"';} ?>>
-                        <input class="form-control" id="customer_id" name="customer_id" type="hidden" <?php if(isset($posted_values) && !empty($posted_values['customer_id'])){ echo 'value="'.$posted_values['customer_id'].'"';} ?>>
+                        <input class="form-control" id="customer_name_disabled" name="customer_name_disabled" type="text" disabled placeholder="<?php /*echo $invoiceData['customer_company_name']; */?>" required<?php /*if(isset($posted_values) && !empty($posted_values['customer_name'])){ echo 'value="'.$posted_values['customer_name'].'"';} */?>>
+                        <input class="form-control" id="customer_name" name="customer_name" type="hidden" <?php /*if(isset($posted_values) && !empty($posted_values['customer_company_name'])){ echo 'value="'.$posted_values['customer_company_name'].'"';} */?>>
+                        <input class="form-control" id="customer_id" name="customer_id" type="hidden" <?php /*if(isset($posted_values) && !empty($posted_values['customer_id'])){ echo 'value="'.$posted_values['customer_id'].'"';} */?>>
                     </div>
                     <div class="col-sm-1">
                         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#customersModal">Select Customer</button>
                     </div>
-                </div>
+                </div>-->
                 <div class="form-group  <?php if(isset($posted_values) && empty($posted_values['project_id'])){ echo 'has-error';} ?>">
                     <label class="col-sm-offset-2 col-sm-2 control-label" for="project_name">Project:</label>
                     <div class="col-sm-4">
@@ -178,7 +177,7 @@ switch ($current_page){
                 <div class="form-group">
                     <label class="col-sm-offset-2 col-sm-2 control-label" for="project">Date:</label>
                     <div class="col-sm-4">
-                        <input type='date' name="invoiceDate" id="invoiceDate" class="form-control" placeholder="<?php echo $invoiceData['invoice_date']; ?>" required>
+                        <input type='date' name="invoiceDate" id="invoiceDate" class="form-control" value="<?php echo $invoiceData['invoice_date']; ?>" required>
                     </div>
                 </div>
                 <div class="form-group">
@@ -220,10 +219,10 @@ switch ($current_page){
                         </tr>
                         </thead>
                         <?php
-                        $invoiceData = $invoices->getAllData();
+                        $invoiceData = $invoices->getAllInvoiceData();
                         foreach ($invoiceData as $invoice) {
                             echo '<tr>';
-                            echo '<td> #' . str_replace("-","",$invoice->invoice_date) . $invoice->invoice_id . '</td>';
+                            echo '<td> #' . $invoice->invoice_number . '</td>';
                             echo '<td>' . $invoice->customer_company_name . '</td>';
                             echo '<td>' . $invoice->project_name . '</td>';
                             echo '<td>' . $invoice->invoice_date . '</td>';
@@ -242,7 +241,32 @@ switch ($current_page){
             </div>
         <?php
         break;
+    case 'view_invoice':
+        if(!$invoice->invoiceExists($invoice_id)){
+            $user->redirect('invoices.php?page=invalid_invoice');
+        }
 
+        ?>
+        <div class="col-sm-10 col-sm-offset-1">
+            <div class="well well-lg">
+                <?php
+                echo '<h3>'.$project->getProjectName().'</h3>  ';
+                ?>
+                <table class="table table-responisve table-striped table-hover">
+                    <?php
+                    echo '<tr><td>Customer:</td><td>'.$project->getProjectCustomerName().'</td></tr>';
+                    echo '<tr><td>Priority:</td><td>'.$project->getProjectPrio().'</td></tr>';
+                    echo '<tr><td>Deadline:</td><td> '.date('d-m-Y', strtotime($project->getProjectDeadline())).'</td></tr>';
+                    echo '<tr><td>Start:</td><td> '.date('d-m-Y', strtotime($project->getProjectStart())).'</td></tr>';
+                    echo '<tr><td>Version:</td><td> '.$project->getProjectVersion().'</td></tr>';
+                    echo '<tr><td>Finished:</td><td> '.$project->getProjectFinished().'</td></tr>';
+                    echo '<tr><td>Description:</td><td> '.$project->getProjectDescription().'</td></tr>';
+                    ?>
+                </table>
+            </div>
+        </div>
+        <?php
+        break;
     default:
         echo 'This page does not exists!';
 
