@@ -8,6 +8,10 @@
     if(!$user->isLoggedIn){
         $user->redirect('index.php');
     }
+
+    //get current page
+    $current_page_name = rtrim(basename($_SERVER['PHP_SELF']),'.php');
+
 ?>
 
 <div class="container-fluid">
@@ -28,9 +32,25 @@
 
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
+
+
+
+
+                    <?php
+                        if($user->hasAccess('sales')){
+                    ?>
                     <li><a href="customers.php?page=customer_general_data&type=insert">Add Customer <span class="sr-only">(current)</span></a></li>
                     <li><a href="projects.php?page=add_project">Add Project</a></li>
-                    <li><a href="invoices.php?page=add_invoice">Add Invoice</a></li>
+                    <?php
+                        }
+                    ?>
+                    <?php
+                        if($user->hasAccess('finance')){
+                    ?>
+                        <li><a href="invoices.php?page=add_invoice">Add Invoice</a></li>
+                    <?php
+                        }
+                    ?>
                     <li><a href="#">Helpdesk</a></li>
 
 
@@ -75,51 +95,68 @@
                 </div>
                 <div class="navbar-collapse collapse sidebar-navbar-collapse">
                     <ul class="nav navbar-nav">
-                        <li class="active"><a href="home.php">Home</a></li>
-                        <li>
+                        <li <?php echo ($current_page_name == 'home' ? 'class="active"' : ''); ?>><a href="home.php">Home</a></li>
+                        <li <?php echo ($current_page_name == 'projects' ? 'class="active"' : ''); ?>>
                             <a href="#" data-toggle="collapse" data-target="#toggleProjects" data-parent="#sidenav01" class="collapsed">
                                 </span> Projects <span class="caret pull-right"></span>
                             </a>
                             <div class="collapse" id="toggleProjects" style="height: 0px;">
                                 <ul class="nav nav-list">
                                     <li><a href="projects.php">Project list</a></li>
+                                    <?php if($user->hasAccess('sales')){?>
                                     <li><a href="projects.php?page=add_project">Add project</a></li>
+                                    <?php } ?>
                                 </ul>
                             </div>
                         </li>
-                        <li>
+                        <li <?php echo ($current_page_name == 'customers' ? 'class="active"' : ''); ?>>
                             <a href="#" data-toggle="collapse" data-target="#toggleCustomers" data-parent="#sidenav01" class="collapsed">
                                </span> Customers <span class="caret pull-right"></span>
                             </a>
                             <div class="collapse" id="toggleCustomers" style="height: 0px;">
                                 <ul class="nav nav-list">
                                     <li><a href="customers.php">Customers list</a></li>
+                                    <?php if($user->hasAccess('sales')){?>
                                     <li><a href="customers.php?page=customer_general_data&type=insert">Add customer</a></li>
+                                    <?php } ?>
                                 </ul>
                             </div>
                         </li>
-                        <li>
-                            <a href="#" data-toggle="collapse" data-target="#toggleFinance" data-parent="#sidenav01" class="collapsed">
-Finance <span class="caret pull-right"></span>
-                            </a>
-                            <div class="collapse" id="toggleFinance" style="height: 0px;">
-                                <ul class="nav nav-list">
-                                    <li><a href="invoices.php?page=list_invoices">Invoice list</a></li>
-                                    <li><a href="invoices.php?page=add_invoice">Add invoice</a></li>
-                                </ul>
-                            </div>
-                        </li>
-                        <li>
-                            <a href="#" data-toggle="collapse" data-target="#toggleAdmin" data-parent="#sidenav01" class="collapsed">
-                                </span> Admin <span class="caret pull-right"></span>
-                            </a>
-                            <div class="collapse" id="toggleAdmin" style="height: 0px;">
-                                <ul class="nav nav-list">
-                                    <li><a href="admin.php">Users</a></li>
-                                    <li><a href="admin.php?page=add_user">Add User</a></li>
-                                </ul>
-                            </div>
-                        </li>
+                        <?php
+                            if($user->hasAccess('finance')) {
+
+                                ?>
+                                <li <?php echo ($current_page_name == 'invoices' ? 'class="active"' : ''); ?>>
+                                    <a href="#" data-toggle="collapse" data-target="#toggleFinance"
+                                       data-parent="#sidenav01" class="collapsed">
+                                        Finance <span class="caret pull-right"></span>
+                                    </a>
+                                    <div class="collapse" id="toggleFinance" style="height: 0px;">
+                                        <ul class="nav nav-list">
+                                            <li><a href="invoices.php?page=list_invoices">Invoice list</a></li>
+                                            <li><a href="invoices.php?page=add_invoice">Add invoice</a></li>
+                                        </ul>
+                                    </div>
+                                </li>
+                                <?php
+                            }
+                        if($user->hasAccess('admin')) {
+                            ?>
+                            <li <?php echo ($current_page_name == 'admin' ? 'class="active"' : ''); ?>>
+                                <a href="#" data-toggle="collapse" data-target="#toggleAdmin" data-parent="#sidenav01"
+                                   class="collapsed">
+                                    </span> Admin <span class="caret pull-right"></span>
+                                </a>
+                                <div class="collapse" id="toggleAdmin" style="height: 0px;">
+                                    <ul class="nav nav-list">
+                                        <li><a href="admin.php">Users</a></li>
+                                        <li><a href="admin.php?page=add_user">Add User</a></li>
+                                    </ul>
+                                </div>
+                            </li>
+                            <?php
+                        }
+                        ?>
                     </ul>
                 </div><!--/.nav-collapse -->
             </div>
