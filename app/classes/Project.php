@@ -196,6 +196,24 @@ class Project
         return $result;
     }
 
+    public function getOpenProjectsCount(){
+        $sql = 'SELECT COUNT(*) AS count FROM `tbl_projects` WHERE project_is_active = 1';
+        $stmt = $this->db->pdo->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_OBJ);
+        return $result->count;
+    }
+
+    public function getDeadlinesExpiredProjectsCount(){
+        $sql = 'SELECT COUNT(*) AS count FROM `tbl_projects` WHERE project_is_active = 1 AND project_deadline < :date';
+        $stmt = $this->db->pdo->prepare($sql);
+        $date = date('Y-m-d');
+        $stmt->bindParam(':date', $date);
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_OBJ);
+        return $result->count;
+    }
+
     public function getProjectId(){
         return $this->project_id;
     }

@@ -170,6 +170,15 @@ li a.logout:hover {
     text-align: center;
 }
 
+.table-dashboard{
+    margin-top: 10px;
+    text-align: center;
+}
+
+.table-dashboard th{
+    text-align: center;
+}
+
 /* make sidebar nav vertical */
 @media (min-width: 768px) {
     .sidebar-nav .navbar .navbar-collapse {
