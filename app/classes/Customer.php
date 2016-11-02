@@ -141,6 +141,13 @@ class Customer
         return $result;
     }
 
+    public function getAllVisits(){
+        $sql = "SELECT * FROM `tbl_visits`";
+        $result = $this->db->pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+        return $result;
+    }
+
+
     public function addVisits(){
         $sql = "UPDATE `tbl_customers`
                 SET ";
