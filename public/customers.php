@@ -396,9 +396,10 @@ case 'customer_financial':
 
 case 'customer_visits':
 
-         ?>
+    $visitData = $customer->getAllVisits();
+    var_dump($visitData);?>
 
-    <a href="customers.php?page=customer_create_visit&visit_id=<?php echo $visit['visit_id']; ?>"></a><button type="submit" class=" btn btn-block btn-success text-center" >Create visit</button>
+    <a href="customers.php?page=customer_create_visit&visit_id=<?php echo $visitData[0]['visit_id']; ?>"><button type="submit" class=" btn btn-block btn-success text-center" >Create visit</button></a>
 
 <table class="table table-striped table-hover table-responsive">
         <thead>
@@ -421,7 +422,7 @@ case 'customer_visits':
         foreach($visitData as $visit){
             $options_ar = array();
             $options_ar[] = '<a href="customers.php?page=customer_overall&customer_id='. $visit['visit_id'].'" class="btn btn-small btn-primary btn-options"><span class="glyphicon glyphicon-eye-open"></span></a>';
-            $options_ar[] = '<a href="customers.php?page=customer_general_data&customer_id='. $visit['visit_id'].'&type=edit" class="btn btn-small btn-warning btn-options"><span class="glyphicon glyphicon-edit"></span></a>';
+            $options_ar[] = '<a href="customers.php?page=customer_create_visit&customer_id='. $visit['visit_id'].'&type=edit" class="btn btn-small btn-warning btn-options"><span class="glyphicon glyphicon-edit"></span></a>';
             $options_ar[] = '<a href="../app/controllers/deleteController.php?customer_id='.$visit['visit_id'].'" class="btn btn-small btn-danger btn-options"><span class="glyphicon glyphicon-remove"></span></a>';
             echo '<tr>';
             echo '<td>' . $visit['visit_id'] . '</td>';
@@ -445,10 +446,68 @@ case 'customer_visits':
 
 case 'customer_create_visit':
 
+    $id = $_GET['customer_id'];
+    $visitData = $customer->getVisitById($id); ?>
 
+    <form action="<?php echo BASE_URL; ?>/app/controllers/customerController.php" method="POST" class="form-horizontal">
+            <fieldset>
+                <legend class="text-center">Create/edit visit</legend>
+                <div class="form-group">
+                    <label class="col-sm-offset-2 col-sm-2 control-label" for="salesAgent">Visit type:</label>
+                    <div class="col-sm-4">
+                        <select class="form-control" name="visitType" id="visitType">
+                            <option value=""></option>
+                            <option value="email">Email</option>
+                            <option value="telefoon">Telefoon</option>
+                            <option value="brief">Per Post</option>
+                            <option value="fax">Fax</option>
+                        </select>
+                    </div>
+                </div>
 
+                <div class="form-group">
+                    <label class="col-sm-offset-2 col-sm-2 control-label" for="salesAgent">Visit date:</label>
+                    <div class="col-sm-4"><input type="date" value="<?php echo date('Y-m-d'); ?>"></div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-sm-offset-2 col-sm-2 control-label" for="salesAgent">Visit text:</label>
+                    <div class="col-sm-4"><textarea name="" id="" cols="30" rows="10"></textarea></div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-sm-offset-2 col-sm-2 control-label" for="salesAgent">Action date:</label>
+                    <div class="col-sm-4"><input type="date" value="<?php echo date('Y-m-d'); ?>"></div>
+                </div>
+
+                <div class="form-group">
+                    <div class="checkbox col-sm-offset-4 col-sm-4">
+                        <label>
+                            <input type="checkbox" value="actionFinished" name="actionFinished" >
+                            Action Finished
+                        </label>
+                    </div>
+                </div>
+
+                <div class="formname">
+                    <input type="hidden" name="formname" value="create_visit">
+                </div>
+
+                <div class="form-group">
+                    <input type="hidden" name="id" value="<?php echo $visitData['customer_id'];?>">
+                </div>
+                <div class="col-sm-offset-4 col-sm-4"><input type="submit" name='saveAddresses' value='Save' class="btn btn-block btn-success"></div>
+            </fieldset>
+        </form>
+<?php
 break;
 
+
+case 'customer_edit_visit':
+
+    
+
+break;
 
 case 'customer_soft_hard':
 

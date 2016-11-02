@@ -147,10 +147,28 @@ class Customer
         return $result;
     }
 
+    public function getVisitById($id){
+        $sql = "SELECT * FROM tbl_visits 
+                LEFT JOIN tbl_customers 
+                ON  tbl_visits.customer_id = tbl_customers.customer_id
+                WHERE tbl_visits.customer_id = :id";
+        $stmt = $this->db->pdo->prepare($sql);
+        $stmt->bindParam(':id', $id);
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result;
+    }
 
-    public function addVisits(){
-        $sql = "UPDATE `tbl_customers`
+
+    public function insertVisits(){
+        $sql = "INSERT INTO `tbl_visits`
                 SET ";
+    }
+
+    public  function editVisits(){
+        $sql = "UPDATE `tbl_visits`
+                SET 
+                WHERE visit_id = :id";
     }
 
     public function searchCustomerName($search_value){
