@@ -133,7 +133,7 @@ switch($current_page){
         ?>
         <div class="col-sm-10 col-sm-offset-1">
             <?php
-            echo $project->getProjectsTable();
+            echo $project->getProjectsTable($user);
             ?>
         </div>
         <?php

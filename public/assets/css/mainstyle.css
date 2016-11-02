@@ -179,6 +179,12 @@ li a.logout:hover {
     text-align: center;
 }
 
+.notification-btn a.all_notifications{
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    font-size: 0.9em;
+}
+
 /* make sidebar nav vertical */
 @media (min-width: 768px) {
     .sidebar-nav .navbar .navbar-collapse {

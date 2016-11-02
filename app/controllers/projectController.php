@@ -3,9 +3,16 @@ require_once ('../init.php');
 
 $project = new Project();
 
+
 if(isset($_GET['pid']) && isset($_GET['page'])){
     if($project->projectExists($_GET['pid'])){
         if($_GET['page'] == 'delete'){
+
+            $current_project = $project->getProjectByID($_GET['pid']);
+            $for_section_id = $admin->getUserRightId('development');
+            $note_text = 'The project \''.$current_project->project_name.'\' has been deleted for \''.$current_project->customer_company_name.'\'';
+            $notification->addNotification($for_section_id->user_right_id, $user->getUserID(), $note_text);
+
             $project->deleteProject($user, $_GET['pid']);
             $message = 'Project is deleted!';
             $user->redirect('projects.php?success='.$message);
@@ -46,8 +53,11 @@ if($_SERVER['REQUEST_METHOD'] = 'POST'){
                     exit();
                 }
             }
-           $project->addProject($user, $posted_values);
 
+            $for_section_id = $admin->getUserRightId('development');
+            $note_text = 'A project has been created for \''.$posted_values['customer_name'].'\'';
+            $notification->addNotification($for_section_id->user_right_id, $user->getUserID(), $note_text);
+            $project->addProject($user, $posted_values);
             break;
         case 'Edit Project':
             $required_fields_ar = array('customer_id', 'project_name', 'project_priority', 'project_version', 'project_description', 'project_start_date');

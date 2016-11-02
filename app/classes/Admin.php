@@ -63,7 +63,7 @@ class Admin
         return $result;
     }
 
-    private function getUserToUserRights($section){
+    public function getUserToUserRights($section){
         $sql = 'SELECT * FROM `tbl_user_to_user_rights` WHERE user_right_id = :user_right_id';
         $stmt = $this->db->pdo->prepare($sql);
         $stmt->bindParam(':user_right_id', $section);

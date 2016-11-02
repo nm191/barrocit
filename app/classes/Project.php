@@ -136,7 +136,7 @@ class Project
         return $result;
     }
 
-    public function getProjectsTable(){
+    public function getProjectsTable(User $user){
         $projects = $this->getProjects();
         $table = '<table class="table table-hover table-responsive table-striped">';
         $table .= '<thead><tr><th>#</th><th>Priority</th><th>Project</th><th>Customer</th><th>Deadline</th><th>Version</th><th>Finished</th><th>Options</th></tr></thead>';
@@ -144,10 +144,17 @@ class Project
 
             $options_ar =$td_ar = array();
 
-            $options_ar[] = '<a href="../app/controllers/projectController.php?page=finish&pid='.$project->project_id.'" class="btn btn-small btn-success btn-options '.($project->project_is_finished ? " disabled" : "").'" title="Finished project: '.$project->project_name.'" '.($project->project_is_finished ? "disabled='disabled'" : "").' ><span class="glyphicon glyphicon-ok"></span></a>';
             $options_ar[] = '<a href="projects.php?page=view_project&pid='.$project->project_id.'" class="btn btn-small btn-primary btn-options" title="View project: '.$project->project_name.'"><span class="glyphicon glyphicon-eye-open"></span></a>';
-            $options_ar[] = '<a href="projects.php?page=edit_project&pid='.$project->project_id.'" class="btn btn-small btn-warning btn-options" title="Edit project: '.$project->project_name.'"><span class="glyphicon glyphicon-edit"></span></a>';
-            $options_ar[] = '<a href="../app/controllers/projectController.php?page=delete&pid='.$project->project_id.'" class="btn btn-small btn-danger btn-options" id="deleteProject" title="Delete project: '.$project->project_name.'"><span class="glyphicon glyphicon-remove"></span></a>';
+            if($user->hasAccess('development')){
+                $options_ar[] = '<a href="../app/controllers/projectController.php?page=finish&pid='.$project->project_id.'" class="btn btn-small btn-success btn-options '.($project->project_is_finished ? " disabled" : "").'" title="Finished project: '.$project->project_name.'" '.($project->project_is_finished ? "disabled='disabled'" : "").' ><span class="glyphicon glyphicon-ok"></span></a>';
+            }
+            if($user->hasAccess('sales') || $user->hasAccess('development')){
+                $options_ar[] = '<a href="projects.php?page=edit_project&pid='.$project->project_id.'" class="btn btn-small btn-warning btn-options" title="Edit project: '.$project->project_name.'"><span class="glyphicon glyphicon-edit"></span></a>';
+            }
+            if($user->hasAccess('sales') || $user->hasAccess('development')){
+                $options_ar[] = '<a href="../app/controllers/projectController.php?page=delete&pid='.$project->project_id.'" class="btn btn-small btn-danger btn-options" id="deleteProject" title="Delete project: '.$project->project_name.'"><span class="glyphicon glyphicon-remove"></span></a>';
+            }
+
 
 
             $td_ar[] = '<td>'.$project->project_id.'</td>';

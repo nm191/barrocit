@@ -22,6 +22,7 @@ if(isset($_SESSION['uid'])){
 }
 
 $modal = new Modals();
-
+$notification = new Notifications();
+$admin = new Admin();
 
 
