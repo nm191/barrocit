@@ -101,6 +101,10 @@ class Notifications
     public function getNotificationsTable($user_id){
         $notifications_ar = $this->getNotificationsForUser($user_id);
 
+        if(!$notifications_ar){
+            return '<h3 class="text-center">No Notifications found</h3>';
+        }
+
         foreach($notifications_ar as $note){
             $options_ar = $td_ar = array();
 
