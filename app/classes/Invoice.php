@@ -9,26 +9,10 @@
 class Invoice
 {
     private $db;
-    private $invoice_id;
 
     public function __construct($uid = 0)
     {
         $this->db = Database::getInstance();
-
-/*        if(invoice_id && $this->projectExists($invoice_id)){
-            $current_project = $this->getProjectByID($invoice_id);
-            $this->$invoice_id = $invoice_id;
-            $this->project_name = $current_project->project_name;
-            $this->project_priority = $current_project->project_priority;
-            $this->project_deadline = $current_project->project_deadline;
-            $this->project_start_date = $current_project->project_start_date;
-            $this->project_description = $current_project->project_description;
-            $this->project_version = $current_project->project_version;
-            $this->project_is_finished = $current_project->project_is_finished;
-            $this->project_customer_name = $current_project->customer_company_name;
-            $this->project_customer_id = $current_project->customer_id;
-
-        }*/
 
     }
 
@@ -52,6 +36,19 @@ class Invoice
         $stmt->bindParam(':invoiceDate', $invoiceDate);
         $stmt->bindParam(':invoiceNumber', $invoiceNumber);
         $stmt->execute();
+    }
+
+    public function editInvoice($project, $invoiceTotal, $invoiceDate) {
+        
+        $sql = "UPDATE `tbl_invoices` 
+                SET invoice_total = :invoiceTotal, invoice_date = :invoiceDate
+                WHERE project_id = :project";
+        $stmt = $this->db->pdo->prepare($sql);
+        $stmt->bindParam(':project', $project);
+        $stmt->bindParam(':invoiceTotal', $invoiceTotal);
+        $stmt->bindParam(':invoiceDate', $invoiceDate);
+        $result = $stmt->execute();
+        return $result;
     }
 
     public function getInvoiceByID($id) {
@@ -118,53 +115,38 @@ class Invoice
         return $this->invoice_id;
     }
     public function getInvoiceNumber(){
-        return $this->project_name;
+        return $this->invoice_number;
     }
 
-    public function getProjectPrio(){
-        return $this->project_priority;
+    public function getInvoiceDate(){
+        return $this->invoice_date;
     }
 
-    public function getProjectCustomerName(){
-        return $this->project_customer_name;
+    public function getInvoiceTotal(){
+        return $this->invoice_total;
     }
 
-    public function getProjectCustomerId(){
-        return $this->project_customer_id;
+    public function getInvoiceSent(){
+        return $this->invoice_is_sent ? 'Yes' : 'No';
     }
 
-    public function getProjectStart(){
-        return $this->project_start_date;
+    public function getInvoicePaid(){
+        return $this->invoice_is_confirmed ? 'Yes' : 'No';
     }
 
-    public function getProjectDeadline(){
-        return $this->project_deadline;
-    }
-
-    public function getProjectVersion(){
-        return $this->project_version;
-    }
-
-    public function getProjectDescription(){
-        return $this->project_description;
-    }
-
-    public function getProjectFinished(){
-        return ($this->project_is_finished ? 'Yes' : 'No');
+    public function getInvoiceActive(){
+        return $this->invoice_is_active ? 'Yes' : 'No';
     }
 
     public function getInvoiceData(){
         $return_ar = array();
-        $return_ar['project_id'] = $this->getProjectId();
-        $return_ar['project_name'] = $this->getProjectName();
-        $return_ar['project_priority'] = $this->getProjectPrio();
-        $return_ar['project_start_date'] = $this->getProjectStart();
-        $return_ar['project_deadline'] = $this->getProjectDeadline();
-        $return_ar['project_version'] = $this->getProjectVersion();
-        $return_ar['project_description'] = $this->getProjectDescription();
-        $return_ar['project_is_finished'] = $this->getProjectFinished();
-        $return_ar['customer_name'] = $this->getProjectCustomerName();
-        $return_ar['customer_id'] = $this->getProjectCustomerId();
+        $return_ar['invoice_id'] = $this->getInvoiceId();
+        $return_ar['invoice_number'] = $this->getInvoiceNumber();
+        $return_ar['invoice_date'] = $this->getInvoiceDate();
+        $return_ar['invoice_total'] = $this->getInvoiceTotal();
+        $return_ar['invoice_sent'] = $this->getInvoiceSent();
+        $return_ar['invoice_confirmed'] = $this->getInvoicePaid();
+        $return_ar['invoice_is_active'] = $this->getInvoiceActive();
 
         return $return_ar;
     }*/

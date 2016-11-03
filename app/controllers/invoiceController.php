@@ -17,15 +17,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET'){
     $invoice_id = $_GET['invoice_id'];
 
     if ($invoice->disableInvoice($invoice_id)){
-        echo 'Invoice deleted';
+        echo 'Invoice disabled';
         $message = 'Invoice has been disabled!';
         $user->redirect('invoices.php?page=list_invoices&success=' . $message);
     }
 }
 
 if($_SERVER['REQUEST_METHOD'] = 'POST'); {
-    switch($_POST['type']) {
-        case 'addInvoice':
+    if(empty($_POST['type'])){
+        $user->redirect('invoices.php?page=add_invoices');
+    }
+
+    $form_name = $_POST['type'];
+    $posted_values = $_POST;
+    $_SESSION['posted_values'] = $posted_values;
+    switch($form_name){
+        case 'Add Invoice':
             if (!empty($_POST['project_id'])
                 && !empty($_POST['invoiceTotal'])
                 && !empty($_POST['invoiceDate'])
@@ -39,6 +46,24 @@ if($_SERVER['REQUEST_METHOD'] = 'POST'); {
                 $message = 'Invoice is added!';
                 $invoice->redirect('../public/invoices.php?page=list_invoices&success=' . $message);
             }
+            break;
+        case 'Edit Invoice':
+/*            var_dump($_POST);
+            exit;*/
+            if (!empty($_POST['project_id'])
+                && !empty($_POST['invoiceTotal'])
+                && !empty($_POST['invoiceDate'])
+            ) {
+
+                $project = $_POST['project_id'];
+                $invoiceTotal = $_POST['invoiceTotal'];
+                $invoiceDate = $_POST['invoiceDate'];
+
+                $invoice->editInvoice($project,$invoiceTotal , $invoiceDate);
+                $message = 'Invoice has been edited!';
+                $invoice->redirect('../public/invoices.php?page=list_invoices&success=' . $message);
+            }
+             break;
     }
 }
 
