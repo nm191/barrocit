@@ -12,14 +12,13 @@ $invoice = new Invoice();
 
 if ($_SERVER['REQUEST_METHOD'] == 'GET'){
 
-    /*    var_dump($_GET);
-        exit;*/
     $invoice_id = $_GET['invoice_id'];
 
     if ($invoice->disableInvoice($invoice_id)){
         echo 'Invoice disabled';
         $message = 'Invoice has been disabled!';
         $user->redirect('invoices.php?page=list_invoices&success=' . $message);
+        exit;
     }
 }
 
@@ -48,18 +47,18 @@ if($_SERVER['REQUEST_METHOD'] = 'POST'); {
             }
             break;
         case 'Edit Invoice':
-/*            var_dump($_POST);
+            /*var_dump($_POST);
             exit;*/
-            if (!empty($_POST['project_id'])
+            if (!empty($_POST['invoice_id'])
                 && !empty($_POST['invoiceTotal'])
                 && !empty($_POST['invoiceDate'])
             ) {
 
-                $project = $_POST['project_id'];
+                $invoice_id = $_POST['invoice_id'];
                 $invoiceTotal = $_POST['invoiceTotal'];
                 $invoiceDate = $_POST['invoiceDate'];
 
-                $invoice->editInvoice($project,$invoiceTotal , $invoiceDate);
+                $invoice->editInvoice($invoice_id, $invoiceTotal, $invoiceDate);
                 $message = 'Invoice has been edited!';
                 $invoice->redirect('../public/invoices.php?page=list_invoices&success=' . $message);
             }

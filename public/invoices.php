@@ -158,12 +158,13 @@ switch ($current_page){
                         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#customersModal">Select Customer</button>
                     </div>
                 </div>-->
-                <div class="form-group  <?php if(isset($posted_values) && empty($posted_values['project_id'])){ echo 'has-error';} ?>">
+                <div class="form-group  <?php if(isset($invoiceData) && empty($invoiceData['project_id'])){ echo 'has-error';} ?>">
                     <label class="col-sm-offset-2 col-sm-2 control-label" for="project_name">Project:</label>
                     <div class="col-sm-4">
-                        <input class="form-control" id="project_name_disabled" name="project_name_disabled" type="text" disabled placeholder="<?php echo $invoiceData['project_name']; ?>" required>
-                        <input class="form-control" id="project_name" name="project_name" type="hidden" <?php if(isset($posted_values) && !empty($posted_values['project_name'])){ echo 'value="'.$posted_values['project_name'].'"';} ?>>
-                        <input class="form-control" id="project_id" name="project_id" type="hidden" <?php if(isset($posted_values) && !empty($posted_values['project_id'])){ echo 'value="'.$posted_values['project_id'].'"';} ?>>
+                        <input class="form-control" id="project_name_disabled" name="project_name_disabled" type="text" disabled value="<?php echo $invoiceData['project_name']; ?>" required>
+                        <input class="form-control" id="project_name" name="project_name" type="hidden" <?php if(isset($invoiceData) && !empty($invoiceData['project_name'])){ echo 'value="'.$invoiceData['project_name'].'"';} ?>>
+                        <input class="form-control" id="project_id" name="project_id" type="hidden" <?php if(isset($invoiceData) && !empty($invoiceData['project_id'])){ echo 'value="'.$invoiceData['project_id'].'"';} ?>>
+                        <input class="form-control" id="invoice_id" name="invoice_id" type="hidden" <?php if(isset($invoiceData) && !empty($invoiceData['invoice_id'])){ echo 'value="'.$invoiceData['invoice_id'].'"';} ?>>
                     </div>
                     <div class="col-sm-1">
                         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#projectsModal">Select Project</button>
@@ -171,7 +172,7 @@ switch ($current_page){
                 </div>
                 <div class="form-group">
                     <label class="col-sm-offset-2 col-sm-2 control-label" for="invoiceTotal">Invoice Total:</label>
-                    <div class="col-sm-4"><input class="form-control" id="invoiceTotal" name="invoiceTotal" type="text" placeholder="<?php echo $invoiceData['invoice_total']; ?>" required></div>
+                    <div class="col-sm-4"><input class="form-control" id="invoiceTotal" name="invoiceTotal" type="text" value="<?php echo $invoiceData['invoice_total']; ?>" required></div>
                 </div>
                 <div class="form-group">
                     <label class="col-sm-offset-2 col-sm-2 control-label" for="project">Invoice Date</label>

@@ -38,13 +38,13 @@ class Invoice
         $stmt->execute();
     }
 
-    public function editInvoice($project, $invoiceTotal, $invoiceDate) {
+    public function editInvoice($invoice, $invoiceTotal, $invoiceDate) {
         
         $sql = "UPDATE `tbl_invoices` 
                 SET invoice_total = :invoiceTotal, invoice_date = :invoiceDate
-                WHERE project_id = :project";
+                WHERE invoice_id = :invoice";
         $stmt = $this->db->pdo->prepare($sql);
-        $stmt->bindParam(':project', $project);
+        $stmt->bindParam(':invoice', $invoice);
         $stmt->bindParam(':invoiceTotal', $invoiceTotal);
         $stmt->bindParam(':invoiceDate', $invoiceDate);
         $result = $stmt->execute();
