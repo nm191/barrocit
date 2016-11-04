@@ -20,8 +20,8 @@ class Notifications
     public function addNotification($for_section_id, $user_id, $notification_text){
         $for_users_ar = $this->admin->getUserToUserRights($for_section_id);
         $current_date = date('Y-m-d');
-        foreach($for_users_ar as $for_user){
-            $for_user_id = $for_user->user_id;
+
+        foreach($for_users_ar as $for_user_id){
             if($for_user_id == $user_id){
                 continue;
             }
@@ -100,6 +100,10 @@ class Notifications
 
     public function getNotificationsTable($user_id){
         $notifications_ar = $this->getNotificationsForUser($user_id);
+
+        if(!$notifications_ar){
+            return '<h3 class="text-center">No Notifications found</h3>';
+        }
 
         foreach($notifications_ar as $note){
             $options_ar = $td_ar = array();

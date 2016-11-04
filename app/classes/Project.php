@@ -129,7 +129,7 @@ class Project
                 INNER JOIN `tbl_customers` c
                 ON p.customer_id = c.customer_id
                 WHERE p.project_is_active = 1
-                ORDER BY p.project_id';
+                ORDER BY p.project_is_finished, p.project_id';
         $stmt = $this->db->pdo->prepare($sql);
         $stmt->execute();
         $result = $stmt->fetchAll(PDO::FETCH_OBJ);

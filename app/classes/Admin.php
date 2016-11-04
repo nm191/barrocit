@@ -64,11 +64,11 @@ class Admin
     }
 
     public function getUserToUserRights($section){
-        $sql = 'SELECT * FROM `tbl_user_to_user_rights` WHERE user_right_id = :user_right_id';
+        $sql = 'SELECT `user_id` FROM `tbl_user_to_user_rights` WHERE user_right_id = :user_right_id';
         $stmt = $this->db->pdo->prepare($sql);
         $stmt->bindParam(':user_right_id', $section);
         $stmt->execute();
-        $result = $stmt->fetchAll(PDO::FETCH_OBJ);
+        $result = $stmt->fetchAll(PDO::FETCH_COLUMN);
         return $result;
     }
 
@@ -91,13 +91,9 @@ class Admin
         $users_ar = $this->getAllUsers();
         $user_rights_ar = $this->getUserToUserRights($section);
         $input_ar = array();
-        $rights_ar = array();
-        foreach($user_rights_ar as $user_right){
-            $rights_ar[$user_right->user_id] = $user_right->user_id;
-        }
 
         foreach($users_ar as $user){
-            if(!in_array($user->user_id, $rights_ar)){
+            if(!in_array($user->user_id, $user_rights_ar)){
                 $input_ar[] = '<div class="checkbox"><label><input type="checkbox" name="user_id_'.$user->user_id.'" value="'.$user->user_id.'">'.$user->username.'</label></div>';
             }else {
                 $input_ar[] = '<div class="checkbox"><label><input type="checkbox" name="user_id_' . $user->user_id . '" value="' . $user->user_id . '" checked>' . $user->username . '</label></div>';
