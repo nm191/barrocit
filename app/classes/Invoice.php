@@ -9,12 +9,33 @@
 class Invoice
 {
     private $db;
+    private $customer;
 
     public function __construct($uid = 0)
     {
         $this->db = Database::getInstance();
+        $this->customer = new Customer();
 
     }
+
+    public function getOpenInvoicesCount(){
+        $sql = 'SELECT COUNT(*) as count FROM tbl_invoices WHERE invoice_is_active = 1 AND invoice_is_confirmed = 0 AND invoice_is_sent = 1';
+        $stmt = $this->db->pdo->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_OBJ);
+
+        return $result->count;
+    }
+
+    public function getOpenInvoicesSum(){
+        $sql = 'SELECT SUM(invoice_total) as sum FROM tbl_invoices WHERE invoice_is_active = 1 AND invoice_is_confirmed = 0 AND invoice_is_sent = 1';
+        $stmt = $this->db->pdo->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_OBJ);
+
+        return $result->sum;
+    }
+
 
     private function countInvoices($project){
         $sql = "SELECT COUNT(*) AS count FROM tbl_invoices WHERE project_id = :project";
@@ -64,6 +85,33 @@ class Invoice
         $stmt->bindParam(':id', $id);
         $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result;
+    }
+
+    public function getUnpaidInvoicesByCustomerID($customer_id){
+
+        //get payment term from customer
+        $customer = $this->customer->getCustomerById($customer_id);
+        $payment_term = '-'.$customer['customer_pay_term'].' days';
+        $payment_date = date('Y-m-d', strtotime($payment_term));
+
+        $sql = 'SELECT * 
+                FROM `tbl_invoices` i
+                INNER JOIN `tbl_projects` p
+                ON i.project_id = p.project_id
+                INNER JOIN `tbl_customers` c
+                ON p.customer_id = c.customer_id
+                WHERE p.project_is_active = 1
+                AND i.invoice_is_active = 1
+                AND i.invoice_is_confirmed = 0
+                AND i.invoice_date < :payment_date 
+                AND c.customer_id = :customer_id
+                ORDER BY i.invoice_id';
+        $stmt = $this->db->pdo->prepare($sql);
+        $stmt->bindParam(':customer_id', $customer_id);
+        $stmt->bindParam(':payment_date', $payment_date);
+        $stmt->execute();
+        $result = $stmt->fetchAll(PDO::FETCH_OBJ);
         return $result;
     }
 

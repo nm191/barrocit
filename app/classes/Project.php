@@ -19,6 +19,7 @@ class Project
     private $project_version;
     private $project_is_finished;
     private $project_name;
+    private $project_is_onhold;
 
 
     public function __construct($project_id = 0)
@@ -37,6 +38,7 @@ class Project
             $this->project_is_finished = $current_project->project_is_finished;
             $this->project_customer_name = $current_project->customer_company_name;
             $this->project_customer_id = $current_project->customer_id;
+            $this->project_is_onhold = $current_project->customer_is_onhold;
 
         }
     }
@@ -129,7 +131,7 @@ class Project
                 INNER JOIN `tbl_customers` c
                 ON p.customer_id = c.customer_id
                 WHERE p.project_is_active = 1
-                ORDER BY p.project_is_finished, p.project_id';
+                ORDER BY c.customer_is_onhold, p.project_is_finished, p.project_id';
         $stmt = $this->db->pdo->prepare($sql);
         $stmt->execute();
         $result = $stmt->fetchAll(PDO::FETCH_OBJ);
@@ -165,7 +167,7 @@ class Project
             $td_ar[] = '<td>'.$project->project_version.'</td>';
             $td_ar[] = '<td>'.($project->project_is_finished ? 'Yes' : 'No').'</td>';
             $td_ar[] = '<td>'.implode('', $options_ar).'</td>';
-            $table .= '<tr>'.implode('', $td_ar).'</tr>';
+            $table .= '<tr '.($project->customer_is_onhold ? 'class="on_hold"' : '').'>'.implode('', $td_ar).'</tr>';
         }
         $table .= '</table>';
         return $table;
@@ -258,6 +260,10 @@ class Project
 
     public function getProjectFinished(){
         return ($this->project_is_finished ? 'Yes' : 'No');
+    }
+
+    public function getProjectIsOnHold(){
+        return ($this->project_is_onhold ? 'Yes' : 'No');
     }
 
     public function getProjectData(){

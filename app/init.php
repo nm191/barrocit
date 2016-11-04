@@ -26,3 +26,7 @@ $notification = new Notifications();
 $admin = new Admin();
 
 
+$calculator = new Calculator();
+$calculator->calcOverdraftLimits();
+
+

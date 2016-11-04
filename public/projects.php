@@ -148,6 +148,9 @@ switch($current_page){
             <div class="well well-lg">
                 <?php
                  echo '<h3>'.$project->getProjectName().'</h3>  ';
+                    if($project->getProjectIsOnHold() == 'Yes'){
+                        echo '<div class="alert alert-danger" role="alert">This project has been put on hold! Contact Sales for more information.</div>';
+                    }
                  ?>
                 <table class="table table-responisve table-striped table-hover">
                     <?php

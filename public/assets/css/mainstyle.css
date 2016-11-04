@@ -185,6 +185,10 @@ li a.logout:hover {
     font-size: 0.9em;
 }
 
+.on_hold{
+    background-color: #ebccd1 !important;
+}
+
 /* make sidebar nav vertical */
 @media (min-width: 768px) {
     .sidebar-nav .navbar .navbar-collapse {

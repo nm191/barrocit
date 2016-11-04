@@ -32,9 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
             echo "set Customer name and/or Salesagent";
         }
 
-
-
-            if ($_POST['edit'] == 'edit'){
+            if (isset($_POST['edit'])){
 
 
                 $id = $_POST['id'];
@@ -57,11 +55,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
             (isset($_POST['prospect']) ? $customer_is_prospect = $_POST['prospect'] : $customer_is_prospect = 0);
             (isset($_POST['maintenanceContract']) ? $customer_maintenance_contract = $_POST['maintenanceContract'] : $customer_maintenance_contract = 0);
 
-        if ($customer->addGeneralData($customer_company_name, $customer_sales_agent, $customer_is_prospect, $customer_maintenance_contract)) {
-            echo 'Added with success';
-
-        }
-
+            $insert_result = $customer->addGeneralData($customer_company_name, $customer_sales_agent, $customer_is_prospect, $customer_maintenance_contract);
+            
         }
             $user->redirect('customers.php?page=customer_addresses&customer_id='.$id);
 

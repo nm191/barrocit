@@ -112,11 +112,6 @@ switch ($current_page){
 
 
     case 'customer_general_data':
-
-
-        var_dump($_POST);
-        var_dump($_GET);
-
         if ($_GET['type'] == 'edit'){
             $id = $_GET['customer_id'];
             $custData = $customer->getCustomerById($id);
@@ -178,18 +173,14 @@ switch ($current_page){
                     <input type="hidden" name="formname" value="generalData">
                 </div>
                 <div class="formname">
-                    <input type="hidden" name="edit" value="edit">
+                    <?php
+                        if($_GET['type'] == 'edit') {
+                            echo '<input type="hidden" name="edit" value="edit">';
+                        }
+                    ?>
                 </div>
                 <div class="formname">
                     <input type="hidden" name="id" value="<?php if(isset($_GET['customer_id'])){ echo $_GET['customer_id'];}?>">
-                </div>
-
-                <div class="col-sm-offset-4 col-sm-4">
-                    <?php if ( isset($_GET['customer_id'] ) ):
-//                     echo  '<a href="customers.php?page=customer_addresses' . $addition .'"'>'<button class="btn btn-block btn-success">Next</button></a>';?>
-                  <?php else: ?>
-                        <input type="submit" name='saveGeneralData' value='Save' class="btn btn-block btn-success">
-                    <?php endif; ?>
                 </div>
                 <div class="col-sm-offset-4 col-sm-4"><input type="submit" name='saveGeneralData' value='Save' class="btn btn-block btn-success"></div>
             </fieldset>

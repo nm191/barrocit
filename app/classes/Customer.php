@@ -180,4 +180,12 @@ class Customer
         $result = $stmt->fetchAll(PDO::FETCH_OBJ);
         return $result;
     }
+
+    public function setCustomerOnHold($customer_id){
+        $sql = 'UPDATE `tbl_customers` SET customer_is_onhold = 1 WHERE customer_id = :customer_id';
+        $stmt = $this->db->pdo->prepare($sql);
+        $stmt->bindParam(':customer_id', $customer_id);
+        $result = $stmt->execute();
+        return $result;
+    }
 }
