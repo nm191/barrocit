@@ -58,7 +58,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
             $insert_result = $customer->addGeneralData($customer_company_name, $customer_sales_agent, $customer_is_prospect, $customer_maintenance_contract);
             
         }
-            $user->redirect('customers.php?page=customer_addresses&customer_id='.$id);
+            $custData = $customer->getLatest();
+            $user->redirect('customers.php?page=customer_addresses&customer_id='.$custData["customer_id"]);
 
         break;
 
@@ -112,8 +113,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
             $ledgeraccount = $_POST['legderAccountNumber'];
             $revenue = $_POST['grossRevenue'];
             $tax_id = $_POST['taxCode'];
+            $credit_worthy = (isset($_POST['creditWorthy']) ? 1 : 0);
 
-            if($customer->addFinancial($discount, $overdraft, $payterm, $bankaccount, $ledgeraccount, $revenue, $tax_id, $id)){
+            if($customer->addFinancial($discount, $overdraft, $payterm, $bankaccount, $ledgeraccount, $revenue, $tax_id, $credit_worthy, $id)){
 
             }
 
@@ -123,10 +125,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
         
         
         
-        case 'visits':
-            
-            
-            
+        case 'create_visit':
+            $posted_values = $_POST;
+            unset($posted_values['formname']);
+            unset($posted_values['saveAddresses']);
+            if(!$posted_values['visit_id']) {
+                $insert_visit = $customer->addCustomerVisit($posted_values);
+                if($insert_visit){
+                    $message = 'Customer visit has been created!';
+                    $user->redirect('customers.php?page=customer_visits&customer_id='.$posted_values['customer_id'].'&success='.$message);
+                    die();
+                }
+            }
+            $update_result = $customer->updateCustomerVisit($posted_values);
+            if($update_result){
+                $message = 'Customer visit has been updated!';
+                $user->redirect('customers.php?page=customer_visits&customer_id='.$posted_values['customer_id'].'&success='.$message);
+                die();
+            }
             break;
         
         

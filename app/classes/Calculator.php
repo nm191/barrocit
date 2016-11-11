@@ -49,7 +49,7 @@ class Calculator
                 //add notification
                 $for_section_id = $this->admin->getUserRightId('development');
                 $note_text = '\'' . $customer['customer_company_name'] . '\' have passed their overdraft limit and is put on hold.';
-                $this->notification->addNotification($for_section_id->user_right_id, 14, $note_text); // 8 = system
+                $this->notification->addNotification($for_section_id->user_right_id, 14, $note_text); // 14 = system
 
                 //set customer on hold
                 $this->customer->setCustomerOnHold($customer['customer_id']);

@@ -40,15 +40,17 @@ if($_SERVER['REQUEST_METHOD'] = 'POST'); {
                 $project = $_POST['project_id'];
                 $invoiceTotal = $_POST['invoiceTotal'];
                 $invoiceDate = $_POST['invoiceDate'];
+                $invoiceSent = (isset($_POST['invoiceSent']) ? 1 : 0);
+                $invoicePaid = (isset($_POST['invoicePaid']) ? 1 : 0);
 
-                $invoice->addInvoice($project,$invoiceTotal , $invoiceDate);
+                $invoice->addInvoice($project,$invoiceTotal , $invoiceDate, $invoiceSent, $invoicePaid);
                 $message = 'Invoice is added!';
                 $invoice->redirect('../public/invoices.php?page=list_invoices&success=' . $message);
             }
             break;
         case 'Edit Invoice':
-            /*var_dump($_POST);
-            exit;*/
+//            var_dump($_POST);
+//            exit;
             if (!empty($_POST['invoice_id'])
                 && !empty($_POST['invoiceTotal'])
                 && !empty($_POST['invoiceDate'])
@@ -57,8 +59,10 @@ if($_SERVER['REQUEST_METHOD'] = 'POST'); {
                 $invoice_id = $_POST['invoice_id'];
                 $invoiceTotal = $_POST['invoiceTotal'];
                 $invoiceDate = $_POST['invoiceDate'];
+                $invoiceSent = (isset($_POST['invoiceSent']) ? 1 : 0);
+                $invoicePaid = (isset($_POST['invoicePaid']) ? 1 : 0);
 
-                $invoice->editInvoice($invoice_id, $invoiceTotal, $invoiceDate);
+                $invoice->editInvoice($invoice_id, $invoiceTotal, $invoiceDate, $invoiceSent, $invoicePaid);
                 $message = 'Invoice has been edited!';
                 $invoice->redirect('../public/invoices.php?page=list_invoices&success=' . $message);
             }

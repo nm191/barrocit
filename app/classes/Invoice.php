@@ -46,28 +46,32 @@ class Invoice
         return $result->count;
     }
 
-    public function addInvoice($project, $invoiceTotal, $invoiceDate) {
+    public function addInvoice($project, $invoiceTotal, $invoiceDate, $invoiceSent, $invoicePaid) {
         $invoiceCount = $this->countInvoices($project);
         $invoiceNumber = date("Ymd"). $project .$invoiceCount;
 
-        $sql = "INSERT INTO tbl_invoices (project_id, invoice_total, invoice_date, invoice_number) VALUES(:project, :invoiceTotal, :invoiceDate, :invoiceNumber)";
+        $sql = "INSERT INTO tbl_invoices (project_id, invoice_total, invoice_date, invoice_number, invoice_is_sent, invoice_is_confirmed) VALUES(:project, :invoiceTotal, :invoiceDate, :invoiceNumber, :invoiceSent,:invoicePaid)";
         $stmt = $this->db->pdo->prepare($sql);
         $stmt->bindParam(':project', $project);
         $stmt->bindParam(':invoiceTotal', $invoiceTotal);
         $stmt->bindParam(':invoiceDate', $invoiceDate);
         $stmt->bindParam(':invoiceNumber', $invoiceNumber);
+        $stmt->bindParam(':invoiceSent', $invoiceSent);
+        $stmt->bindParam(':invoicePaid', $invoicePaid);
         $stmt->execute();
     }
 
-    public function editInvoice($invoice, $invoiceTotal, $invoiceDate) {
+    public function editInvoice($invoice, $invoiceTotal, $invoiceDate, $invoiceSent, $invoicePaid) {
         
         $sql = "UPDATE `tbl_invoices` 
-                SET invoice_total = :invoiceTotal, invoice_date = :invoiceDate
+                SET invoice_total = :invoiceTotal, invoice_date = :invoiceDate, invoice_is_sent = :invoiceSent, invoice_is_confirmed = :invoicePaid
                 WHERE invoice_id = :invoice";
         $stmt = $this->db->pdo->prepare($sql);
         $stmt->bindParam(':invoice', $invoice);
         $stmt->bindParam(':invoiceTotal', $invoiceTotal);
         $stmt->bindParam(':invoiceDate', $invoiceDate);
+        $stmt->bindParam(':invoiceSent', $invoiceSent);
+        $stmt->bindParam(':invoicePaid', $invoicePaid);
         $result = $stmt->execute();
         return $result;
     }

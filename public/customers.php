@@ -32,7 +32,9 @@ if(isset($_GET['success'])){
 if (isset($_GET['customer_id']))
 {
     $addition = '&type=edit&customer_id=' . $_GET['customer_id'];
+    $customer_id = $_GET['customer_id'];
 } else {
+    $customer_id = 0;
     $addition = '';
 }
 ?>
@@ -112,19 +114,18 @@ switch ($current_page){
 
 
     case 'customer_general_data':
-        if ($_GET['type'] == 'edit'){
-            $id = $_GET['customer_id'];
-            $custData = $customer->getCustomerById($id);
-        }
+//        if ($_GET['type'] == 'edit'){
+//            $id = $_GET['customer_id'];
+//            $custData = $customer->getCustomerById($id);
+//        }
 
-//        if(!isset($_GET['customer_id'])) {
-//
-//                    $custData = $customer->getLatest();
-//                }
-//                 else {
-//                    $id = $_GET['customer_id'];
-//                    $custData = $customer->getCustomerById($id);
-//                }
+        if(!isset($_GET['customer_id'])) {
+                    $custData = $customer->getLatest();
+                }
+                 else {
+                    $id = $_GET['customer_id'];
+                    $custData = $customer->getCustomerById($id);
+                }
 
         ?>
         <form action="<?php echo BASE_URL; ?>/app/controllers/customerController.php" method="POST" class="form-horizontal">
@@ -195,10 +196,6 @@ switch ($current_page){
         ?>
         <?php
 
-        var_dump($_POST);
-        var_dump($_GET);
-
-
         if(!isset($_GET['customer_id'])){
 
             $custData = $customer->getLatest();
@@ -259,10 +256,6 @@ switch ($current_page){
         <?php
         break;
     case 'customer_contact_person':
-
-        var_dump($_POST);
-        var_dump($_GET);
-
         if(!isset($_GET['customer_id'])){
 
             $custData = $customer->getLatest();
@@ -328,7 +321,6 @@ case 'customer_financial':
             $custData = $customer->getCustomerById($id);
         }
 
-        var_dump($custData);
 
 
         ?>
@@ -388,9 +380,13 @@ case 'customer_financial':
 case 'customer_visits':
 
     $visitData = $customer->getAllVisits();
-    var_dump($visitData);?>
+    if(!$customer_id){
+        $user->redirect('customers.php?page=invalid_customer');
+    }
+    ;?>
 
-    <a href="customers.php?page=customer_create_visit&visit_id=<?php echo $visitData[0]['visit_id']; ?>"><button type="submit" class=" btn btn-block btn-success text-center" >Create visit</button></a>
+
+    <a class="btn btn-block btn-success" href="customers.php?page=customer_create_visit&customer_id=<?php echo $customer_id; ?>">Create visit</a>
 
 <table class="table table-striped table-hover table-responsive">
         <thead>
@@ -413,7 +409,7 @@ case 'customer_visits':
         foreach($visitData as $visit){
             $options_ar = array();
             $options_ar[] = '<a href="customers.php?page=customer_overall&customer_id='. $visit['visit_id'].'" class="btn btn-small btn-primary btn-options"><span class="glyphicon glyphicon-eye-open"></span></a>';
-            $options_ar[] = '<a href="customers.php?page=customer_create_visit&customer_id='. $visit['visit_id'].'&type=edit" class="btn btn-small btn-warning btn-options"><span class="glyphicon glyphicon-edit"></span></a>';
+            $options_ar[] = '<a href="customers.php?page=customer_create_visit&customer_id='. $visit['customer_id'].'&visit_id='.$visit['visit_id'].'" class="btn btn-small btn-warning btn-options"><span class="glyphicon glyphicon-edit"></span></a>';
             $options_ar[] = '<a href="../app/controllers/deleteController.php?customer_id='.$visit['visit_id'].'" class="btn btn-small btn-danger btn-options"><span class="glyphicon glyphicon-remove"></span></a>';
             echo '<tr>';
             echo '<td>' . $visit['visit_id'] . '</td>';
@@ -438,7 +434,14 @@ case 'customer_visits':
 case 'customer_create_visit':
 
     $id = $_GET['customer_id'];
-    $visitData = $customer->getVisitById($id); ?>
+    $visitData = '';
+    if(isset($_GET['visit_id'])){
+        $visit_id = $_GET['visit_id'];
+        $visitData = $customer->getVisitById($visit_id);
+    }else{
+        $visit_id = 0;
+    }
+    ?>
 
     <form action="<?php echo BASE_URL; ?>/app/controllers/customerController.php" method="POST" class="form-horizontal">
             <fieldset>
@@ -447,34 +450,43 @@ case 'customer_create_visit':
                     <label class="col-sm-offset-2 col-sm-2 control-label" for="salesAgent">Visit type:</label>
                     <div class="col-sm-4">
                         <select class="form-control" name="visitType" id="visitType">
-                            <option value=""></option>
-                            <option value="email">Email</option>
-                            <option value="telefoon">Telefoon</option>
-                            <option value="brief">Per Post</option>
-                            <option value="fax">Fax</option>
+                            <?php
+                                echo $customer->getVisitTypeOptions($visitData);
+                            ?>
                         </select>
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label class="col-sm-offset-2 col-sm-2 control-label" for="salesAgent">Visit date:</label>
-                    <div class="col-sm-4"><input type="date" value="<?php echo date('Y-m-d'); ?>"></div>
+                    <div class="col-sm-4"><input class="form-control" type="date" name="visit_date" value="<?php echo ($visitData ? $visitData['visit_date'] : date('Y-m-d')); ?>"></div>
                 </div>
 
                 <div class="form-group">
                     <label class="col-sm-offset-2 col-sm-2 control-label" for="salesAgent">Visit text:</label>
-                    <div class="col-sm-4"><textarea name="" id="" cols="30" rows="10"></textarea></div>
+                    <div class="col-sm-4"><textarea name="visit_text" id="" cols="30" rows="10"><?php echo ($visitData ? $visitData['visit_text'] : ''); ?></textarea></div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-sm-offset-2 col-sm-2 control-label" for="salesAgent">Action For:</label>
+                    <div class="col-sm-4">
+                        <select class="form-control" name="actionFor" id="visitType">
+                            <option value="Nick" >Nick</option>
+                            <option value="Ronald">Ronald</option>
+                            <option value="Tim">Tim</option>
+                        </select>
+                    </div>
                 </div>
 
                 <div class="form-group">
                     <label class="col-sm-offset-2 col-sm-2 control-label" for="salesAgent">Action date:</label>
-                    <div class="col-sm-4"><input type="date" value="<?php echo date('Y-m-d'); ?>"></div>
+                    <div class="col-sm-4"><input class="form-control" type="date" name="action_date" value="<?php echo ($visitData ? $visitData['visit_action_date'] : date('Y-m-d')); ?>"></div>
                 </div>
 
                 <div class="form-group">
                     <div class="checkbox col-sm-offset-4 col-sm-4">
                         <label>
-                            <input type="checkbox" value="actionFinished" name="actionFinished" >
+                            <input type="checkbox" value="actionFinished" name="actionFinished" <?php echo (isset($visitData['visit_action_is_finished']) ?  'checked' : ''); ?>>
                             Action Finished
                         </label>
                     </div>
@@ -485,21 +497,14 @@ case 'customer_create_visit':
                 </div>
 
                 <div class="form-group">
-                    <input type="hidden" name="id" value="<?php echo $visitData['customer_id'];?>">
+                    <input type="hidden" name="customer_id" value="<?php echo $customer_id;?>">
+                    <input type="hidden" name="visit_id" value="<?php echo $visit_id;?>">
                 </div>
                 <div class="col-sm-offset-4 col-sm-4"><input type="submit" name='saveAddresses' value='Save' class="btn btn-block btn-success"></div>
             </fieldset>
         </form>
 <?php
 break;
-
-
-case 'customer_edit_visit':
-
-    
-
-break;
-
 case 'customer_soft_hard':
 
         if(!isset($_GET['customer_id'])){
@@ -602,7 +607,9 @@ case 'customer_soft_hard':
 </div>
 <?php
         break;
-
+    case 'invalid_customer':
+        echo '<h3>This Customer doesn\'t exists!</h3>';
+        break;
     default:
         echo 'This page does not exists!';
 
