@@ -588,7 +588,7 @@ case 'customer_soft_hard':
             $options_ar[] = '<a href="customers.php?page=customer_overall&customer_id='. $cust['customer_id'].'" class="btn btn-small btn-primary btn-options"><span class="glyphicon glyphicon-eye-open"></span></a>';
             $options_ar[] = '<a href="customers.php?page=customer_general_data&customer_id='. $cust['customer_id'].'&type=edit" class="btn btn-small btn-warning btn-options"><span class="glyphicon glyphicon-edit"></span></a>';
             $options_ar[] = '<a href="../app/controllers/deleteController.php?customer_id='.$cust['customer_id'].'" class="btn btn-small btn-danger btn-options"><span class="glyphicon glyphicon-remove"></span></a>';
-            echo '<tr>';
+            echo '<tr '.($cust['customer_is_onhold'] ? 'class="on_hold" ' : '').'>';
             echo '<td>' . $cust['customer_company_name'] . '</td>';
             echo '<td>' . $cust['customer_address'] . '</td>';
             echo '<td>' . $cust['customer_contact_firstname'] . ' ' . $cust['customer_contact_surname'] . '</td>';

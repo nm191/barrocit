@@ -19,7 +19,7 @@ class Customer
 
     public function getAlldata()
     {
-        $sql = "SELECT * FROM tbl_customers WHERE customer_is_active = 1";
+        $sql = "SELECT * FROM tbl_customers WHERE customer_is_active = 1 ORDER BY customer_is_onhold DESC";
         $result = $this->db->pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
         return $result;
     }

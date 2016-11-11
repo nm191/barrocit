@@ -28,15 +28,14 @@ class Calculator
     public function calcOverdraftLimits(){
         //get all active customers
         $customers_ar = $this->customer->getAlldata();
-
-        //var_dump($customers_ar);
         
         foreach($customers_ar as $customer){
+
             if($customer['customer_is_onhold']){
                 continue;
             }
             $overdraft_limit = $customer['customer_overdraft'];
-            
+
             //get all unpaid invoices
             $invoices_ar = $this->invoice->getUnpaidInvoicesByCustomerID($customer['customer_id']);
 
@@ -44,8 +43,8 @@ class Calculator
             foreach($invoices_ar as $invoice){
                 $invoices_total += $invoice->invoice_total;
             }
-
             if($invoices_total > $overdraft_limit) {
+
                 //add notification
                 $for_section_id = $this->admin->getUserRightId('development');
                 $note_text = '\'' . $customer['customer_company_name'] . '\' have passed their overdraft limit and is put on hold.';
