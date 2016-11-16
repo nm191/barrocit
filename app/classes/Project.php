@@ -205,9 +205,15 @@ class Project
         return $result;
     }
 
-    public function getOpenProjectsCount(){
+    public function getOpenProjectsCount($customer_id = 0){
         $sql = 'SELECT COUNT(*) AS count FROM `tbl_projects` WHERE project_is_active = 1';
+        if($customer_id){
+            $sql .= ' AND customer_id = :customer_id';
+        }
         $stmt = $this->db->pdo->prepare($sql);
+        if($customer_id){
+            $stmt->bindParam(':customer_id', $customer_id);
+        }
         $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_OBJ);
         return $result->count;

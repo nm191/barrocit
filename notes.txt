@@ -1,5 +1,6 @@
 Zoveel mogelijk commentaar overal bijzetten.
 Zoek functie bij alle tabellen toevoegen
+Optie om van onhold af te halen
 
 Dashboard:
     - Link aan de getallen geven zodat je naar die tabel etc gaat.
@@ -10,19 +11,18 @@ Finance:
     - View invoice -> invoice date en invoice total format
     - invoice tabel -> invoice date format
     - Delete invoices checks toevoegen.
-    -
 
 Customers:
-    - customer onhold laten zien in de tabel.
-    -  customer verwijderen checks toevoegen
-    - add/Edit customer meldingen geven.
-    - check of alles ingevuld zoniet geef melding
-    - customers checkboxes fixen
-    - financial data form opmaken
-    - tax code dropdown van maken
-    - visits table action finished aanpassen
-    - action finished checkbox fixen
-    - Soft en hardware pagina fixen
+    x customer onhold laten zien in de tabel.
+    x customer verwijderen checks toevoegen
+    x add/Edit customer meldingen geven.
+    x check of alles ingevuld zoniet geef melding
+    X customers checkboxes fixen
+    X financial data form opmaken
+    x tax code dropdown van maken
+    X visits table action finished aanpassen
+    X action finished checkbox fixen
+    x Soft en hardware pagina fixen
 
 Projects:
     - van priority een dropdown maken

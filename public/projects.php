@@ -97,15 +97,25 @@ switch($current_page){
                 </div>
                 <div class="form-group <?php if(isset($posted_values) && empty($posted_values['project_start_date'])){ echo 'has-error';} ?>">
                     <label class="col-sm-offset-2 col-sm-2 control-label" for="project_start_date">Start date:</label>
-                    <div class="col-sm-4"><input class="form-control" id="project_start_date" name="project_start_date" type="date" <?php if(isset($posted_values) && !empty($posted_values['project_start_date'])){ echo 'value="'.$posted_values['project_start_date'].'"';} ?>></div>
+                    <div class="col-sm-4">
+                        <div class="input-group">
+                            <div class="input-group-addon"><span class="glyphicon glyphicon-calendar" aria-hidden="true"></span></div>
+                            <input class="form-control" id="project_start_date" name="project_start_date" type="date" <?php if(isset($posted_values) && !empty($posted_values['project_start_date'])){ echo 'value="'.$posted_values['project_start_date'].'"';} ?>>
+                        </div>
+                    </div>
                 </div>
                 <div class="form-group">
                     <label class="col-sm-offset-2 col-sm-2 control-label" for="project_deadline">Deadline:</label>
-                    <div class="col-sm-4"><input class="form-control" id="project_deadline" name="project_deadline" type="date" <?php if(isset($posted_values) && !empty($posted_values['project_deadline'])){ echo 'value="'.$posted_values['project_deadline'].'"';} ?>></div>
+                    <div class="col-sm-4">
+                        <div class="input-group">
+                            <div class="input-group-addon"><span class="glyphicon glyphicon-calendar" aria-hidden="true"></span></div>
+                            <input class="form-control" id="project_deadline" name="project_deadline" type="date" <?php if(isset($posted_values) && !empty($posted_values['project_deadline'])){ echo 'value="'.$posted_values['project_deadline'].'"';} ?>>
+                        </div>
+                    </div>
                 </div>
                 <div class="form-group  <?php if(isset($posted_values) && empty($posted_values['project_version'])){ echo 'has-error';} ?>">
                     <label class="col-sm-offset-2 col-sm-2 control-label" for="project_version">Version:</label>
-                    <div class="col-sm-4"><input class="form-control" id="project_version" name="project_version" type="text" maxlength="15" <?php if(isset($posted_values) && !empty($posted_values['project_version'])){ echo 'value="'.$posted_values['project_version'].'"';} ?>></div>
+                    <div class="col-sm-4"><input class="form-control" id="project_version" name="project_version" type="text" placeholder="Like: 0.0.1" maxlength="15" <?php if(isset($posted_values) && !empty($posted_values['project_version'])){ echo 'value="'.$posted_values['project_version'].'"';} ?>></div>
                 </div>
                 <div class="form-group <?php if(isset($posted_values) && empty($posted_values['project_description'])){ echo 'has-error';} ?>">
                     <label class="col-sm-offset-2 col-sm-2 control-label" for="project_description">Description:</label>

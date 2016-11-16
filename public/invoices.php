@@ -99,12 +99,20 @@ switch ($current_page){
                 </div>
                 <div class="form-group">
                     <label class="col-sm-offset-2 col-sm-2 control-label" for="invoiceTotal">Amount:</label>
-                    <div class="col-sm-4"><input class="form-control" id="invoiceTotal" name="invoiceTotal" type="text" placeholder="<?php echo $invoiceData['invoice_total']; ?>" required></div>
+                    <div class="col-sm-4">
+                        <div class="input-group">
+                            <div class="input-group-addon">&euro;</div>
+                            <input class="form-control" id="invoiceTotal" name="invoiceTotal" type="number" placeholder="<?php echo $invoiceData['invoice_total']; ?>" required>
+                        </div>
+                    </div>
                 </div>
                 <div class="form-group">
                     <label class="col-sm-offset-2 col-sm-2 control-label" for="project">Invoice Date:</label>
                         <div class="col-sm-4">
-                            <input type='date' name="invoiceDate" id="invoiceDate" class="form-control" placeholder="<?php echo $invoiceData['invoice_date']; ?>" required>
+                            <div class="input-group">
+                                <div class="input-group-addon"><span class="glyphicon glyphicon-calendar" aria-hidden="true"></span></div>
+                                <input type='date' name="invoiceDate" id="invoiceDate" class="form-control" placeholder="<?php echo $invoiceData['invoice_date']; ?>" required>
+                            </div>
                         </div>
                     </div>
                 <div class="form-group">

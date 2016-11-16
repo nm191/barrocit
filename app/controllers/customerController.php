@@ -18,12 +18,12 @@ if (isset($_GET['customer_id']))
     $addition = '';
 }
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST'){
-
-
-
     if (isset($_POST['formname'])){
         $formname = $_POST['formname'];
+    }
+
+    if(isset($_GET['page'])){
+        $formname = $_GET['page'];
     }
 
     switch ($formname){
@@ -52,14 +52,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
 
             $customer_company_name = $_POST['customerName'];
             $customer_sales_agent = $_POST['salesAgent'];
-            (isset($_POST['prospect']) ? $customer_is_prospect = $_POST['prospect'] : $customer_is_prospect = 0);
-            (isset($_POST['maintenanceContract']) ? $customer_maintenance_contract = $_POST['maintenanceContract'] : $customer_maintenance_contract = 0);
+            $customer_is_prospect = (isset($_POST['prospect']) ?  $_POST['prospect'] : 0);
+            $customer_maintenance_contract = (isset($_POST['maintenanceContract']) ? $_POST['maintenanceContract'] : 0);
 
             $insert_result = $customer->addGeneralData($customer_company_name, $customer_sales_agent, $customer_is_prospect, $customer_maintenance_contract);
             
         }
             $custData = $customer->getLatest();
-            $user->redirect('customers.php?page=customer_addresses&customer_id='.$custData["customer_id"]);
+            $message = 'Customer general data has been saved!';
+            $user->redirect('customers.php?page=customer_addresses&customer_id='.$custData["customer_id"].'&success='.$message);
 
         break;
 
@@ -77,8 +78,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
             if(isset($_POST['secundaryCity'])){$sCity = $_POST['secundaryCity'];}
 
         if ($customer->addAddress($pAddress, $pZipcode, $pCity, $sAddress, $sZipcode, $sCity, $id)){
-
-            $user->redirect('customers.php?page=customer_contact_person&customer_id='.$id);
+            $message = 'Customer address data has been saved!';
+            $user->redirect('customers.php?page=customer_contact_person&customer_id='.$id.'&success='.$message);
         }
 
         break;
@@ -96,10 +97,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
             if(isset($_POST['sTelephone'])){$sec_phone = $_POST['sTelephone'];}
             if(isset($_POST['faxNumber'])){$fax = $_POST['faxNumber'];}
 
-        if($customer->addContactPerson($initials, $firstname, $surname, $email, $phone, $sec_phone, $fax, $id)){
+            if($customer->addContactPerson($initials, $firstname, $surname, $email, $phone, $sec_phone, $fax, $id)) {
+                $message = 'Customer contact person data has been saved!';
+                $user->redirect('customers.php?page=customer_financial&customer_id='.$id.'&success='.$message);
+            }
+            else{
+                $message = 'Something went wrong saving the data. Try again.';
+                $user->redirect('customers.php?page=customer_contact_person&customer_id='.$id.'&error='.$message);
+            }
 
-        }
-                  $user->redirect('customers.php?page=customer_financial&customer_id='.$id);
             break;
 
 
@@ -116,10 +122,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
             $credit_worthy = (isset($_POST['creditWorthy']) ? 1 : 0);
 
             if($customer->addFinancial($discount, $overdraft, $payterm, $bankaccount, $ledgeraccount, $revenue, $tax_id, $credit_worthy, $id)){
-
+                $message = 'Financial data has been saved!';
+                $user->redirect('customers.php?page=customer_financial&customer_id='.$id.'&success='.$message);
+            }else{
+                $user->redirect('customers.php?page=customer_financial&customer_id='.$id.'&error='.$message);
             }
 
-            $user->redirect('customers.php?page=customer_financial&customer_id='.$id);
+
             
             break;
         
@@ -148,12 +157,43 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
         
         case 'soft_hard':
             
-            
-            
+            $posted_values = $_POST;
+            unset($posted_values['formname']);
+            unset($posted_values['saveSH']);
+            if(!$posted_values['customer_id']){
+                $message = 'No customer selected';
+                $user->redirect('customers.php?page=customer_soft_hard_form&error='.$message);
+            }
+
+            if(!$posted_values['shid']){
+                $insert_sh = $customer->addSoftHardware($posted_values);
+                $message = 'Software/hardware has been saved!';
+                $user->redirect('customers.php?page=customer_soft_hard_table&customer_id='.$posted_values['customer_id'].'&success='.$message);
+                exit();
+            }
+            $update_sh = $customer->updateSoftHardware($posted_values);
+            if($update_sh){
+                $message = 'Software/hardware has been changed!';
+                $user->redirect('customers.php?page=customer_soft_hard_form&shid='.$posted_values['shid'].'&customer_id='.$posted_values['customer_id'].'&success='.$message);
+            }
+
             break;
 
+        case 'delete_sh':
+            var_dump($_GET);
+            if(!isset($_GET['customer_id'])){
+                $user->redirect('customers.php');
+                exit;
+            }
+            if(!isset($_GET['shid'])){
+                $message = 'There went something wrong! Try again';
+                $user->redirect('customers.php?page=customer_soft_hard_table&customer_id='.$_GET['customer_id'].'&error='.$message);
+                exit();
+            }
 
-
-}
-
-}
+            $customer->deleteSoftHardware($_GET['shid']);
+            $message = 'Soft/hardware has been deleted!';
+            $user->redirect('customers.php?page=customer_soft_hard_table&customer_id='.$_GET['customer_id'].'&success='.$message);
+            exit();
+            break;
+    }
