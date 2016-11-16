@@ -1,0 +1,46 @@
+Zoveel mogelijk commentaar overal bijzetten.
+Zoek functie bij alle tabellen toevoegen
+
+Dashboard:
+    - Link aan de getallen geven zodat je naar die tabel etc gaat.
+
+Finance:
+    - Amount input format fixen.
+    - Checkboxes fixen bij add invoice\
+    - View invoice -> invoice date en invoice total format
+    - invoice tabel -> invoice date format
+    - Delete invoices checks toevoegen.
+    -
+
+Customers:
+    - customer onhold laten zien in de tabel.
+    -  customer verwijderen checks toevoegen
+    - add/Edit customer meldingen geven.
+    - check of alles ingevuld zoniet geef melding
+    - customers checkboxes fixen
+    - financial data form opmaken
+    - tax code dropdown van maken
+    - visits table action finished aanpassen
+    - action finished checkbox fixen
+    - Soft en hardware pagina fixen
+
+Projects:
+    - van priority een dropdown maken
+    - version placeholder plaatsen
+    - view projects finish button toevoegen
+    - projects on hold niet kunnen finishen
+    - gefinishde projecten niet meer aan kunnen passen
+    - op prio orderen, daarna op id
+
+
+
+
+Notifications:
+    - Customer on hold notificatie toevoegen
+    - Add project notificatie meer betekenis geven.
+
+
+
+Could haves:
+    Dashoard extra 'metertjes toevoegen'
+    Table filters toevoegen
