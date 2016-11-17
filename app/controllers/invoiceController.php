@@ -14,6 +14,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET'){
 
     $invoice_id = $_GET['invoice_id'];
 
+    if(isset($_GET['page'])){
+        $page = $_GET['page'];
+    }
+
+    switch ($page){
+        case 'set_paid':
+            $invoice->setPaid($invoice_id);
+            $message = 'Invoice has been set to paid!';
+            $user->redirect('invoices.php?page=list_invoices&success=' . $message);
+            exit;
+            break;
+    }
+
     if ($invoice->disableInvoice($invoice_id)){
         echo 'Invoice disabled';
         $message = 'Invoice has been disabled!';

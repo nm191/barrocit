@@ -341,7 +341,7 @@ case 'customer_financial':
                     <label class="col-sm-offset-2 col-sm-2 control-label" for="discountRate">Discount rate:</label>
                     <div class="col-sm-4">
                         <div class="input-group">
-                           <input class="form-control" id="discountRate" name="discountRate" type="number" value="<?php echo $custData['customer_discount']; ?>">
+                           <input class="form-control" id="discountRate" name="discountRate" type="number" max="100" value="<?php echo $custData['customer_discount']; ?>">
                             <div class="input-group-addon">%</div>
                         </div>
                     </div>
@@ -417,7 +417,7 @@ case 'customer_financial':
 
 case 'customer_visits':
 
-    $visitData = $customer->getAllVisits();
+    $visitData = $customer->getAllVisits($customer_id);
     if(!$customer_id){
         $user->redirect('customers.php?page=invalid_customer');
     }
@@ -431,18 +431,17 @@ case 'customer_visits':
         <tr>
                 <th>ID</th>
                 <th>Visit Type</th>
-                <th>Visit text</th>
                 <th>Visit Date</th>
-                <th>Action date</th>
-                <th>Action finished?</th>
-                <th>Option buttons</th>
+                <th>Visit Text</th>
+                <th>Action Date</th>
+                <th>Action Finished?</th>
+                <th>Options</th>
 
         </tr>
         </thead>
 
 
         <?php
-        $visitData = $customer->getAllVisits();
 
         foreach($visitData as $visit){
             $options_ar = array();
@@ -616,7 +615,7 @@ case 'customer_soft_hard_form':
         break;
     case 'customer_soft_hard_table':
         echo '<a href="customers.php?page=customer_soft_hard_form&customer_id='.$customer_id.'" class="btn btn-block btn-primary">Add Software / Hardware</a>';
-        echo $customer->getSoftHardwaresTable();
+        echo $customer->getSoftHardwaresTable($customer_id);
     break;
     case 'customers':
 ?>

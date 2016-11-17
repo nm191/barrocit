@@ -75,6 +75,7 @@ if(isset($_GET['search']) && isset($_POST['value'])){
                 $tr_ar = array();
                 foreach ($invoices_ar as $invoice) {
                     $options_ar = $td_ar = array();
+                    $options_ar[] = '<a href="../app/controllers/invoiceController.php?page=set_paid&invoice_id='.$invoice->invoice_id.'" class="btn btn-small btn-success btn-options '.($invoice->invoice_is_confirmed ? 'disabled' : '').'" title="Set Paid"><span class="glyphicon glyphicon-ok"></span></a>';
                     $options_ar[] = '<a href="invoices.php?page=view_invoice&invoice_id='.$invoice->invoice_id.'" class="btn btn-small btn-primary btn-options"><span class="glyphicon glyphicon-eye-open"></span></a>';
                     $options_ar[] = '<a href="invoices.php?page=edit_invoice&invoice_id='.$invoice->invoice_id.'" class="btn btn-small btn-warning btn-options '.($invoice->invoice_is_sent ? 'disabled' : '').'"><span class="glyphicon glyphicon-edit"></span></a>';
                     $options_ar[] = '<a href="../app/controllers/invoiceController.php?invoice_id='.$invoice->invoice_id.'" class="btn btn-small btn-danger btn-options '.($invoice->invoice_is_sent ? 'disabled' : '').'"><span class="glyphicon glyphicon-remove"></span></a>';

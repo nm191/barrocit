@@ -17,7 +17,6 @@ $dashboard = new Dashboard();
 <?php
     echo $dashboard->getDashboardTable($user);
 ?>
-        Main content goes here
 </div>
 <?php
 require_once ('includes/footer.php');

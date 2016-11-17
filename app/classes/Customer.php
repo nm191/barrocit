@@ -156,9 +156,12 @@ class Customer
         return $result;
     }
 
-    public function getAllVisits(){
-        $sql = "SELECT * FROM `tbl_visits`";
-        $result = $this->db->pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+    public function getAllVisits($customer_id){
+        $sql = "SELECT * FROM `tbl_visits` WHERE customer_id = :customer_id";
+        $stmt = $this->db->pdo->prepare($sql);
+        $stmt->bindParam(':customer_id', $customer_id);
+        $stmt->execute();
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
         return $result;
     }
 
@@ -186,6 +189,14 @@ class Customer
 
     public function setCustomerOnHold($customer_id){
         $sql = 'UPDATE `tbl_customers` SET customer_is_onhold = 1 WHERE customer_id = :customer_id';
+        $stmt = $this->db->pdo->prepare($sql);
+        $stmt->bindParam(':customer_id', $customer_id);
+        $result = $stmt->execute();
+        return $result;
+    }
+
+    public function unsetCustomerOnHold($customer_id){
+        $sql = 'UPDATE `tbl_customers` SET customer_is_onhold = 0 WHERE customer_id = :customer_id';
         $stmt = $this->db->pdo->prepare($sql);
         $stmt->bindParam(':customer_id', $customer_id);
         $result = $stmt->execute();
@@ -329,17 +340,18 @@ class Customer
         return $result;
     }
 
-    private function getSoftHardwares(){
-        $sql = 'SELECT * FROM `tbl_customer_softhardwares` s LEFT JOIN `tbl_software_hardware_types` t ON s.softhard_type_id = t.soft_hard_type_id WHERE s.is_active = 1';
+    private function getSoftHardwares($customer_id){
+        $sql = 'SELECT * FROM `tbl_customer_softhardwares` s LEFT JOIN `tbl_software_hardware_types` t ON s.softhard_type_id = t.soft_hard_type_id WHERE s.is_active = 1 AND s.customer_id = :customer_id ';
         $stmt = $this->db->pdo->prepare($sql);
+        $stmt->bindParam(':customer_id', $customer_id);
         $stmt->execute();
         $result = $stmt->fetchAll(PDO::FETCH_OBJ);
 
         return $result;
     }
 
-    public function getSoftHardwaresTable(){
-        $softhard_ar = $this->getSoftHardwares();
+    public function getSoftHardwaresTable($customer_id){
+        $softhard_ar = $this->getSoftHardwares($customer_id);
         $return_ar[] = '<table class="table table-reponsive table-striped table-hover">';
         $return_ar[] = '<thead><tr><th>ID</th><th>Type</th><th>Name</th><th>Description</th><th>Version</th><th>Options</th></tr></thead>';
 

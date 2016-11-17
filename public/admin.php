@@ -76,12 +76,16 @@ switch ($current_page){
                    <div class="col-sm-9 col-sm-offset-1">
                        <?php
                             echo $admin->getUserRightsFormTable($section);
+                            if($section) {
                         ?>
-                       <div class="form-group">
-                            <input type="hidden" name="section_id" value="<?php echo $section ?>">
-                           <input type="hidden" name="formname" value="user_rights">
-                            <input type="submit" class="btn btn-block btn-success" value="Save User Rights">
-                       </div>
+                                <div class="form-group">
+                                    <input type="hidden" name="section_id" value="<?php echo $section ?>">
+                                    <input type="hidden" name="formname" value="user_rights">
+                                    <input type="submit" class="btn btn-block btn-success" value="Save User Rights">
+                                </div>
+                        <?php
+                            }
+                        ?>
                    </div>
                </fieldset>
             </form>

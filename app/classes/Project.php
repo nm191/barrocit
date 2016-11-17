@@ -131,7 +131,7 @@ class Project
                 INNER JOIN `tbl_customers` c
                 ON p.customer_id = c.customer_id
                 WHERE p.project_is_active = 1
-                ORDER BY c.customer_is_onhold DESC';
+                ORDER BY c.customer_is_onhold DESC, p.project_priority';
         $stmt = $this->db->pdo->prepare($sql);
         $stmt->execute();
         $result = $stmt->fetchAll(PDO::FETCH_OBJ);
@@ -215,7 +215,7 @@ class Project
                 ON p.customer_id = c.customer_id 
                 WHERE p.project_is_active = 1 
                 AND (p.project_name LIKE :search_value OR c.customer_company_name LIKE :search_value)
-                ORDER BY c.customer_is_onhold DESC";
+                ORDER BY c.customer_is_onhold DESC, p.project_priority";
         $stmt = $this->db->pdo->prepare($sql);
         $search_value = '%'.$search_value.'%';
         $stmt->bindParam(':search_value', $search_value);

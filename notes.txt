@@ -1,6 +1,6 @@
 Zoveel mogelijk commentaar overal bijzetten.
 Zoek functie bij alle tabellen toevoegen -> gefixed
-Optie om van onhold af te halen
+Optie om van onhold af te halen -> gefixed
 
 Dashboard:
     - Link aan de getallen geven zodat je naar die tabel etc gaat.
@@ -35,8 +35,6 @@ Projects:
 
 
 Notifications:
-    - Customer on hold notificatie toevoegen
-    - Add project notificatie meer betekenis geven.
     x Show notifications date
 
 

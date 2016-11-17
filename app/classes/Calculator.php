@@ -31,9 +31,7 @@ class Calculator
         
         foreach($customers_ar as $customer){
 
-            if($customer['customer_is_onhold']){
-                continue;
-            }
+
             $overdraft_limit = $customer['customer_overdraft'];
 
             //get all unpaid invoices
@@ -44,7 +42,9 @@ class Calculator
                 $invoices_total += $invoice->invoice_total;
             }
             if($invoices_total > $overdraft_limit) {
-
+                if($customer['customer_is_onhold']){
+                    continue;
+                }
                 //add notification
                 $for_section_id = $this->admin->getUserRightId('development');
                 $note_text = '\'' . $customer['customer_company_name'] . '\' have passed their overdraft limit and is put on hold.';
@@ -52,9 +52,22 @@ class Calculator
 
                 //set customer on hold
                 $this->customer->setCustomerOnHold($customer['customer_id']);
+            }elseif ($invoices_total < $overdraft_limit){
+                if(!$customer['customer_is_onhold']){
+                    continue;
+                }
+                //add notification
+                $for_section_id = $this->admin->getUserRightId('development');
+                $note_text = '\'' . $customer['customer_company_name'] . '\' is no longer on hold.';
+                $this->notification->addNotification($for_section_id->user_right_id, 14, $note_text); // 14 = system
+
+                //unset customer on hold
+                $this->customer->unsetCustomerOnHold($customer['customer_id']);
             }
         }
         return true;
     }
+
+
 
 }

@@ -239,6 +239,7 @@ switch ($current_page){
                             echo '<td>' . ( $invoice->invoice_is_sent == 1 ? 'Yes' : 'No' ). '</td>';
                             echo '<td>' . ( $invoice->invoice_is_confirmed == 1 ? 'Yes' : 'No' ). '</td>';
                             echo '<td>
+                            <a href="../app/controllers/invoiceController.php?page=set_paid&invoice_id='.$invoice->invoice_id.'" class="btn btn-small btn-success btn-options '.($invoice->invoice_is_confirmed ? 'disabled' : '').'"><span class="glyphicon glyphicon-ok"></span></a>
                             <a href="invoices.php?page=view_invoice&invoice_id='.$invoice->invoice_id.'" class="btn btn-small btn-primary btn-options"><span class="glyphicon glyphicon-eye-open"></span></a>
                             <a href="invoices.php?page=edit_invoice&invoice_id='.$invoice->invoice_id.'" class="btn btn-small btn-warning btn-options '.($invoice->invoice_is_sent ? 'disabled' : '').'"><span class="glyphicon glyphicon-edit"></span></a>
                             <a href="../app/controllers/invoiceController.php?invoice_id='.$invoice->invoice_id.'" class="btn btn-small btn-danger btn-options '.($invoice->invoice_is_sent ? 'disabled' : '').'"><span class="glyphicon glyphicon-remove"></span></a></td>';

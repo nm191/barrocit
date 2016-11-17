@@ -158,6 +158,14 @@ class Invoice
         return $result;
     }
 
+    public function setPaid($invoice_id) {
+        $sql = "UPDATE `tbl_invoices` SET invoice_is_confirmed = 1 WHERE invoice_id = :invoice_id";
+        $stmt = $this->db->pdo->prepare($sql);
+        $stmt->bindParam(':invoice_id', $invoice_id);
+        $result = $stmt->execute();
+        return $result;
+    }
+
     public function searchInvoices($search_value){
         $sql = 'SELECT * 
                 FROM `tbl_invoices` i
