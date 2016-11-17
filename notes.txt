@@ -1,16 +1,16 @@
 Zoveel mogelijk commentaar overal bijzetten.
-Zoek functie bij alle tabellen toevoegen
+Zoek functie bij alle tabellen toevoegen -> gefixed
 Optie om van onhold af te halen
 
 Dashboard:
     - Link aan de getallen geven zodat je naar die tabel etc gaat.
 
 Finance:
-    - Amount input format fixen.
-    - Checkboxes fixen bij add invoice\
-    - View invoice -> invoice date en invoice total format
-    - invoice tabel -> invoice date format
-    - Delete invoices checks toevoegen.
+    x Amount input format fixen.
+    x Checkboxes fixen bij add invoice\
+    x View invoice -> invoice date en invoice total format
+    x invoice tabel -> invoice date format
+    x Delete invoices checks toevoegen.
 
 Customers:
     x customer onhold laten zien in de tabel.
@@ -25,11 +25,10 @@ Customers:
     x Soft en hardware pagina fixen
 
 Projects:
-    - van priority een dropdown maken
-    - version placeholder plaatsen
-    - view projects finish button toevoegen
-    - projects on hold niet kunnen finishen
-    - gefinishde projecten niet meer aan kunnen passen
+    x version placeholder plaatsen
+    x view projects finish button toevoegen
+    x projects on hold niet kunnen finishen
+    x gefinishde projecten niet meer aan kunnen passen
     - op prio orderen, daarna op id
 
 
@@ -38,6 +37,7 @@ Projects:
 Notifications:
     - Customer on hold notificatie toevoegen
     - Add project notificatie meer betekenis geven.
+    x Show notifications date
 
 
 

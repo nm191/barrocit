@@ -142,9 +142,13 @@ switch($current_page){
     case 'projects':
         ?>
         <div class="col-sm-10 col-sm-offset-1">
-            <?php
-            echo $project->getProjectsTable($user);
-            ?>
+            <input type="text" class="form-control" id="searchProjects" placeholder="Search">
+            <div id="projects_list">
+                <?php
+                    echo $project->getProjectsTable($user);
+                ?>
+            </div>
+
         </div>
         <?php
         break;
@@ -160,6 +164,10 @@ switch($current_page){
                  echo '<h3>'.$project->getProjectName().'</h3>  ';
                     if($project->getProjectIsOnHold() == 'Yes'){
                         echo '<div class="alert alert-danger" role="alert">This project has been put on hold! Contact Sales for more information.</div>';
+                    }
+
+                    if($project->getProjectIsOnHold() == 'No' && $project->getProjectFinished() == 'No'){
+                        echo '<a href="../app/controllers/projectController.php?page=finish&pid='.$project->getProjectId().'" class="btn btn-success"><span class="glyphicon glyphicon-ok"></span> Finish</a>';
                     }
                  ?>
                 <table class="table table-responisve table-striped table-hover">
@@ -223,6 +231,13 @@ switch($current_page){
                 });
             });
             return false;
+        });
+
+        $("#searchProjects").change(function(){
+            var value = $("#searchProjects").val();
+            $.post('../app/controllers/searchController.php?search=projects_list',{value:value}, function(data) {
+                $("#projects_list").html(data);
+            });
         });
 
     });

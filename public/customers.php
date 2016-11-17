@@ -47,7 +47,9 @@ $project = new Project();
 <h1 class="text-center">Customers</h1>
 
 <div class="col-sm-10 col-sm-offset-1">
-
+<?php
+    if($current_page != 'customers'){
+?>
 <ul class="nav nav-tabs flex tab-menu">
     <li role="presentation" <?php echo ($current_page == 'customer_general_data' ? 'class="active"' : ''); ?>><a href="customers.php?page=customer_general_data&type=insert<?php echo $addition;?>">General Data</a></li>
     <li role="presentation" <?php echo ($current_page == 'customer_addresses' ? 'class="active"' : ''); ?>><a href="customers.php?page=customer_addresses<?php echo $addition;?>">Addresses</a></li>
@@ -58,7 +60,7 @@ $project = new Project();
 </ul>
 
 <?php
-
+    } // end if current page
 if(!empty($error)){
     ?>
     <div class="alert alert-danger" role="alert">Error: <?php echo $error; ?></div>
@@ -618,7 +620,9 @@ case 'customer_soft_hard_form':
     break;
     case 'customers':
 ?>
-<table class="table table-striped table-hover table-responsive">
+    <input type="text" class="form-control" id="searchCustomers" placeholder="Search">
+    <div id="customers_list">
+        <table class="table table-striped table-hover table-responsive">
         <thead>
         <tr>
                 <th>Companyname</th>
@@ -657,7 +661,7 @@ case 'customer_soft_hard_form':
         ?>
 
 </table>
-
+</div>
 </div>
 <?php
         break;
@@ -690,6 +694,13 @@ require_once ('includes/footer.php');
                 return false;
             }
             return true;
+        });
+
+        $("#searchCustomers").change(function(){
+            var value = $("#searchCustomers").val();
+            $.post('../app/controllers/searchController.php?search=customers_list',{value:value}, function(data) {
+                $("#customers_list").html(data);
+            });
         });
 
     });

@@ -113,6 +113,7 @@ class Notifications
             $td_ar[] = '<td>'.$note->notification_id.'</td>';
             $td_ar[] = '<td>'.$note->from_user.'</td>';
             $td_ar[] = '<td>'.$note->notification_text.'</td>';
+            $td_ar[] = '<td>'.date('d-m-Y', strtotime($note->notification_date)).'</td>';
             $td_ar[] = '<td>'.($note->notification_seen ? 'Yes' : 'No').'</td>';
             $td_ar[] = '<td>'.implode('', $options_ar).'</td>';
 
@@ -122,6 +123,7 @@ class Notifications
         $th_ar[] = '<th>ID</th>';
         $th_ar[] = '<th>From</th>';
         $th_ar[] = '<th>Notification</th>';
+        $th_ar[] = '<th>Date</th>';
         $th_ar[] = '<th>Seen?</th>';
         $th_ar[] = '<th>Options</th>';
 
@@ -147,6 +149,7 @@ class Notifications
         $return_ar[] = '<table class="table table-responsive table-striped table-hover">';
         $return_ar[] = '<tr><td>ID</td><td>'.$note_id.'</td></tr>';
         $return_ar[] = '<tr><td>From</td><td>'.$notification->from_user.'</td></tr>';
+        $return_ar[] = '<tr><td>Date</td><td>'.date('d-m-Y' , strtotime($notification->notification_date)).'</td></tr>';
         $return_ar[] = '<tr><td>Notification</td><td>'.$notification->notification_text.'</td></tr>';
         $return_ar[] = '</table>';
 

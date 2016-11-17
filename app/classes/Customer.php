@@ -370,6 +370,25 @@ class Customer
         return $result;
     }
 
+    public function searchCustomers($search_value){
+        $sql = 'SELECT * 
+                FROM tbl_customers 
+                WHERE customer_is_active = 1 
+                AND (customer_company_name LIKE :search_value
+                OR customer_address LIKE :search_value
+                OR customer_contact_firstname LIKE :search_value
+                OR customer_contact_surname LIKE :search_value
+                OR customer_contact_email LIKE :search_value
+                OR customer_sales_agent LIKE :search_value)
+                ORDER BY customer_is_onhold DESC';
+        $stmt = $this->db->pdo->prepare($sql);
+        $search_value = '%'.$search_value.'%';
+        $stmt->bindParam(':search_value', $search_value);
+        $stmt->execute();
+        $result = $stmt->fetchAll(PDO::FETCH_OBJ);
+        return $result;
+    }
+
     private function setCustomerFilledStatusses($customer_data){
         $general_ar = array('customer_company_name', 'customer_sales_agent');
         $addresses_ar = array('customer_address', 'customer_zipcode', 'customer_city');

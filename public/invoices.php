@@ -118,7 +118,7 @@ switch ($current_page){
                 <div class="form-group">
                     <div class="checkbox col-sm-offset-4 col-sm-4">
                         <label>
-                            <input type="checkbox" value="prospect" name="prospect" >
+                            <input type="checkbox" value="invoiceSent" name="invoiceSent" >
                             Sent invoice
                         </label>
                     </div>
@@ -126,7 +126,7 @@ switch ($current_page){
                 <div class="form-group">
                     <div class="checkbox col-sm-offset-4 col-sm-4">
                         <label>
-                            <input type="checkbox" value="maintenanceContract" name="maintenanceContract" >
+                            <input type="checkbox" value="invoicePaid" name="invoicePaid" >
                             Invoice paid
                         </label>
                     </div>
@@ -211,8 +211,9 @@ switch ($current_page){
         break;
     case 'list_invoices':
         ?>
-        <div class="col-sm-10 col-sm-offset-1">
-            <div class="well well-lg">
+            <div class="col-sm-10 col-sm-offset-1">
+                <input type="text" class="form-control" id="searchInvoices" placeholder="Search">
+                <div id="invoices_list">
                     <table class="table table-striped table-hover table-responsive">
                         <thead>
                         <tr>
@@ -233,18 +234,18 @@ switch ($current_page){
                             echo '<td> #' . $invoice->invoice_number . '</td>';
                             echo '<td>' . $invoice->customer_company_name . '</td>';
                             echo '<td>' . $invoice->project_name . '</td>';
-                            echo '<td>' . $invoice->invoice_date . '</td>';
+                            echo '<td>' . date('d-m-Y', strtotime($invoice->invoice_date)) . '</td>';
                             echo '<td> € ' . $invoice->invoice_total . '</td>';
                             echo '<td>' . ( $invoice->invoice_is_sent == 1 ? 'Yes' : 'No' ). '</td>';
                             echo '<td>' . ( $invoice->invoice_is_confirmed == 1 ? 'Yes' : 'No' ). '</td>';
                             echo '<td>
                             <a href="invoices.php?page=view_invoice&invoice_id='.$invoice->invoice_id.'" class="btn btn-small btn-primary btn-options"><span class="glyphicon glyphicon-eye-open"></span></a>
-                            <a href="invoices.php?page=edit_invoice&invoice_id='.$invoice->invoice_id.'" class="btn btn-small btn-warning btn-options"><span class="glyphicon glyphicon-edit"></span></a>
-                            <a href="../app/controllers/invoiceController.php?invoice_id='.$invoice->invoice_id.'" class="btn btn-small btn-danger btn-options"><span class="glyphicon glyphicon-remove"></span></a></td>';
+                            <a href="invoices.php?page=edit_invoice&invoice_id='.$invoice->invoice_id.'" class="btn btn-small btn-warning btn-options '.($invoice->invoice_is_sent ? 'disabled' : '').'"><span class="glyphicon glyphicon-edit"></span></a>
+                            <a href="../app/controllers/invoiceController.php?invoice_id='.$invoice->invoice_id.'" class="btn btn-small btn-danger btn-options '.($invoice->invoice_is_sent ? 'disabled' : '').'"><span class="glyphicon glyphicon-remove"></span></a></td>';
                             echo '</tr>';
                         }
                         ?>
-                     </table>
+                    </table>
                 </div>
             </div>
         <?php
@@ -277,8 +278,8 @@ switch ($current_page){
                     echo '<tr><td>Invoice Number:</td><td>'.$invoiceData['invoice_number'].'</td></tr>';
                     echo '<tr><td>Company Name:</td><td>'.$invoiceData['customer_company_name'].'</td></tr>';
                     echo '<tr><td>Project Name:</td><td>'.$invoiceData['project_name'].'</td></tr>';
-                    echo '<tr><td>Invoice Date:</td><td> '.$invoiceData['invoice_date'].'</td></tr>';
-                    echo '<tr><td>Invoice Total:</td><td> '.$invoiceData['invoice_total'].'</td></tr>';
+                    echo '<tr><td>Invoice Date:</td><td> '.date('m-d-Y', strtotime($invoiceData['invoice_date'])).'</td></tr>';
+                    echo '<tr><td>Invoice Total:</td><td>&euro; '.$invoiceData['invoice_total'].'</td></tr>';
                     echo '<tr><td>Invoice Sent:</td><td> '.($invoiceData['invoice_is_sent'] == 1 ? 'Yes' : 'No').'</td></tr>';
                     echo '<tr><td>Invoice Paid:</td><td> '.($invoiceData['invoice_is_confirmed'] == 1 ? 'Yes' : 'No').'</td></tr>';
                     ?>
@@ -361,6 +362,14 @@ switch ($current_page){
             });
             return false;
         });
+
+        $("#searchInvoices").change(function(){
+            var value = $("#searchInvoices").val();
+            $.post('../app/controllers/searchController.php?search=invoices_list',{value:value}, function(data) {
+                $("#invoices_list").html(data);
+            });
+        });
+
 
     });
 

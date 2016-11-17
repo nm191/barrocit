@@ -138,8 +138,11 @@ class Project
         return $result;
     }
 
-    public function getProjectsTable(User $user){
-        $projects = $this->getProjects();
+    public function getProjectsTable(User $user, $projects_ar = array()){
+        $projects = $projects_ar;
+        if(empty($projects_ar)){
+            $projects = $this->getProjects();
+        }
         $table = '<table class="table table-hover table-responsive table-striped">';
         $table .= '<thead><tr><th>#</th><th>Priority</th><th>Project</th><th>Customer</th><th>Deadline</th><th>Version</th><th>Finished</th><th>Options</th></tr></thead>';
         foreach($projects as $project){
@@ -148,10 +151,10 @@ class Project
 
             $options_ar[] = '<a href="projects.php?page=view_project&pid='.$project->project_id.'" class="btn btn-small btn-primary btn-options" title="View project: '.$project->project_name.'"><span class="glyphicon glyphicon-eye-open"></span></a>';
             if($user->hasAccess('development')){
-                $options_ar[] = '<a href="../app/controllers/projectController.php?page=finish&pid='.$project->project_id.'" class="btn btn-small btn-success btn-options '.($project->project_is_finished ? " disabled" : "").'" title="Finished project: '.$project->project_name.'" '.($project->project_is_finished ? "disabled='disabled'" : "").' ><span class="glyphicon glyphicon-ok"></span></a>';
+                $options_ar[] = '<a href="../app/controllers/projectController.php?page=finish&pid='.$project->project_id.'" class="btn btn-small btn-success btn-options '.($project->project_is_finished || $project->customer_is_onhold ? " disabled" : "").'" title="Finished project: '.$project->project_name.'" '.($project->project_is_finished ? "disabled='disabled'" : "").' ><span class="glyphicon glyphicon-ok"></span></a>';
             }
             if($user->hasAccess('sales') || $user->hasAccess('development')){
-                $options_ar[] = '<a href="projects.php?page=edit_project&pid='.$project->project_id.'" class="btn btn-small btn-warning btn-options" title="Edit project: '.$project->project_name.'"><span class="glyphicon glyphicon-edit"></span></a>';
+                $options_ar[] = '<a href="projects.php?page=edit_project&pid='.$project->project_id.'" class="btn btn-small btn-warning btn-options '.($project->project_is_finished ? " disabled" : "").'" title="Edit project: '.$project->project_name.'"><span class="glyphicon glyphicon-edit"></span></a>';
             }
             if($user->hasAccess('sales') || $user->hasAccess('development')){
                 $options_ar[] = '<a href="../app/controllers/projectController.php?page=delete&pid='.$project->project_id.'" class="btn btn-small btn-danger btn-options" id="deleteProject" title="Delete project: '.$project->project_name.'"><span class="glyphicon glyphicon-remove"></span></a>';
@@ -197,6 +200,22 @@ class Project
 
     public function searchProjectName($search_value){
         $sql = "SELECT * FROM `tbl_projects` WHERE project_name LIKE :search_value";
+        $stmt = $this->db->pdo->prepare($sql);
+        $search_value = '%'.$search_value.'%';
+        $stmt->bindParam(':search_value', $search_value);
+        $stmt->execute();
+        $result = $stmt->fetchAll(PDO::FETCH_OBJ);
+        return $result;
+    }
+
+    public function searchProjects($search_value){
+        $sql = "SELECT * 
+                FROM `tbl_projects` p  
+                INNER JOIN `tbl_customers` c 
+                ON p.customer_id = c.customer_id 
+                WHERE p.project_is_active = 1 
+                AND (p.project_name LIKE :search_value OR c.customer_company_name LIKE :search_value)
+                ORDER BY c.customer_is_onhold DESC";
         $stmt = $this->db->pdo->prepare($sql);
         $search_value = '%'.$search_value.'%';
         $stmt->bindParam(':search_value', $search_value);

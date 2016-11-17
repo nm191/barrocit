@@ -158,6 +158,27 @@ class Invoice
         return $result;
     }
 
+    public function searchInvoices($search_value){
+        $sql = 'SELECT * 
+                FROM `tbl_invoices` i
+                INNER JOIN `tbl_projects` p
+                ON i.project_id = p.project_id
+                INNER JOIN `tbl_customers` c
+                ON p.customer_id = c.customer_id
+                WHERE p.project_is_active = 1
+                AND i.invoice_is_active = 1
+                AND (p.project_name LIKE :search_value 
+                OR c.customer_company_name LIKE :search_value 
+                OR i.invoice_number LIKE :search_value)
+                ORDER BY i.invoice_id';
+        $stmt = $this->db->pdo->prepare($sql);
+        $search_value = '%'.$search_value.'%';
+        $stmt->bindParam(':search_value', $search_value);
+        $stmt->execute();
+        $result = $stmt->fetchAll(PDO::FETCH_OBJ);
+        return $result;
+    }
+
 
     public function redirect($path){
         header('location: ' . BASE_URL . '/public/' . $path);
